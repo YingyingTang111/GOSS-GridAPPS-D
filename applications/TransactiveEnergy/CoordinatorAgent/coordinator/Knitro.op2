@@ -1,0 +1,14 @@
+honorbnds = 1
+*outlev = 6
+*mip_heuristic 1
+*mip_heuristic_maxit 1
+*mip_method = 2
+mip_rounding = 4
+*infeastol=  1.0e-10
+*ms_enable=1
+opttol=5e-5
+opttolabs=1e-2
+algorithm=3
+feastol=1.0e-5
+feastolabs=1.0e-6
+presolve=1

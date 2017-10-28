@@ -1,0 +1,10 @@
+# file...... triplexload_voltage_output1.csv
+# date...... Wed Oct 25 16:58:25 2017
+# user...... yingying
+# host...... (null)
+# target.... triplex_meter 9
+# trigger... (none)
+# interval.. 300
+# limit..... 0
+# timestamp,voltage_1,voltage_2,voltage_12,measured_power
+2012-01-01 00:00:00 PST,-60.0436-103.803j,-60.0436-103.803j,-120.087-207.607j,+3277.87-40.2979d
