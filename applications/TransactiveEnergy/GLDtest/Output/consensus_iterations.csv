@@ -1,5 +1,5 @@
 # file...... Output/consensus_iterations.csv
-# date...... Fri Oct 27 17:25:51 2017
+# date...... Sat Oct 28 19:55:14 2017
 # user...... yingying
 # host...... (null)
 # target.... dummy_class 4
@@ -8,6 +8,3 @@
 # limit..... 0
 # timestamp,consensus_iterations
 2010-08-16 00:00:00 UTC,+0
-2010-08-16 00:05:00 UTC,+0
-2010-08-16 00:10:00 UTC,+0
-2010-08-16 00:15:00 UTC,+0

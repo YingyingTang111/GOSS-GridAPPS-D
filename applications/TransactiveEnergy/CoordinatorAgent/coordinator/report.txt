@@ -1,12 +1,12 @@
 "sunlamp crest-vct prototype acopf model"
 "start run"
 "start point summary"
-"p_load", 2.99268E-01
+"p_load", 4.13768E-01
 "p_gen", 7.01759E-01
 "p_shunt", 0.00000E+00
 "p_solar", 0.00000E+00
 "p_dr", 0.00000E+00
-"p_imbalance", 4.02491E-01
+"p_imbalance", 2.87990E-01
 "sum_loss", 2.72730E+04
 "v_load_bus_volt_pen", 6.13683E-02
 "v_totalshuntswitching", 0.00000E+00

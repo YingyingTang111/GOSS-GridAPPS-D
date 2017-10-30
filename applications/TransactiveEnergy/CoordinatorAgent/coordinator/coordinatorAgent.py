@@ -412,8 +412,8 @@ def coordinator_agent(config_path, **kwargs):
                 # Create list of Q based on ACOPF fortmat requirement:
                 # unit in MVAr
                 bus7_Q = unknownBusLds/1000.0
-                bus18_Q = self.meters_reactive['downstream_1_load_kVAR']/1000.0
-                bus57_Q = self.meters_reactive['downstream_2_load_kVAR']/1000.0
+                bus18_Q = self.meters_reactive['downstream_1_kVAR_load']/1000.0
+                bus57_Q = self.meters_reactive['downstream_2_kVAR_load']/1000.0
                 Qlist = [bus7_Q, bus18_Q, bus57_Q] * 3
                 self.Q = [7, 18, 57]
                 self.Q.extend(Qlist)                

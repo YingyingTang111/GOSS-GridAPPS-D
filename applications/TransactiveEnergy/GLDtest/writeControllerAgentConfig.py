@@ -38,9 +38,9 @@ use_override = "OFF"
 aggregatorName = "Aggregator_1"
 unit = "kW"
 periodAggregator = 60
-initial_price = 0.02078
-std_dev = 0.01 # 0.00361
-price_cap = 3.78
+initial_price = 65.00
+std_dev = 16.00 # 0.00361
+price_cap = 1000
 
 # Loop through the file fncs_configure.cfg
 controlledHouse = ''
