@@ -15,7 +15,14 @@ else:
     os.makedirs(outputFolderName)
 
 # parameters to be written into config files
-agentName = "Coordinator"
+# Subscription to FNCS_Bridge simulation_end message
+fncs_zpl = {}
+fncs_zpl['name'] = 'FNCS_Volttron_Bridge'
+fncs_zpl['fncs_bridge_termination_topic'] = fncs_zpl['name']+'/simulation_end'
+
+#
+agentName = "Coordinator1"
+
 # market data:
 market_id = 1 # Coordinator starts with market id of 1, instead of 0 as in aggregator and controller
 bid_delay = 0.0
@@ -97,6 +104,7 @@ for meter in meterLoads:
 #             break
 # metered substation load
 meter = 'substation_load'
+meterkVAR = 'substation_kVAR_load'
 meters['Meter_substation'] = {}
 ip.seek(0, 0)
 for line in ip:      
@@ -104,7 +112,13 @@ for line in ip:
             lst = line.split('-> ')
             temp = lst[1].split(';')
             meters['Meter_substation'][temp[0]] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
+        elif (meterkVAR in line):
+            lst = line.split('-> ')
+            temp = lst[1].split(';')
+            meters['Meter_substation'][temp[0]] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
 #             break    
+
+
 subscriptions['metered_loads'].append(meters)
 
 # generators

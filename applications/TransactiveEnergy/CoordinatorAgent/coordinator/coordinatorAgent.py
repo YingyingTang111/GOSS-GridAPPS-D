@@ -305,7 +305,7 @@ def coordinator_agent(config_path, **kwargs):
         def on_receive_DER_message(self, peer, sender, bus, topic, headers, message):
             """Subscribe to GLD substation load publications and change the data accordingly 
             """    
-            DERName = topic.split("/")[-2]
+            DERName = topic.split("/")[-1]
             phaseName = topic.split("/")[-1]
             val =  message[0]/1000
             
@@ -313,6 +313,22 @@ def coordinator_agent(config_path, **kwargs):
             
             self.DERs[DERName] = val
         
+        # ====================Obtain utility price setpoint based on given quantity setpoint===========================
+        def obtainUtility(self, val, ind, sumQuantityArray, UtilityArray):
+            utilityPrice = 0.0
+            
+            if (ind == 0):
+                utilityPrice = float(val * UtilityArray[ind] / sumQuantityArray[ind])
+            else:
+                q1 = sumQuantityArray[ind-1]
+                q2 = sumQuantityArray[ind]
+                x1 = UtilityArray[ind-1]
+                x2 = UtilityArray[ind]
+                utilityPrice = (val - q1) * (x2 - x1) / (q2 - q1) + x1
+                utilityPrice = float(utilityPrice)
+                
+            return utilityPrice
+ 
         @Core.periodic(1)
         def clear_market(self):
             ''' This method checks whether the market clearing time comes, and pre-process the data needed for ACOPF
@@ -334,9 +350,9 @@ def coordinator_agent(config_path, **kwargs):
                         else:
                             priceArray.append(value['price'][i])
                             quantityArray.append(value['quantity'][i])
-    #                 priceArray = [1000, 37.9] #value['price']
-    #                 quantityArray = [158, 4] # value['quantity']
                 quantityArray = [x/1000.0 for x in quantityArray] # unit should be MW in ACOPF 
+#                 priceArray = [30, 20, 10] #value['price']
+#                 quantityArray = [10, 10, 10] # value['quantity']
                 
                 # Obtain DR array to be used by ACOPF
                 self.DRquantity = []
@@ -354,17 +370,26 @@ def coordinator_agent(config_path, **kwargs):
                 else:
                     # Or, grab several points with same steps
                     step = sum(quantityArray)/buyerCurveNum
-                    quantitySumArray = []
+                    UtilityArray = []
+                    sumQuantityArray = []
+                    sumUtility = 0
                     sumQuantity = 0
                     for i in range(len(quantityArray)):
+                        sumUtility += quantityArray[i] * priceArray[i]
+                        UtilityArray.append(sumUtility)
                         sumQuantity += quantityArray[i]
-                        quantitySumArray.append(sumQuantity)
+                        sumQuantityArray.append(sumQuantity)
                     for i in range(buyerCurveNum):
                         val = step * (i + 1) # The value put into the DR quantity array, based on given number of points and corresponding step value
                         self.DRquantity.append(val)
-                        for j in range(len(quantitySumArray)):
-                            if val < quantitySumArray[j]:
-                                self.DRprice.append(priceArray[j]) # Put into the DRprice array based on quantity value on the bidding curve
+                        for j in range(len(sumQuantityArray)):
+                            if val <= sumQuantityArray[j]:
+                                utilityPrice = self.obtainUtility(val, j, sumQuantityArray, UtilityArray)
+                                self.DRprice.append(utilityPrice) # Put into the DRprice array based on quantity setpoint on the utility curve
+                                break;
+                            elif val > sumQuantityArray[-1]:
+                                utilityPrice = self.obtainUtility(val, len(sumQuantityArray) - 1, sumQuantityArray, UtilityArray)
+                                self.DRprice.append(utilityPrice) # Put into the DRprice array based on quantity setpoint on the utility curve
                                 break;
                 
                 ## Obtain unknown bus real power ---------------------------------------------------------------------------------------------
@@ -411,16 +436,19 @@ def coordinator_agent(config_path, **kwargs):
                 
                 # Create list of Q based on ACOPF fortmat requirement:
                 # unit in MVAr
-                bus7_Q = unknownBusLds/1000.0
+                bus7_Q = unknownBusLds_kVAR/1000.0
                 bus18_Q = self.meters_reactive['downstream_1_kVAR_load']/1000.0
                 bus57_Q = self.meters_reactive['downstream_2_kVAR_load']/1000.0
                 Qlist = [bus7_Q, bus18_Q, bus57_Q] * 3
                 self.Q = [7, 18, 57]
                 self.Q.extend(Qlist)                
                 
-
                 # Clear the market by using the fixed_price sent from coordinator ---------------------------------------------------------------
-                self.ACOPF() 
+                returnVal = self.ACOPF() 
+                DERoutputs = returnVal['DER'] 
+                cleared_quantity = returnVal['DRquantity'] 
+                socialWelfare = returnVal['SocialWelfare']
+                
                 
                 # Create a message for all points.
 #                 all_message = [{'market_id': self.market_output['market_id'], 
@@ -451,6 +479,50 @@ def coordinator_agent(config_path, **kwargs):
                 # Update lastmkt_id since the market just get cleared
                 self.market['lastmkt_id'] = self.market['market_id']
                 self.market['market_id'] += 1 # Go to wait for the next market
+                
+                # Publish cleared aggregator bidding price based on quantity solved by ACOPF
+                if len(priceArray) != 0:
+                    # When there are bids from aggregator (there are controllable loads)
+                    for j in range(len(sumQuantityArray)):
+                        if cleared_quantity <= sumQuantityArray[j]:
+                            clear_price = priceArray[j]
+                            break
+                    # Publish clear_price
+                    all_message = [{'market_id': self.market['market_id'], 
+                        'fixed_price': clear_price                         
+                        },
+                       {'market_id': {'units': 'none', 'tz': 'UTC', 'type': 'integer'},
+                        'fixed_price': {'units': '$', 'tz': 'UTC', 'type': 'float'}                       
+                        }]
+                    pub_topic = 'coordinator/' + config['agentid'] + '/all'
+                    _log.info('coordinator agent {0} publishes updated cleared price {1} to aggregator agents'.format(config['agentid'], clear_price))
+                    # Create timestamp
+                    now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
+                    headers = {
+                        headers_mod.DATE: now
+                    }
+                    self.vip.pubsub.publish('pubsub', pub_topic, headers, all_message)
+                
+                # Publish DER outputs
+                if (len(DERoutputs) != len(self.DERs)):
+                    raise ValueError('Length of ACOPF DER outputs {0} is not equal to the number of DERs {1} subscribed by coordinator'.format(len(DERoutputs), len(self.DERs)))
+                index = 0
+                for key1, val1 in self.DERs.items():
+                    DERname = key1
+                    DER_output = DERoutputs[index] * 1000000.0 / 3.0 # convert unit from MW to W
+                    for key2, val2 in val1.items():
+                        DER_phase_name = key2
+                        # Publish the updated DER output by phase:
+                        pub_topic = 'fncs/input/' + DER_phase_name
+                        _log.info('coordinator agent {0} publishes updated DER {1} output: {2}'.format(config['agentid'], DER_phase_name, DER_output))
+                        #Create timestamp
+                        now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
+                        headers = {
+                            headers_mod.DATE: now
+                        }
+                        self.vip.pubsub.publish('pubsub', pub_topic, headers, DER_output)
+                    index += 1
+ 
                 
                 # Display the opening of the next market
                 tiemDiff = (self.timeSim + datetime.timedelta(0,self.market['period']) - self.market['clearat']).total_seconds() % self.market['period']
@@ -542,7 +614,7 @@ def coordinator_agent(config_path, **kwargs):
                     control_load_BusID                      = 18    
                     solar_qlimit_busID                      = 18
                     # Nbend is for the number of steps we'd like to run
-                    Nbend                                   = 3 #(12*duration[hour]+1)  
+                    Nbend                                   = 1 #(12*duration[hour]+1)  
                     # Define start row
                     startrow                                = 2   #(12*stating_hour+1)    
                     Nbend2                                  = 5
@@ -617,7 +689,7 @@ def coordinator_agent(config_path, **kwargs):
             
             _log.info("--- ACOPF total running time: %s seconds ---" % (time.time() - ACOPF_start_time))
             
-            return
+            return System.returnVal
         
                       
     Agent.__name__ = config['agentid']

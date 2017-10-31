@@ -16,6 +16,10 @@ else:
     os.makedirs(folderName)
 
 # parameters to be written into config files
+# Subscription to FNCS_Bridge simulation_end message
+fncs_zpl = {}
+fncs_zpl['name'] = 'FNCS_Volttron_Bridge'
+fncs_zpl['fncs_bridge_termination_topic'] = fncs_zpl['name']+'/simulation_end'
 # controller data:
 periodController = 60
 control_mode = "CN_RAMP"
@@ -59,6 +63,7 @@ for line in ip:
             subscriptions = {}
             subscriptions['house'] = []
             subscriptions['aggregator'] = []
+            subscriptions['fncs_bridge'] = []
             # data subscribed to aggregator
             aggregator = {}
             aggregator['market_id'] = {'type': 'integer', 'units': 'none', 'default': 1}
@@ -74,6 +79,10 @@ for line in ip:
             house['power_state'] = {'type': 'string', 'units': 'none', 'default': 'ON'}
             house['hvac_load'] = {'type': 'double', 'units': 'none', 'default': 0.0}
             subscriptions['house'].append({controlledHouse: house})
+            # Write subscription to fncs_bridge message
+            fncs_bridge = {}
+            fncs_bridge[fncs_zpl['name']] = {'propertyType': 'String', 'propertyUnit': 'none', 'propertyValue': 0}
+            subscriptions['fncs_bridge'].append(fncs_bridge)
             
             # Write initial valuess
             initialVal = {}

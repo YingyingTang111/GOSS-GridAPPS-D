@@ -174,7 +174,7 @@ $include eqn_definition.gms
 *display Pmax, Pmin, V_P.l;
 *===== SECTION: MODEL DEFINITION
 $include mod_definition.gms
-display Pmax, Pmin, Pd, Va, Vm, Qg;
+display Pmax, Pmin, Pd, Va, Vm, Qg, Gs, b, bc;
 *===== SECTION: VARIABLE BOUNDS
 $include var_bounds.gms
 

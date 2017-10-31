@@ -15,7 +15,12 @@ else:
     shutil.rmtree(folderName) # delete the existing input folder in case there are data not needed
     os.makedirs(folderName)
 
-# parameters to be written into config files
+## parameters to be written into config files
+# Subscription to FNCS_Bridge simulation_end message
+fncs_zpl = {}
+fncs_zpl['name'] = 'FNCS_Volttron_Bridge'
+fncs_zpl['fncs_bridge_termination_topic'] = fncs_zpl['name']+'/simulation_end'
+
 # controller data:
 periodController = 60
 control_mode = "CN_RAMP"
@@ -57,6 +62,9 @@ aggregator_lines = ['18_21']; # Line name of aggregation point
 capacity_reference_object = aggregator_lines[0]
 max_capacity_reference_bid_quantity = 5000
 
+# coordinator data:
+coordinatorName = 'Coordinator1'
+
 # Loop through the file fncs_configure.cfg
 config = {}
 config['agentid'] = marketName
@@ -64,6 +72,8 @@ config['agentid'] = marketName
 subscriptions = {}
 subscriptions['controller'] = []
 subscriptions['meter'] = []
+subscriptions['fncs_bridge'] = []
+subscriptions['coordinator'] = []
 controllers = {}
 controller= ''
 for line in ip:
@@ -85,7 +95,7 @@ for line in ip:
             
     # Meter data (real power from switch) subscribed  
     meters = {}      
-    if (marketName in line and aggregator_lines[0] in line):
+    if ((marketName in line) and (aggregator_lines[0] in line) and ('VAR' not in line)):
         lst = line.split('-> ')
         temp = lst[1].split(';')
         meter = temp[0]
@@ -93,7 +103,18 @@ for line in ip:
         subscriptions['meter'].append(meters)      
         
 subscriptions['controller'].append(controllers)
-   
+
+# Write subscription to fncs_bridge message
+fncs_bridge = {}
+fncs_bridge[fncs_zpl['name']] = {'propertyType': 'String', 'propertyUnit': 'none', 'propertyValue': 0}
+subscriptions['fncs_bridge'].append(fncs_bridge)
+
+# data subscribed to aggregator
+coordinator = {}
+coordinator['market_id'] = {'type': 'integer', 'units': 'none', 'default': 1}
+coordinator['fixed_price'] = {'type': 'double', 'units': 'none', 'default': 0.0}
+subscriptions['coordinator'].append({coordinatorName:coordinator})
+            
 # Write initial valuess
 initialVal = {}
 initialVal = {}

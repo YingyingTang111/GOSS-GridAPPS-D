@@ -24,7 +24,7 @@ $endif
 
 
 
-V_dem_Load.up(demanStep)$(ord(demanStep) > 1)=  demLoad(demanStep-1)-demLoad(demanStep);
+V_dem_Load.up(demanStep)$(ord(demanStep) > 1)=  demLoad(demanStep)-demLoad(demanStep-1);
 V_dem_Load.fx('1')=0;
 Q_s.lo('13')=-300;
 Q_s.lo('57')=-300;

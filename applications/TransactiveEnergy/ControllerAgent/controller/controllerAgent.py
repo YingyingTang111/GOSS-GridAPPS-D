@@ -262,6 +262,12 @@ def controller_agent(config_path, **kwargs):
                 self.subscriptions[key] = []
                 topic = 'aggregator/' + key + '/all'
                 self.subscriptions[key].append(topic)
+            # subscription from fncs_bridge
+            self.subscriptions['fncs_bridge'] = []
+            fncs_bridge = agentSubscription['fncs_bridge'][0]
+            for key, val in fncs_bridge.items():
+                topic = key + '/simulation_end'
+                self.subscriptions['fncs_bridge'].append(topic)
             
         @Core.receiver('onsetup')
         def setup(self, sender, **kwargs):
@@ -283,6 +289,12 @@ def controller_agent(config_path, **kwargs):
                         self.vip.pubsub.subscribe(peer='pubsub',
                                                   prefix=subscription_topic,
                                                   callback=self.on_receive_aggregator_message)
+                                # Initialize subscription function to fncs_bridge:
+            for topic in self.subscriptions['fncs_bridge']:
+                _log.info('Subscribing to ' + topic)
+                self.vip.pubsub.subscribe(peer='pubsub',
+                                          prefix=topic,
+                                              callback=self.on_receive_fncs_bridge_message_fncs)
             
             
         # ====================extract float from string ===============================
@@ -327,6 +339,22 @@ def controller_agent(config_path, **kwargs):
             self.aggregator['clear_price']= val['clear_price']
             self.aggregator['price_cap'] = val['price_cap']
             self.aggregator['initial_price'] = val['initial_price']
+        
+        # ====================Obtain values from fncs_bridge ===========================
+        def on_receive_fncs_bridge_message_fncs(self, peer, sender, bus, topic, headers, message):
+            """Subscribe to fncs_bridge publications and change the data accordingly 
+            """    
+
+            val =  message[0] # value True
+#             _log.info('Aggregator {0:s} recieves from fncs_bridge the simulation ends message {1:s}'.format(self.market['name'], val))
+            if (val == 'True'):
+                # Dump to JSON fies and close the files
+#                 print (json.dumps(self.controller_bids_metrics), file=controller_op)
+#                 print (json.dumps(self.aggregator_cleared_metrics), file=aggregator_op)
+#                 aggregator_op.close()
+#                 controller_op.close()
+                # End the agent
+                self.core.stop() 
             
         @Core.periodic(1)
         def controller_implementation(self):
@@ -375,15 +403,15 @@ def controller_agent(config_path, **kwargs):
             
             if  self.controller['t1'] < self.controller['next_run'] and marketId == lastmkt_id :
                 if self.controller['t1'] <= self.controller['next_run'] - datetime.timedelta(0,bid_delay):
-                    if self.controller['use_predictive_bidding'] == 1 and ((self.controller['control_mode'] == 'CN_RAMP' and setpoint0 != last_setpoint) or (self.controller['control_mode'] == 'CN_DOUBLE_RAMP' and (self.controller['heating_setpoint0']  != self.controller['last_heating_setpoint'] or self.controller['cooling_setpoint0']  != self.controller['last_cooling_setpoint']))):
+                    if self.controller['use_predictive_bidding'] == 1 and ((self.controller['control_mode'] == 'CN_RAMP' and setpoint0 != last_setpoint)):
                         # Base set point setpoint0 is changed, and therefore sync is needed:
                         pass
                     elif self.house['last_pState'] != powerstate:
                         # house power state is changed, therefore sync is needed
                         pass
-                    elif self.controller['use_override'] == 'ON' and self.controller['t1'] >= self.controller['next_run']- datetime.timedelta(0,bid_delay) and self.bidded == false :
+                    elif self.controller['use_override'] == 'ON' and self.controller['t1'] >= self.controller['next_run']- datetime.timedelta(0,bid_delay) and self.bidded == False :
                         # At the exact time that controller is operating, therefore sync is needed:
-                        self.bidded = true # set it as true so that in the same controller period, it will not bid without the changes of house setpoint/power state
+                        self.bidded = True # set it as true so that in the same controller period, it will not bid without the changes of house setpoint/power state
                         pass
                     else:
                         return

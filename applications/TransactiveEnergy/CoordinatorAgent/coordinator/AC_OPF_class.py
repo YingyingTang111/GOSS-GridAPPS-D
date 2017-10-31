@@ -87,8 +87,9 @@ class AC_OPF:
         self.TimeStamp                               = TimeStamp
         self.GDXcaseName                             = GDXcaseName
         self.Display_Input()
-        self.Main_Program()
+        returnVal = self.Main_Program()
         
+        self.returnVal = returnVal
         
 
     def Display_Input(self):
@@ -136,7 +137,9 @@ class AC_OPF:
         
         self.st = self.Read_in(self.wb, 'GenS', self.sum_gennum  , self.rowlist)
         self.ip = self.Read_in(self.wb, 'GenP', self.sum_gennum  , self.rowlist)
-        self.pv = self.Read_in(self.wb, 'pv'  , self.pv_num      , self.rowlist)        
+        self.pv = self.Read_in(self.wb, 'pv'  , self.pv_num      , self.rowlist)   
+        
+        self.ip = [1, 2.0, 2.0, 2.0]     
            
         if self.definesolarlocation:
             self.solarindex  = self.Read_solar(self.system_folder + '/' + self.solar_index_file  , self.sum_distriGen, 3, 3)
@@ -149,20 +152,23 @@ class AC_OPF:
             self.wb              = openpyxl.load_workbook(self.system_folder + '/' + self.Feeder_Constraints_file)
             self.sheet1          = self.wb.get_sheet_by_name('DR_Boundary')
             
+            self.DemandRes_Price = self.DRprice
+            self.DemandRes_load = self.DRquantity
+            
             # comment out --------------------------------------------------------------
-            self.DemandRes_Price   = [None] * self.Nbend2
-            self.DemandRes_load   = [None] * self.Nbend2
-   
-            for icol in range(2, self.Nbend2+2):
-                self.DemandRes_Price[icol-2]   = self.sheet1.cell(row=1, column=icol).value
-                self.DemandRes_load[icol-2] = self.sheet1.cell(row=1, column=icol).value
-            for icol in range(2, self.Nbend2+2):
-                self.DemandRes_Price.append(self.sheet1.cell(row=2, column=icol).value)
-                self.DemandRes_load.append(self.sheet1.cell(row=3, column=icol).value)
+#             self.DemandRes_Price   = [None] * self.Nbend2
+#             self.DemandRes_load   = [None] * self.Nbend2
+#     
+#             for icol in range(2, self.Nbend2+2):
+#                 self.DemandRes_Price[icol-2]   = self.sheet1.cell(row=1, column=icol).value
+#                 self.DemandRes_load[icol-2] = self.sheet1.cell(row=1, column=icol).value
+#             for icol in range(2, self.Nbend2+2):
+#                 self.DemandRes_Price.append(self.sheet1.cell(row=3, column=icol).value)
+#                 self.DemandRes_load.append(self.sheet1.cell(row=2, column=icol).value)
+
             # --------------------------------------------------------------------------
             
-#             self.DemandRes_Price = self.DRprice
-#             self.DemandRes_load = self.DRquantity
+            
         
         [self.token1_vm, self.token2_Reac_P, self.token3_Reac_Solar, self.token4_tot_cost, self.token5_tot_loss, self.token6_tot_swit, self.token7_demand_res,\
         self.token8_solver_stat, self.token9_model_stat, self.token4_Distribu_Gen, self.token11_DR_inc_P, self.token12_DR_dec_P, self.token13_DR_inc_Q, self.token14_DR_dec_Q,\
@@ -182,11 +188,12 @@ class AC_OPF:
         # Print inputs of ACOPF
         print '[%s]' % ', '.join(map(str, self.p))
         print '[%s]' % ', '.join(map(str, self.q))
-        print '[%s]' % ', '.join(map(str, self.DRprice))
-        print '[%s]' % ', '.join(map(str, self.DRquantity))
+        print '[%s]' % ', '.join(map(str, self.DemandRes_Price))
+        print '[%s]' % ', '.join(map(str, self.DemandRes_load))
         print('end of printing inputs')
         
         """ MAIN ITERATION -------------------------------------------------------- """
+        ACOPF_solved = False
         while self.Nb < self.Nbend:  
             self.Nb      += 1       
             
@@ -244,7 +251,12 @@ class AC_OPF:
             # Run GAMS
             # NOTE:  DO NOT put t1 as an attribute of object SELF; otherwise, you MUST restart Python if you want to run the code again. The command "os.remove" DOES NOT help
             #return # uncomment this line to quit right before the first gams solve
-            t1.run(gams_options)   
+            try:
+                t1.run(gams_options)  
+                ACOPF_solved = True 
+            except:
+                print('Could not solve ACOPF')
+                 
             # Check the status of the model and solution
             print ('mstat: %s' %t1.out_db["mstat"].find_record().value)
             print ('Opt time: %s' %self.opt_time)
@@ -254,7 +266,11 @@ class AC_OPF:
                 
                 gams_options.defines["ic"] = str(self.icset[self.opt_time])
                 # Run GAMS again
-                t1.run(gams_options)
+                try:
+                    t1.run(gams_options)  
+                    ACOPF_solved = True 
+                except:
+                    print('Could not solve ACOPF')
             
                 print ('mstat: %s' %t1.out_db["mstat"].find_record().value)
                 print ('Opt time: %s' %self.opt_time)
@@ -263,74 +279,74 @@ class AC_OPF:
             
    
             """ COLLECT THE RESULT FROM GAMS --------------------------------------- """
-   
-            # Collect the headers      
-            self.switched_shunt_susceptance_keys     = [(rec.key(0), rec.key(1)) for rec in t1.out_db["switched_shunt_susceptance_keys"]] 
-            self.switched_shunt_susceptance_buses    = [rec[0] for rec in self.switched_shunt_susceptance_keys]  
-       
-            if (self.Nb == 1): # only to collect the header information ONCE
-                for comp in t1.out_db["atBus"]:
-                    self.genatbus.append(int(comp.key(1)))    
-                for comp in t1.out_db["Pd"]:
-                    self.loadindex.append(int(comp.key(0)))     
-                for comp in t1.out_db["VoltageDevNongen"]:                    
-                    self.rowLoadnongenatBus.append(int(comp.key(0)))
-                for comp in t1.out_db["type"]:                    
-                    if comp.value == 3:
-                        self.slackbus = int(comp.key(0))                  
-                # Number of nongen buses connected to loads
-                self.len_nongenLoad = len(self.rowLoadnongenatBus)                    
-                # Non-gen voltage deadband (parameter)
-                self.loadvoltage_deviation_db        = self.Get_Result(t1, self.loadvoltage_deviation_db, "load_bus_volt_dead_band", 2, 1)                 
-            
-            # Voltage magnitude at generator bus (parameters)
-            self.token1_vm                           = self.Get_Result(t1, self.token1_vm, "Vm", 2, self.sum_bus_num)
-            # Reactive power generated by generators (variables)
-            self.token2_Reac_P                       = self.Get_Result(t1, self.token2_Reac_P, "V_Q", 1, self.sum_gennum)
-            # Reactive power generated by solars and the associated inverters (variables)
-            self.token3_Reac_Solar                   = self.Get_Result(t1, self.token3_Reac_Solar, "Q_S", 1, self.sum_distriGen)
-            
-            
-            
-            
-             
-            # Reactive power generated by solars and the associated inverters (variables)
-            #distributed generation
-            self.token4_Distribu_Gen                = self.Get_Result(t1, self.token4_Distribu_Gen, "P_S", 1, self.sum_distriGen)    
-            # Real power generated by generators (Variables)
-            self.pgen                                = self.Get_Result(t1, self.pgen, "V_P", 1, self.sum_gennum)       
-            # Demand (Parameters)
-            self.demand                              = self.Get_Result(t1, self.demand, "Pd", 2, self.sum_load_num)
-            # Generator voltages (Parameters)
-            self.generator_voltage                   = self.Get_Result(t1, self.generator_voltage, "vmgenBus", 2, self.sum_gennum) 
-            # Generator voltages schedule (Parameters)
-            self.Vschedule                           = self.Get_Result(t1, self.Vschedule, "Vsch", 2, self.sum_gennum)
-            # Load voltages (Parameters)
-            self.nongenerator_voltage                = self.Get_Result(t1, self.nongenerator_voltage, "vmnongen", 2, self.sum_bus_num-self.sum_gennum) 
-            # Non-gen load voltage deviation (parameters)
-            self.loadvoltage_deviation               = self.Get_Result(t1, self.loadvoltage_deviation, "VoltageDevNongen", 2, self.len_nongenLoad)            
-            # Values of shunt susceptances (Parameters)
-            self.switched_shunt_susceptance_values   = self.Get_Result_shunt(t1, self.switched_shunt_susceptance_values, "switched_shunt_susceptance_final")  
-            # Values of shunt susceptances (Parameters)
-            self.bus_va_degrees                      = self.Get_Result(t1, self.bus_va_degrees, "Va", 2, self.sum_bus_num)  
-            self.bus_va_degrees.insert((self.Nb-1)*self.sum_bus_num + self.slackbus-1 , 0) # insert zero angle of the slack bus
-            # Total cost
-            self.token4_tot_cost                     = self.Get_Result(t1, self.token4_tot_cost, "total_cost", 3, 1)
-            # Total lost
-            self.token5_tot_loss                     = self.Get_Result(t1, self.token5_tot_loss, "TotalLoss", 3, 1)    
-            # Total switch cost
-            self.token6_tot_swit                     = self.Get_Result(t1, self.token6_tot_swit, "TotalSwitches", 3, 1)     
-          
-            
-            
-            
-            # Load voltage deviation
-            #controllable load shift
-            self.token7_demand_res               = self.Get_Result(t1, self.token7_demand_res, "V_dem_Load", 1, 5) 
-            # sstat
-            self.token8_solver_stat                  = self.Get_Result(t1, self.token8_solver_stat, "sstat", 3, 1)    
-            # mstat
-            self.token9_model_stat                   = self.Get_Result(t1, self.token9_model_stat, "mstat", 3, 1)      
+            if (ACOPF_solved == True):
+                # Collect the headers      
+                self.switched_shunt_susceptance_keys     = [(rec.key(0), rec.key(1)) for rec in t1.out_db["switched_shunt_susceptance_keys"]] 
+                self.switched_shunt_susceptance_buses    = [rec[0] for rec in self.switched_shunt_susceptance_keys]  
+           
+                if (self.Nb == 1): # only to collect the header information ONCE
+                    for comp in t1.out_db["atBus"]:
+                        self.genatbus.append(int(comp.key(1)))    
+                    for comp in t1.out_db["Pd"]:
+                        self.loadindex.append(int(comp.key(0)))     
+                    for comp in t1.out_db["VoltageDevNongen"]:                    
+                        self.rowLoadnongenatBus.append(int(comp.key(0)))
+                    for comp in t1.out_db["type"]:                    
+                        if comp.value == 3:
+                            self.slackbus = int(comp.key(0))                  
+                    # Number of nongen buses connected to loads
+                    self.len_nongenLoad = len(self.rowLoadnongenatBus)                    
+                    # Non-gen voltage deadband (parameter)
+                    self.loadvoltage_deviation_db        = self.Get_Result(t1, self.loadvoltage_deviation_db, "load_bus_volt_dead_band", 2, 1)                 
+                
+                # Voltage magnitude at generator bus (parameters)
+                self.token1_vm                           = self.Get_Result(t1, self.token1_vm, "Vm", 2, self.sum_bus_num)
+                # Reactive power generated by generators (variables)
+                self.token2_Reac_P                       = self.Get_Result(t1, self.token2_Reac_P, "V_Q", 1, self.sum_gennum)
+                # Reactive power generated by solars and the associated inverters (variables)
+                self.token3_Reac_Solar                   = self.Get_Result(t1, self.token3_Reac_Solar, "Q_S", 1, self.sum_distriGen)
+                
+                
+                
+                
+                 
+                # Reactive power generated by solars and the associated inverters (variables)
+                #distributed generation
+                self.token4_Distribu_Gen                = self.Get_Result(t1, self.token4_Distribu_Gen, "P_S", 1, self.sum_distriGen)    
+                # Real power generated by generators (Variables)
+                self.pgen                                = self.Get_Result(t1, self.pgen, "V_P", 1, self.sum_gennum)       
+                # Demand (Parameters)
+                self.demand                              = self.Get_Result(t1, self.demand, "Pd", 2, self.sum_load_num)
+                # Generator voltages (Parameters)
+                self.generator_voltage                   = self.Get_Result(t1, self.generator_voltage, "vmgenBus", 2, self.sum_gennum) 
+                # Generator voltages schedule (Parameters)
+                self.Vschedule                           = self.Get_Result(t1, self.Vschedule, "Vsch", 2, self.sum_gennum)
+                # Load voltages (Parameters)
+                self.nongenerator_voltage                = self.Get_Result(t1, self.nongenerator_voltage, "vmnongen", 2, self.sum_bus_num-self.sum_gennum) 
+                # Non-gen load voltage deviation (parameters)
+                self.loadvoltage_deviation               = self.Get_Result(t1, self.loadvoltage_deviation, "VoltageDevNongen", 2, self.len_nongenLoad)            
+                # Values of shunt susceptances (Parameters)
+                self.switched_shunt_susceptance_values   = self.Get_Result_shunt(t1, self.switched_shunt_susceptance_values, "switched_shunt_susceptance_final")  
+                # Values of shunt susceptances (Parameters)
+                self.bus_va_degrees                      = self.Get_Result(t1, self.bus_va_degrees, "Va", 2, self.sum_bus_num)  
+                self.bus_va_degrees.insert((self.Nb-1)*self.sum_bus_num + self.slackbus-1 , 0) # insert zero angle of the slack bus
+                # Total cost
+                self.token4_tot_cost                     = self.Get_Result(t1, self.token4_tot_cost, "total_cost", 3, 1)
+                # Total lost
+                self.token5_tot_loss                     = self.Get_Result(t1, self.token5_tot_loss, "TotalLoss", 3, 1)    
+                # Total switch cost
+                self.token6_tot_swit                     = self.Get_Result(t1, self.token6_tot_swit, "TotalSwitches", 3, 1)     
+              
+                
+                
+                
+                # Load voltage deviation
+                #controllable load shift
+                self.token7_demand_res               = self.Get_Result(t1, self.token7_demand_res, "V_dem_Load", 1, 5) 
+                # sstat
+                self.token8_solver_stat                  = self.Get_Result(t1, self.token8_solver_stat, "sstat", 3, 1)    
+                # mstat
+                self.token9_model_stat                   = self.Get_Result(t1, self.token9_model_stat, "mstat", 3, 1)      
             
       
         ## EXTRA calculations
@@ -347,22 +363,25 @@ class AC_OPF:
                 self.loadvoltage_deviation_per[idx] = (self.loadvoltage_deviation[idx] - self.loadvoltage_deviation_db[0]) / 1 * 100
             elif self.loadvoltage_deviation[idx] < (-self.loadvoltage_deviation_db[0]):
                 self.loadvoltage_deviation_per[idx] = abs(self.loadvoltage_deviation[idx] + self.loadvoltage_deviation_db[0]) / 1 * 100
-        
-        
-        
+         
             
         """ Export the solution to spreadsheet """
-        Export_Solution(self.Nb, self.Nbend, self.fileorder, self.busindex, self.genindex, self.genatbus, self.solaratbus, self.solarindex[:self.sum_distriGen], self.loadindex,\
-                        self.sum_load_num, self.sum_gennum, self.sum_distriGen, self.sum_bus_num, self.switched_shunt_susceptance_buses,\
-                        self.simutimestep, self.simuyear, self.startrow, self.token1_vm, self.token2_Reac_P, self.token3_Reac_Solar, self.token4_tot_cost, self.token5_tot_loss, self.token6_tot_swit,\
-                        self.token7_demand_res, self.token8_solver_stat, self.token9_model_stat, self.pgen, self.demand,\
-                        self.generator_voltage, self.nongenerator_voltage, self.genvoltage_deviation, self.loadvoltage_deviation,\
-                        self.genvoltage_deviation_per, self.loadvoltage_deviation_per, self.rowLoadnongenatBus, self.len_nongenLoad,\
-                        self.switched_shunt_susceptance_values, self.bus_va_degrees,\
-                        self.export_to_spreadsheet)
+#         Export_Solution(self.Nb, self.Nbend, self.fileorder, self.busindex, self.genindex, self.genatbus, self.solaratbus, self.solarindex[:self.sum_distriGen], self.loadindex,\
+#                         self.sum_load_num, self.sum_gennum, self.sum_distriGen, self.sum_bus_num, self.switched_shunt_susceptance_buses,\
+#                         self.simutimestep, self.simuyear, self.startrow, self.token1_vm, self.token2_Reac_P, self.token3_Reac_Solar, self.token4_tot_cost, self.token5_tot_loss, self.token6_tot_swit,\
+#                         self.token7_demand_res, self.token8_solver_stat, self.token9_model_stat, self.pgen, self.demand,\
+#                         self.generator_voltage, self.nongenerator_voltage, self.genvoltage_deviation, self.loadvoltage_deviation,\
+#                         self.genvoltage_deviation_per, self.loadvoltage_deviation_per, self.rowLoadnongenatBus, self.len_nongenLoad,\
+#                         self.switched_shunt_susceptance_values, self.bus_va_degrees,\
+#                         self.export_to_spreadsheet)
         
-
-
+        """ Return values to the main function """
+        returnVal = dict()
+        returnVal['DER'] = self.token4_Distribu_Gen
+        returnVal['DRquantity'] = self.token7_demand_res[1]
+        returnVal['SocialWelfare'] = self.token4_tot_cost
+        
+        return returnVal
 
     def Read_in(self, wb, sheet_name, object_num, row_list):
         sheet = wb.get_sheet_by_name(sheet_name)

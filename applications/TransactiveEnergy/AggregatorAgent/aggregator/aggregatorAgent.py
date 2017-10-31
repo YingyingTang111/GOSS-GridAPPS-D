@@ -147,7 +147,7 @@ def aggregator_agent(config_path, **kwargs):
                    
             # Check special mode
             if self.market['special_mode'] != 'MD_NONE' and self.market['fixed_quantity'] < 0.0:
-                sys.exit('Auction is using a one-sided market with a negative fixed quantity')
+                raise ValueError('Auction is using a one-sided market with a negative fixed quantity')
             
             # Initialize latency queue
             self.market['latency_count'] = int (self.market['latency'] / self.market['period']) + 2
@@ -167,7 +167,7 @@ def aggregator_agent(config_path, **kwargs):
             self.market['price_index'] = self.market['price_count'] = 0
             
             if self.market['init_stdev'] < 0.0:
-                sys.exit('auction init_stdev is negative!')
+                raise ValueError('auction init_stdev is negative!')
                 
             # Assign initial values to the market outputs
             self.market_output['std'] = self.market['init_stdev']
@@ -184,6 +184,8 @@ def aggregator_agent(config_path, **kwargs):
             self.subscriptions = {}   
             self.subscriptions['controller'] = []
             self.subscriptions['meter'] = []
+            self.subscriptions['fncs_bridge'] = []
+            self.subscriptions['coordinator'] = []
             # Check agentSubscription
             controller = agentSubscription['controller'][0]
             if len(controller) < 1:
@@ -199,6 +201,16 @@ def aggregator_agent(config_path, **kwargs):
             for key, val in meter.items():
                 topic = 'fncs/output/devices/fncs_Test/' + key
                 self.subscriptions['meter'].append(topic)
+            # subscription from fncs_bridge
+            fncs_bridge = agentSubscription['fncs_bridge'][0]
+            for key, val in fncs_bridge.items():
+                topic = key + '/simulation_end'
+                self.subscriptions['fncs_bridge'].append(topic)
+            # subscription from coordinator agent
+            coordinatorAgent = agentSubscription['coordinator'][0]
+            for key, val in coordinatorAgent.items():
+                topic = 'coordinator/' + key + '/all'
+                self.subscriptions['coordinator'].append(topic)
             
             # Create JSON file storing controller bids and cleared information from coordinator
             controller_bids_meta = {'bid_price':{'units':'USD','index':0},'bid_quantity':{'units':'kW','index':1}}
@@ -212,6 +224,11 @@ def aggregator_agent(config_path, **kwargs):
             
         @Core.receiver('onstart')            
         def startup(self, sender, **kwargs):
+            
+            # Open the JSON file
+            self.aggregator_op = open ("aggregator_" + config['agentid'] + "_metrics.json", "w")
+            self.controller_op = open ("controller_" + config['agentid'] + "_metrics.json", "w")
+
             # Initialize subscription function to controllers
             for topic in self.subscriptions['controller']:
                 _log.info('Subscribing to ' + topic)
@@ -225,6 +242,20 @@ def aggregator_agent(config_path, **kwargs):
                 self.vip.pubsub.subscribe(peer='pubsub',
                                           prefix=topic,
                                               callback=self.on_receive_GLD_message_fncs)
+            
+            # Initialize subscription function to fncs_bridge:
+            for topic in self.subscriptions['fncs_bridge']:
+                _log.info('Subscribing to ' + topic)
+                self.vip.pubsub.subscribe(peer='pubsub',
+                                          prefix=topic,
+                                              callback=self.on_receive_fncs_bridge_message_fncs)
+                
+            # Initialize subscription function to coordinator:
+            for topic in self.subscriptions['coordinator']:
+                _log.info('Subscribing to ' + topic)
+                self.vip.pubsub.subscribe(peer='pubsub',
+                                          prefix=topic,
+                                              callback=self.on_receive_coordinator_message)
                 
             # Publish the initial market information
             self.market['clearat'] = self.startTime + datetime.timedelta(0,self.market['period'])  
@@ -299,7 +330,7 @@ def aggregator_agent(config_path, **kwargs):
             """Subscribe to GLD publications and change the data accordingly 
             """    
 
-            val =  message[0]/1000
+            val =  message[0]/1000 # Convert unit to kW
 #             _log.info('Aggregator {0:s} recieves from GLD the real power {1} kW.'.format(self.market['name'], val))
             self.market['capacity_reference_object']['capacity_reference_property'] = val
             
@@ -319,7 +350,7 @@ def aggregator_agent(config_path, **kwargs):
 
             # Update coordinator data 
             val = message[0]
-            _log.info('Aggregator {0:s} recieves from coordinator the cleared information.'.format(aggregatorName))  
+            _log.info('Aggregator {0:s} recieves from coordinator the cleared information.'.format(self.market['name']))  
                 
             if (val['market_id'] == self.market['market_id']):
                 
@@ -330,8 +361,28 @@ def aggregator_agent(config_path, **kwargs):
                 self.coordinator['received'] = True
                 
             else:
-                raise ValueError('Coordinator market id is not the same with the aggregator')
+                warnings.warn('Coordinator market id {0} is not the same with the aggregator id {1}'.format(val['market_id'], self.market['market_id']))
         
+        # ====================Obtain values from fncs_bridge ===========================
+        def on_receive_fncs_bridge_message_fncs(self, peer, sender, bus, topic, headers, message):
+            """Subscribe to fncs_bridge publications and change the data accordingly 
+            """    
+
+            val =  message[0] # value True
+#             _log.info('Aggregator {0:s} recieves from fncs_bridge the simulation ends message {1:s}'.format(self.market['name'], val))
+            if (val == 'True'):
+                # Dump to JSON fies and close the files
+                with open(self.controller_op, 'w') as outfile:
+                    json.dumps(self.controller_bids_metrics, outfile)
+                with open(self.aggregator_op, 'w') as outfile:
+                    json.dumps(self.aggregator_cleared_metrics, outfile)
+#                 print (json.dumps(self.controller_bids_metrics), file=self.controller_op)
+#                 print (json.dumps(self.aggregator_cleared_metrics), file=self.aggregator_op)
+#                 self.aggregator_op.close()
+#                 self.controller_op.close()
+                # End the agent
+                self.core.stop() 
+            
         @Core.periodic(1)
         def presync(self):
             ''' This method comes from the presync part of the auction source code in GLD 
@@ -650,6 +701,9 @@ def aggregator_agent(config_path, **kwargs):
 
             print(self.timeSim.strftime("%Y-%m-%d %H:%M:%S"),'(Type,Price,MargQ,MargT,MargF)',clearing_type, self.nextClear['price'], marginal_quantity, marginal_total, marginal_frac)
 
+            # Store cleared market information into JSON metrics
+            self.aggregator_cleared_metrics[self.timeSim.strftime("%Y-%m-%d %H:%M:%S")] = self.nextClear['price']
+                    
             # Update new_price and price_index, for the calculation of sdv and mean from update_statistics later
             if self.market['history_count'] > 0:
                 # If the market clearing times equal to the described statistic interval, update it from 0
@@ -750,7 +804,7 @@ def aggregator_agent(config_path, **kwargs):
         def push_market_frame(self):
         
             if (self.market['latency_back'] + 1) % self.market['latency_count'] == self.market['latency_front']:
-                sys.exit('market latency queue is overwriting as-yet unused data, so is not long enough or is not consuming data')
+                raise ValueError('market latency queue is overwriting as-yet unused data, so is not long enough or is not consuming data')
             
             # Copy cleared frame data into the current market frame used
             self.market['framedata'][self.market['latency_back']] = deepcopy(self.market['cleared_frame'])
