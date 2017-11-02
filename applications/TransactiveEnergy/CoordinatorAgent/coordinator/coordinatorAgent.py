@@ -6,6 +6,7 @@ import math
 import numpy as np
 from copy import deepcopy
 import warnings
+import csv
 
 # import from ACOPF
 import os
@@ -28,6 +29,7 @@ def coordinator_agent(config_path, **kwargs):
     config = utils.load_config(config_path)
     agentSubscription = config['subscriptions']
     agentInitialVal = config['initial_value']
+    mypath = "/home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/"
     
     class coordinatorAgent(Agent):
         '''This agent is the top level coordinator that collects the bidding curve from lower level aggregators and DERs before market clears.
@@ -59,6 +61,12 @@ def coordinator_agent(config_path, **kwargs):
             self.market['period'] = agentInitialVal['market_information']['period']
             self.market['market_id'] = agentInitialVal['market_information']['market_id']
             self.market['lastmkt_id'] = self.market['market_id']
+            
+            # Read in csv file storing total feeder loads without controllers and DGs
+            fileName = agentInitialVal['market_information']['total_feeder_load']
+            with open(mypath + fileName, 'rb') as f:
+                reader = csv.reader(f)
+                self.feederLoads = list(reader)
             
             # Aggregator information
             aggregators = agentSubscription['aggregators']
@@ -154,7 +162,20 @@ def coordinator_agent(config_path, **kwargs):
                 for key2, val2 in val1.items():
                     topic = 'fncs/output/devices/fncs_Test/' + key2
                     self.subscriptions['DERs'][key1].append(topic)
-        
+            
+            # subscription from fncs_bridge
+            self.subscriptions['fncs_bridge'] = []
+            fncs_bridge = agentSubscription['fncs_bridge'][0]
+            for key, val in fncs_bridge.items():
+                topic = key + '/simulation_end'
+                self.subscriptions['fncs_bridge'].append(topic)
+            
+            # Open csv file for recording cleared information during simulation
+            self.csvCleared = config['agentid'] + '_cleared_information.csv'
+            with open(self.csvCleared, 'w') as f:
+                f.write('Cleared_time, market_id, ACOPF_solved, cleared_price, cleared_quantity, cleared_DG1_output (kW), cleared_DG2_output (kW), expected_SubstationP (kW), social_welfare ($)')
+                f.flush()
+   
         @Core.receiver('onsetup')
         def setup(self, sender, **kwargs):
             self._agent_id = config['agentid']
@@ -163,7 +184,8 @@ def coordinator_agent(config_path, **kwargs):
         def startup(self, sender, **kwargs):
             
             # Update the clear time 
-            self.market['clearat'] = self.startTime + datetime.timedelta(0,self.market['period']) 
+#             self.market['clearat'] = self.startTime + datetime.timedelta(0,self.market['period']) 
+            self.market['clearat'] = self.startTime + datetime.timedelta(0,10) # For testing
             
             # Initialize subscription function to aggregators
             for key, val in self.subscriptions['aggregators'].items():
@@ -212,6 +234,13 @@ def coordinator_agent(config_path, **kwargs):
                                               prefix=val2,
                                               callback=self.on_receive_DER_message)
             
+            # Initialize subscription function to fncs_bridge:
+            for topic in self.subscriptions['fncs_bridge']:
+                _log.info('Subscribing to ' + topic)
+                self.vip.pubsub.subscribe(peer='pubsub',
+                                          prefix=topic,
+                                              callback=self.on_receive_fncs_bridge_message_fncs)
+            
  
             
         # ====================extract float from string ===============================
@@ -237,7 +266,7 @@ def coordinator_agent(config_path, **kwargs):
                     self.aggregator[aggregatorName]['quantity'] = val['quantity']
                     self.aggregator[aggregatorName]['name'] = val['name']
                 else:
-                    raise ValueError('The market id recieved from aggregator {0:d} is different from coordinator market id {1;d}'.format(val['market_id'], self.market['market_id']))
+                    raise ValueError('The market id recieved from aggregator {0:d} is different from coordinator market id {1:d}'.format(val['market_id'], self.market['market_id']))
         
         def on_receive_aggregator_kVAR_message(self, peer, sender, bus, topic, headers, message):
             """Subscribe to GLD meter publications and change the data accordingly 
@@ -245,9 +274,9 @@ def coordinator_agent(config_path, **kwargs):
             # Find the metered load name
             aggregatorName = topic.split("/")[-1]
             
-            val =  message[0]/1000
+            val =  message[0]/1000  # Convert unit to kVAR
             
-            _log.info('Coordinator {0:s} recieves from GLD the measured reactive power {1} kVAR at aggregator {2:s}.'.format(self.market['name'], val, aggregatorName))
+#             _log.info('At time {3:s},Coordinator {0:s} recieves from GLD the measured reactive power {1} kVAR at aggregator {2:s}.'.format(self.market['name'], val, aggregatorName, self.timeSim.strftime("%Y-%m-%d %H:%M:%S")))
             
             self.aggregator_reactive[aggregatorName] = val
             
@@ -259,9 +288,9 @@ def coordinator_agent(config_path, **kwargs):
             meterName = topic.split("/")[-1]
             
             if ('VAR' not in meterName):
-                val =  message[0]/1000
+                val =  message[0]/1000  # Convert unit to kW
                 
-                _log.info('Coordinator {0:s} recieves from GLD the measured real power {1} kW at meter {2:s}.'.format(self.market['name'], val, meterName))
+#                 _log.info('Coordinator {0:s} recieves from GLD the measured real power {1} kW at meter {2:s}.'.format(self.market['name'], val, meterName))
                 
                 self.meters[meterName] = val
         
@@ -270,9 +299,9 @@ def coordinator_agent(config_path, **kwargs):
             """    
             # Find the metered load name
             meterName = topic.split("/")[-1]
-            val =  message[0]/1000
+            val =  message[0]/1000  # Convert unit to kVAR
             
-            _log.info('Coordinator {0:s} recieves from GLD the measured reactive power {1} kVAR at meter {2:s}.'.format(self.market['name'], val, meterName))
+#             _log.info('Coordinator {0:s} recieves from GLD the measured reactive power {1} kVAR at meter {2:s}.'.format(self.market['name'], val, meterName))
             
             self.meters_reactive[meterName] = val
             
@@ -284,9 +313,9 @@ def coordinator_agent(config_path, **kwargs):
             meterName = topic.split("/")[-1]
             
             if ('VAR' not in meterName):
-                val =  message[0]/1000
+                val =  message[0]/1000 # Convert unit to kW
                 
-                _log.info('Coordinator {0:s} recieves from GLD the measured real power {1} kW at substation.'.format(self.market['name'], val))
+#                 _log.info('Coordinator {0:s} recieves from GLD the measured real power {1} kW at substation.'.format(self.market['name'], val))
                 
                 self.substation[meterName] = val
         
@@ -295,9 +324,9 @@ def coordinator_agent(config_path, **kwargs):
             """    
             
             meterName = topic.split("/")[-1]
-            val =  message[0]/1000
+            val =  message[0]/1000 # Convert unit to kVAR
             
-            _log.info('Coordinator {0:s} recieves from GLD the measured reactive power {1} kVAR at substation.'.format(self.market['name'], val))
+#             _log.info('Coordinator {0:s} recieves from GLD the measured reactive power {1} kVAR at substation.'.format(self.market['name'], val))
             
             self.substation_reactive[meterName] = val
         
@@ -305,13 +334,14 @@ def coordinator_agent(config_path, **kwargs):
         def on_receive_DER_message(self, peer, sender, bus, topic, headers, message):
             """Subscribe to GLD substation load publications and change the data accordingly 
             """    
-            DERName = topic.split("/")[-1]
+            DERPhaseName = topic.split("/")[-1]
+            DERName = DERPhaseName.split("_")[0] + '_'+ DERPhaseName.split("_")[1]
             phaseName = topic.split("/")[-1]
-            val =  message[0]/1000
+            val =  message[0]/1000 # Convert unit to kW
             
-            _log.info('Coordinator {0:s} recieves from GLD the measured real power {1} kW at substation.'.format(self.market['name'], val))
+#             _log.info('Coordinator {0:s} recieves from GLD the measured real power {1} kW at substation.'.format(self.market['name'], val))
             
-            self.DERs[DERName] = val
+            self.DERs[DERName][DERPhaseName] = val
         
         # ====================Obtain utility price setpoint based on given quantity setpoint===========================
         def obtainUtility(self, val, ind, sumQuantityArray, UtilityArray):
@@ -328,6 +358,15 @@ def coordinator_agent(config_path, **kwargs):
                 utilityPrice = float(utilityPrice)
                 
             return utilityPrice
+        
+        # ====================Obtain values from fncs_bridge ===========================
+        def on_receive_fncs_bridge_message_fncs(self, peer, sender, bus, topic, headers, message):
+            """Subscribe to fncs_bridge publications and change the data accordingly 
+            """    
+
+            val =  message[0] # value True
+            if (val == 'True'):
+                self.core.stop() 
  
         @Core.periodic(1)
         def clear_market(self):
@@ -369,7 +408,11 @@ def coordinator_agent(config_path, **kwargs):
                     self.DRprice.extend([0] * buyerCurveNum)
                 else:
                     # Or, grab several points with same steps
-                    step = sum(quantityArray)/buyerCurveNum
+                    # The first item is always 0 by default in ACOPF 
+                    self.DRquantity.extend([0])
+                    self.DRprice.extend([0])
+                    #
+                    step = sum(quantityArray)/(buyerCurveNum - 1)
                     UtilityArray = []
                     sumQuantityArray = []
                     sumUtility = 0
@@ -379,7 +422,7 @@ def coordinator_agent(config_path, **kwargs):
                         UtilityArray.append(sumUtility)
                         sumQuantity += quantityArray[i]
                         sumQuantityArray.append(sumQuantity)
-                    for i in range(buyerCurveNum):
+                    for i in range(buyerCurveNum - 1):
                         val = step * (i + 1) # The value put into the DR quantity array, based on given number of points and corresponding step value
                         self.DRquantity.append(val)
                         for j in range(len(sumQuantityArray)):
@@ -388,7 +431,7 @@ def coordinator_agent(config_path, **kwargs):
                                 self.DRprice.append(utilityPrice) # Put into the DRprice array based on quantity setpoint on the utility curve
                                 break;
                             elif val > sumQuantityArray[-1]:
-                                utilityPrice = self.obtainUtility(val, len(sumQuantityArray) - 1, sumQuantityArray, UtilityArray)
+                                utilityPrice = self.obtainUtility(sumQuantityArray[-1], len(sumQuantityArray) - 1, sumQuantityArray, UtilityArray)
                                 self.DRprice.append(utilityPrice) # Put into the DRprice array based on quantity setpoint on the utility curve
                                 break;
                 
@@ -408,8 +451,11 @@ def coordinator_agent(config_path, **kwargs):
                     totalSubLds += val
                 
                 # Calculate unknown bus real power:
-                unknownBusLds = totalSubLds + totalDGoutputs - (totalUnctlLds + totalAggregatorLds) 
+                unknownBusLds = totalSubLds + totalDGoutputs - (totalUnctlLds + totalAggregatorLds)
                 
+                # Record feeder information before conducting ACOPF                
+                _log.info('At time {3}, coordinator agent {0} start computing ACOPF, with measured substation {1} MW, total DER outputs {2} MW, and controllable loads {3} MW'.format(config['agentid'], totalSubLds/1000.0, totalDGoutputs/1000.0, sum(quantityArray)))
+                 
                 # Obtain unknown bus reactive power
                 totalAggregatorLds = 0
                 for key, value in self.aggregator_reactive.items():
@@ -441,61 +487,74 @@ def coordinator_agent(config_path, **kwargs):
                 bus57_Q = self.meters_reactive['downstream_2_kVAR_load']/1000.0
                 Qlist = [bus7_Q, bus18_Q, bus57_Q] * 3
                 self.Q = [7, 18, 57]
-                self.Q.extend(Qlist)                
+                self.Q.extend(Qlist)          
+                
+                # Calculate the time since simulation starts in second
+                timeDiff = self.timeSim - self.startTime   
+                timeDiffSec = timeDiff.days * 24 * 60 * 60 + timeDiff.seconds
+                timeIndex = (timeDiffSec % (24 * 60 * 60) / 30) # index in total_feeder_load file
+                feederLoad = float(self.feederLoads[timeIndex][0]) * 0.8 # Scale to 0.7 times of the original total loads
                 
                 # Clear the market by using the fixed_price sent from coordinator ---------------------------------------------------------------
-                returnVal = self.ACOPF() 
-                DERoutputs = returnVal['DER'] 
-                cleared_quantity = returnVal['DRquantity'] 
-                socialWelfare = returnVal['SocialWelfare']
-                
-                
-                # Create a message for all points.
-#                 all_message = [{'market_id': self.market_output['market_id'], 
-#                                 'std_dev': self.market_output['std'], 
-#                                 'average_price': self.market_output['mean'],
-#                                 'clear_price': self.market_output['clear_price'], 
-#                                 'price_cap': self.market_output['pricecap'], 
-#                                 'period': self.market['period'],
-#                                 'initial_price': self.market['init_price']                          
-#                                 },
-#                                {'market_id': {'units': 'none', 'tz': 'UTC', 'type': 'integer'},
-#                                 'std_dev': {'units': '$', 'tz': 'UTC', 'type': 'float'}, 
-#                                 'average_price': {'units': '$', 'tz': 'UTC', 'type': 'float'},
-#                                 'clear_price': {'units': '$', 'tz': 'UTC', 'type': 'float'},
-#                                 'price_cap': {'units': '$', 'tz': 'UTC', 'type': 'float'}, 
-#                                 'period': {'units': 'second', 'tz': 'UTC', 'type': 'float'},
-#                                 'initial_price': {'units': '$', 'tz': 'UTC', 'type': 'float'}                          
-#                                 }]
-#                 pub_topic = 'aggregator/' + self.market['name'] + '/all'
-#                 _log.info('Aggregator agent {0} publishes cleared data to controllers with market_id {1}, average_price: {2}, clear_price: {3}'.format(self.market['name'], self.market_output['market_id'], self.market_output['mean'], self.market_output['clear_price']))
-#                 #Create timestamp
-#                 now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
-#                 headers = {
-#                     headers_mod.DATE: now
-#                 }
-#                 self.vip.pubsub.publish('pubsub', pub_topic, headers, all_message)
-                
+                returnVal = self.ACOPF(feederLoad) 
+                if returnVal['solved'] == True:
+                    DERoutputs = returnVal['DER'] 
+                    cleared_quantity = returnVal['DRquantity'] 
+                    socialWelfare = returnVal['SocialWelfare']
+                    subsPexpected = returnVal['substationP']
+                else:
+                    DERoutputs = 0
+                    cleared_quantity = 0
+                    socialWelfare = 0
+                    subsPexpected = 0
+
                 # Update lastmkt_id since the market just get cleared
                 self.market['lastmkt_id'] = self.market['market_id']
                 self.market['market_id'] += 1 # Go to wait for the next market
-                
+
                 # Publish cleared aggregator bidding price based on quantity solved by ACOPF
-                if len(priceArray) != 0:
+                if len(priceArray) != 0 and returnVal['solved'] == True:
                     # When there are bids from aggregator (there are controllable loads)
+                    clear_price = sumQuantityArray[-1]
                     for j in range(len(sumQuantityArray)):
                         if cleared_quantity <= sumQuantityArray[j]:
                             clear_price = priceArray[j]
                             break
                     # Publish clear_price
                     all_message = [{'market_id': self.market['market_id'], 
-                        'fixed_price': clear_price                         
+                        'fixed_price': clear_price, 
+                        'no_bid': False                        
                         },
                        {'market_id': {'units': 'none', 'tz': 'UTC', 'type': 'integer'},
-                        'fixed_price': {'units': '$', 'tz': 'UTC', 'type': 'float'}                       
+                        'fixed_price': {'units': '$', 'tz': 'UTC', 'type': 'float'},
+                        'no_bid': {'units': 'none', 'tz': 'UTC', 'type': 'boolean'}                      
                         }]
                     pub_topic = 'coordinator/' + config['agentid'] + '/all'
-                    _log.info('coordinator agent {0} publishes updated cleared price {1} to aggregator agents'.format(config['agentid'], clear_price))
+                    _log.info('At time {2}, coordinator agent {0} with market_id {3} publishes updated cleared price {1} $ to aggregator agents based on cleared quanyity {4} kW'.format(config['agentid'], clear_price, self.timeSim.strftime("%Y-%m-%d %H:%M:%S"), self.market['market_id'], cleared_quantity * 1000))
+                    # Create timestamp
+                    now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
+                    headers = {
+                        headers_mod.DATE: now
+                    }
+                    self.vip.pubsub.publish('pubsub', pub_topic, headers, all_message)
+                else:
+                    # Publish clear_price
+                    clear_price = 0.0
+                    
+                    all_message = [{'market_id': self.market['market_id'], 
+                        'fixed_price': 0.0, 
+                        'no_bid': True                        
+                        },
+                       {'market_id': {'units': 'none', 'tz': 'UTC', 'type': 'integer'},
+                        'fixed_price': {'units': '$', 'tz': 'UTC', 'type': 'float'},
+                        'no_bid': {'units': 'none', 'tz': 'UTC', 'type': 'boolean'}                      
+                        }]
+                    pub_topic = 'coordinator/' + config['agentid'] + '/all'
+                    if returnVal['solved'] == True:
+                        _log.info('At time {1}, coordinator agent {0} with market_id {2} publishes no_bid price 0.0 to aggregator agents since there are no bids recieved from controllable loads in this market period'.format(config['agentid'], self.timeSim.strftime("%Y-%m-%d %H:%M:%S"), self.market['market_id']))
+                    else:
+                        _log.info('At time {1}, coordinator agent {0} with market_id {2} publishes no_bid price 0.0 to aggregator agents since ACOPF could not be solved in this market period'.format(config['agentid'], self.timeSim.strftime("%Y-%m-%d %H:%M:%S"), self.market['market_id']))
+
                     # Create timestamp
                     now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
                     headers = {
@@ -504,26 +563,33 @@ def coordinator_agent(config_path, **kwargs):
                     self.vip.pubsub.publish('pubsub', pub_topic, headers, all_message)
                 
                 # Publish DER outputs
-                if (len(DERoutputs) != len(self.DERs)):
-                    raise ValueError('Length of ACOPF DER outputs {0} is not equal to the number of DERs {1} subscribed by coordinator'.format(len(DERoutputs), len(self.DERs)))
-                index = 0
-                for key1, val1 in self.DERs.items():
-                    DERname = key1
-                    DER_output = DERoutputs[index] * 1000000.0 / 3.0 # convert unit from MW to W
-                    for key2, val2 in val1.items():
-                        DER_phase_name = key2
-                        # Publish the updated DER output by phase:
-                        pub_topic = 'fncs/input/' + DER_phase_name
-                        _log.info('coordinator agent {0} publishes updated DER {1} output: {2}'.format(config['agentid'], DER_phase_name, DER_output))
-                        #Create timestamp
-                        now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
-                        headers = {
-                            headers_mod.DATE: now
-                        }
-                        self.vip.pubsub.publish('pubsub', pub_topic, headers, DER_output)
-                    index += 1
- 
+                if returnVal['solved'] == True:
+                    if (len(DERoutputs) != len(self.DERs)):
+                        raise ValueError('Length of ACOPF DER outputs {0} is not equal to the number of DERs {1} subscribed by coordinator'.format(len(DERoutputs), len(self.DERs)))
+                    index = 0
+                    for key1, val1 in self.DERs.items():
+                        DERname = key1
+                        DER_output = DERoutputs[index] * 1000000.0 / 3.0 # convert unit from MW to W
+                        for key2, val2 in val1.items():
+                            DER_phase_name = key2
+                            # Publish the updated DER output by phase:
+                            pub_topic = 'fncs/input/' + DER_phase_name
+                            _log.info('At time {3}, coordinator agent {0} with market_id {3} publishes updated DER {1} output: {2}'.format(config['agentid'], DER_phase_name, DER_output, self.timeSim.strftime("%Y-%m-%d %H:%M:%S"), self.market['market_id']))
+                            #Create timestamp
+                            now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
+                            headers = {
+                                headers_mod.DATE: now
+                            }
+                            self.vip.pubsub.publish('pubsub', pub_topic, headers, DER_output)
+                        index += 1
                 
+                # TODOS: remove hard coding of DG outputs
+                with open(self.csvCleared, 'a') as f:
+                    temp = [self.timeSim.strftime("%Y-%m-%d-%H:%M:%S"), str(self.market['market_id']), str(returnVal['solved']), str(clear_price), str(cleared_quantity * 1000.0), str(DERoutputs[0] * 1000), str(DERoutputs[1] * 1000), str(subsPexpected * 1000), str(socialWelfare)]
+#                     writer = csv.writer(f)
+                    writer.writerow(temp)
+                    f.flush()
+                    
                 # Display the opening of the next market
                 tiemDiff = (self.timeSim + datetime.timedelta(0,self.market['period']) - self.market['clearat']).total_seconds() % self.market['period']
                 self.market['clearat'] = self.timeSim + datetime.timedelta(0,self.market['period'] - tiemDiff)
@@ -531,7 +597,7 @@ def coordinator_agent(config_path, **kwargs):
                 
         
         # ======================== Conduct ACOPF by calling GAMS ==============    
-        def ACOPF(self):
+        def ACOPF(self, feederLoad):
             # Call GAMS to conduct ACOPF
             system = "7bus"
             
@@ -604,7 +670,7 @@ def coordinator_agent(config_path, **kwargs):
                     
                 if system == "7bus":
                     # 118-BUS SYSTEM PARAMETERS ----------------------------------------------
-                    system_folder                           = '7bus'
+                    system_folder                           = mypath + '7bus'
                     sum_bus_num                             = 7
                     sum_load_num                            = 3
                     sum_gennum                              = 1 
@@ -660,8 +726,7 @@ def coordinator_agent(config_path, **kwargs):
             opt_Vgen_dev                            = 1
             opt_Vload_dev                           = 1        
             # -------------------------------------------------------------------------    
-        
-           
+
             
             ## OPTIONS FOR PLOTTING RESULTS -------------------------------------------
             # export the result to spreadsheet or not
@@ -684,7 +749,7 @@ def coordinator_agent(config_path, **kwargs):
                             shuntSwitchingPenalty1, demand_response_decrease_penalty, demand_response_increase_penalty, solar_curtail_penalty, generator_voltage_deviation_penalty,\
                             load_bus_volt_pen_coeff_1, load_bus_volt_pen_coeff_2, load_bus_volt_dead_band, opt_Vgen_dev, opt_Vload_dev, previous_solution_as_start_point, icset, max_iter,\
                             bus_list_file, distrb_gen_index_file, solar_oneyear_file, GAMS_OptionSolution_GDXfile, GAMS_OPF_file, demand_response_file,\
-                            export_to_spreadsheet, system_folder, GDXcaseName, TimeStamp, self.P, self.Q, self.DRquantity, self.DRprice)
+                            export_to_spreadsheet, system_folder, GDXcaseName, TimeStamp, feederLoad, self.P, self.Q, self.DRquantity, self.DRprice)
         
             
             _log.info("--- ACOPF total running time: %s seconds ---" % (time.time() - ACOPF_start_time))

@@ -6,13 +6,14 @@ $ifthen %shunt_switching_off% == 1
 V_shunt.fx(bus,bus_s)$numBswitched(bus,bus_s) = numShuntStepsOn_init(bus,bus_s);
 $endif
 
+
 * Generator active power generation limits
-V_P.lo(gen)$(status(gen) and abs(gen_participation_factor(gen))) = Pmin(gen);
+V_P.lo(gen)$(status(gen) and abs(gen_participation_factor(gen))) = Pg(gen);
 V_P.up(gen)$(status(gen) and abs(gen_participation_factor(gen))) = Pmax(gen);
 V_P.fx(gen)$(status(gen) and not abs(gen_participation_factor(gen))) = PgSch(gen);
 V_P.fx(gen)$(not status(gen)) = 0;
 
-
+*display V_P.lo, Pg;
 $ifthen %solar_curtailment_off%==1
 Solar_p_curtail.fx(bus)=0;
 contro_solar_location(bus) = 0;
@@ -32,10 +33,10 @@ Q_s.up('13')=300;
 Q_s.up('57')=300;
 
 
-P_S.lo('13')=0.03;
-P_S.lo('57')=0.02;
-P_S.up('13')=0.3;
-P_S.up('57')=0.25;
+P_S.lo('13')=0.03/baseMVA;
+P_S.lo('57')=0.02/baseMVA;
+P_S.up('13')=0.3/baseMVA;
+P_S.up('57')=0.25/baseMVA;
 
 
 

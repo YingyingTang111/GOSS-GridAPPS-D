@@ -1,12 +1,12 @@
 "sunlamp crest-vct prototype acopf model"
 "start run"
 "start point summary"
-"p_load", 3.42500E-01
-"p_gen", 4.00000E-01
+"p_load", 4.50796E-01
+"p_gen", 4.28844E-01
 "p_shunt", 0.00000E+00
 "p_solar", 0.00000E+00
 "p_dr", 0.00000E+00
-"p_imbalance", 5.74998E-02
+"p_imbalance",-2.19525E-02
 "sum_loss", 0.00000E+00
 "v_load_bus_volt_pen", 3.00000E-02
 "v_totalshuntswitching", 0.00000E+00
@@ -20,7 +20,7 @@
 "max_De_response_Inc_P_up_viol","-INF"
 "max_De_response_dec_P_lo_viol","-INF"
 "max_v_shunt_up_viol","-INF"
-"max_balance_p_viol", 4.00000E-01
+"max_balance_p_viol", 4.28844E-01
 "max_balance_q_viol", 8.52001E-02
 "max_p_generator_add_viol", 0.00000E+00
 "max_c_I_limit_viol", 0.00000E+00

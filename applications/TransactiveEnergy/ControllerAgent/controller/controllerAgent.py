@@ -289,7 +289,8 @@ def controller_agent(config_path, **kwargs):
                         self.vip.pubsub.subscribe(peer='pubsub',
                                                   prefix=subscription_topic,
                                                   callback=self.on_receive_aggregator_message)
-                                # Initialize subscription function to fncs_bridge:
+                        
+            # Initialize subscription function to fncs_bridge:
             for topic in self.subscriptions['fncs_bridge']:
                 _log.info('Subscribing to ' + topic)
                 self.vip.pubsub.subscribe(peer='pubsub',
@@ -332,7 +333,7 @@ def controller_agent(config_path, **kwargs):
             aggregatorName = topic.split("/")[-2]
             # Update controller data 
             val = message[0]
-#             _log.info('Controller {0:s} recieves from aggregator the cleared data.'.format(self.controller['name']))      
+#             _log.info('At time {1:s}, controller {0:s} recieves from aggregator the cleared data.'.format(self.controller['name']), self.timeSim.strftime("%Y-%m-%d %H:%M:%S"))      
             self.aggregator['market_id'] = val['market_id']
             self.aggregator['std_dev'] = val['std_dev']
             self.aggregator['average_price'] = val['average_price']
@@ -426,6 +427,8 @@ def controller_agent(config_path, **kwargs):
             
             #  controller update house setpoint if market clears
             if self.controller['control_mode'] == 'CN_RAMP':
+                 # If market clears, update the setpoints based on cleared market price;
+                 # Or, at the beginning of the simlation, update house setpoint based on controller settings (lastmkt_id == -1 at the begining, therefore will go through here)
                 if marketId != lastmkt_id: 
                     
                     # Update controller last market id and bid id
@@ -467,16 +470,17 @@ def controller_agent(config_path, **kwargs):
                         set_temp = minT
                         
                     # Update house set point
-                    if self.controller['next_run'] != self.startTime:
-                        # Publish the changed setpoints:
-                        pub_topic = 'fncs/input/' + self.controller['name'] + '/cooling_setpoint'
-                        _log.info('controller agent {0} publishes updated setpoints {1} to house controlled with topic: {2}'.format(self.controller['name'], set_temp, pub_topic))
-                        #Create timestamp
-                        now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
-                        headers = {
-                            headers_mod.DATE: now
-                        }
-                        self.vip.pubsub.publish('pubsub', pub_topic, headers, set_temp)
+#                     if self.controller['next_run'] != self.startTime: # At starting time of the simulation, setpoints also need to be updated
+
+                    # Publish the changed setpoints:
+                    pub_topic = 'fncs/input/' + self.controller['name'] + '/cooling_setpoint'
+#                         _log.info('controller agent {0} publishes updated setpoints {1} to house controlled with topic: {2}'.format(self.controller['name'], set_temp, pub_topic))
+                    #Create timestamp
+                    now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
+                    headers = {
+                        headers_mod.DATE: now
+                    }
+                    self.vip.pubsub.publish('pubsub', pub_topic, headers, set_temp)
                     
                 # Calculate bidding price
                 # Bidding price when monitored load temperature is at the min and max limit of the controller
@@ -593,7 +597,7 @@ def controller_agent(config_path, **kwargs):
             
             # Display the bid only when bidding quantity if not 0
             if self.controller_bid['bid_quantity'] > 0:
-                _log.info('At time {0:s}, controller agent {5:s} bids with market_id {1:d}, bidding price is {2:f}, bidding quantity is {3:f}, rebid is {4:d}'.format(self.controller['t1'].strftime("%Y-%m-%d %H:%M:%S"), self.controller_bid['market_id'], self.controller_bid['bid_price'], self.controller_bid['bid_quantity'], self.controller_bid['rebid'], self.controller['name']))
+                _log.info('At time {0:s}, controller agent {5:s} bids with market_id {1:d}, bidding price is {2:f} $, bidding quantity is {3:f} kW, rebid is {4:d}'.format(self.controller['t1'].strftime("%Y-%m-%d %H:%M:%S"), self.controller_bid['market_id'], self.controller_bid['bid_price'], self.controller_bid['bid_quantity'], self.controller_bid['rebid'], self.controller['name']))
             
             # Issue a bid, if appropriate
             if self.controller_bid['bid_quantity'] > 0.0 and self.controller_bid['bid_price'] > 0.0:    

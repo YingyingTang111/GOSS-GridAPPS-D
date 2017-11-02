@@ -29,6 +29,7 @@ bid_delay = 0.0
 unit = "kW"
 periodCoordinator = 60
 price_cap = 1000
+total_feeder_load = 'total_feeder_load.csv' # The file storing total feeder loads without controllers and DGs
 
 # Aggregator data:
 AggregatorName = []
@@ -138,11 +139,17 @@ for meter in meterDGs:
                     meters[meter][temp[0].replace('"', "")] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
 
 subscriptions['metered_DGs'].append(meters)
+
+# Write subscription to fncs_bridge message
+subscriptions['fncs_bridge'] = []
+fncs_bridge = {}
+fncs_bridge[fncs_zpl['name']] = {'propertyType': 'String', 'propertyUnit': 'none', 'propertyValue': 0}
+subscriptions['fncs_bridge'].append(fncs_bridge)
    
 # Write initial valuess
 initialVal = {}
 initialVal = {}
-initialVal['market_information'] = {'market_id': 0, 'bid_delay': bid_delay, 'unit': unit, 'period': periodCoordinator, 'pricecap': price_cap}
+initialVal['market_information'] = {'market_id': 0, 'bid_delay': bid_delay, 'unit': unit, 'period': periodCoordinator, 'pricecap': price_cap, 'total_feeder_load': total_feeder_load}
 
 # Finalize config dictionary
 config['subscriptions'] = subscriptions

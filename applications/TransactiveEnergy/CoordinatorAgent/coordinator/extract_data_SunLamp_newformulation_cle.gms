@@ -3,6 +3,7 @@
 *updated by xinda ke in 7/24/2016
 
 *==== SECTION: Data (pre) declaration
+$onUNDF
 sets
 * New sets
     conj /real,imag/
@@ -172,24 +173,22 @@ $GDXIN
 $GDXIN demandresponseload.gdx
 $LOAD demLoad
 $GDXIN
-
+display demLoad;
 $GDXIN demandresponseprice.gdx
 $LOAD demPrice
 $GDXIN
 demLocation('18')=1;
 
 demLoad(demanStep)=demLoad(demanStep)/baseMVA;
-demSlope(demanStep)$(ord(demanStep) > 1)= -(demPrice(demanStep)-demPrice(demanStep-1) ) /(demLoad(demanStep)-demLoad(demanStep-1) )
-
-
+demSlope(demanStep)$(ord(demanStep) > 1 )=( (demPrice(demanStep)-demPrice(demanStep-1) ) /(demLoad(demanStep)-demLoad(demanStep-1)))$(demLoad(demanStep) ne demLoad(demanStep-1));
 
 display demLoad,demPrice,demLocation,demSlope;
-dis_gen_par1('13')=0.25;
-dis_gen_par1('57')=0.31;
-dis_gen_par2('13')=15.6;
-dis_gen_par2('57')=29.7;
-dis_gen_par3('13')=330;
-dis_gen_par3('57')=300;
+dis_gen_par1('13')=250*sqr(baseMVA);
+dis_gen_par1('57')=310*sqr(baseMVA);
+dis_gen_par2('13')=15.6*baseMVA;
+dis_gen_par2('57')=29.7*baseMVA;
+dis_gen_par3('13')=0.33;
+dis_gen_par3('57')=0.3;
 
 $ifthen %demand_response_off%==1
 Pd_respon_p_down(bus)=0;

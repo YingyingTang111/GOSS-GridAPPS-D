@@ -96,7 +96,7 @@ $if not set reporttxt $set reporttxt report.txt
 $if not set do_excel_reports $set do_excel_reports 0
 
 * use soft constraints for power balance
-$if not set use_soft_balance_constrs $set use_soft_balance_constrs 1
+$if not set use_soft_balance_constrs $set use_soft_balance_constrs 0
 
 * penalty parameter for soft power balance constraints
 $if not set balance_constr_penalty $set balance_constr_penalty 1e3

@@ -14,7 +14,7 @@ import time
 import sys
 import getopt
 # import solver
-from AC_OPF_class_cd import AC_OPF
+from AC_OPF_class_test import AC_OPF_test
 # -----------------------------------------------------------------------------
 
 system = "7bus"
@@ -211,7 +211,7 @@ if __name__ == '__main__':
     
 
     """ CALL """                    
-    System = AC_OPF(Nbend, Nbend2, fileorder, simuyear, simutimestep, startrow, definegenlocation, sum_bus_num, sum_load_num, sum_gennum, sum_distributed_gen,\
+    System = AC_OPF_test(Nbend, Nbend2, fileorder, simuyear, simutimestep, startrow, definegenlocation, sum_bus_num, sum_load_num, sum_gennum, sum_distributed_gen,\
                     solar_curtail_busid, control_load_BusID,solar_qlimit_busID, load_bus_voltage_goal, solar_curtailment_off, control_load_off, solar_q_off, shunt_switching_off,\
                     shuntSwitchingPenalty1, demand_response_decrease_penalty, demand_response_increase_penalty, solar_curtail_penalty, generator_voltage_deviation_penalty,\
                     load_bus_volt_pen_coeff_1, load_bus_volt_pen_coeff_2, load_bus_volt_dead_band, opt_Vgen_dev, opt_Vload_dev, previous_solution_as_start_point, icset, max_iter,\

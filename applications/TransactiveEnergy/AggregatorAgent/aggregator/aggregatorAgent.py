@@ -350,12 +350,16 @@ def aggregator_agent(config_path, **kwargs):
 
             # Update coordinator data 
             val = message[0]
-            _log.info('Aggregator {0:s} recieves from coordinator the cleared information.'.format(self.market['name']))  
+            _log.info('Aggregator {0:s} with market_id {1} recieves from coordinator the cleared information.'.format(self.market['name'], self.market['market_id']))  
                 
             if (val['market_id'] == self.market['market_id']):
                 
                 self.coordinator['market_id'] = val['market_id']
-                self.aggregator['fixed_price'] = val['fixed_price']
+                
+                if val['no_bid'] == False:
+                    self.market['fixed_price'] = val['fixed_price']
+                else:
+                    self.market['fixed_price'] = self.market_output['mean']
                                 
                 # Mark "received" flag as true after receiving fromm coordinator
                 self.coordinator['received'] = True
@@ -580,7 +584,7 @@ def aggregator_agent(config_path, **kwargs):
                 'name': {'units': '', 'tz': 'UTC', 'type': 'list'}                         
                 }]
             pub_topic = 'aggregator/' + self.market['name'] + '/biddings/all'
-#             _log.info('aggregator agent {0} publishes updated biddings to coordinator agent with topic: {1}'.format(self.market['name'], pub_topic))
+            _log.info('aggregator agent {0} with market_id {1} publishes updated biddings to coordinator agent'.format(self.market['name'], self.market['market_id']))
             # Create timestamp
             now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
             headers = {

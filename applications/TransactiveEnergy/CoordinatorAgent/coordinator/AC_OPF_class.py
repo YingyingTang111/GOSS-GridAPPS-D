@@ -28,12 +28,14 @@ class AC_OPF:
                     shuntSwitchingPenalty1, demand_response_decrease_penalty, demand_response_increase_penalty, solar_curtail_penalty, generator_voltage_deviation_penalty,\
                     load_bus_volt_pen_coeff_1, load_bus_volt_pen_coeff_2, load_bus_volt_dead_band, opt_Vgen_dev, opt_Vload_dev, previous_solution_as_start_point, icset, max_iter,\
                     bus_list_file, solar_index_file, solar_oneyear_file, GAMS_OptionSolution_GDXfile, GAMS_OPF_file, Feeder_Constraints_file,\
-                    export_to_spreadsheet, system_folder,GDXcaseName, TimeStamp, P, Q, DRquantity, DRprice):
+                    export_to_spreadsheet, system_folder,GDXcaseName, TimeStamp, feederLoad, P, Q, DRquantity, DRprice):
                  
         self.P                                       = P
         self.Q                                       = Q
         self.DRquantity                              = DRquantity
         self.DRprice                                 = DRprice
+        
+        self.feederLoad                              = feederLoad
         
         
         self.Nbend                                   = Nbend
@@ -127,6 +129,8 @@ class AC_OPF:
         """ Read in input data into lists including the header """
         self.wb = openpyxl.load_workbook(self.system_folder + '/' + 'input_update' + str(self.fileorder) + '.xlsx')
         
+#         self.p = [7, 18, 57, 1.405808599096, 1.3230449957, 1.681560294004, 1.405808599096, 1.3230449957, 1.681560294004, 1.405808599096, 1.3230449957, 1.681560294004]
+        
         self.p  = self.P #self.Read_in(self.wb, 'P'   , self.sum_load_num, self.rowlist)
         self.q  = self.Q #self.Read_in(self.wb, 'Q'   , self.sum_load_num, self.rowlist)
         
@@ -136,10 +140,11 @@ class AC_OPF:
         # ------------------------------------------------------------------------------
         
         self.st = self.Read_in(self.wb, 'GenS', self.sum_gennum  , self.rowlist)
-        self.ip = self.Read_in(self.wb, 'GenP', self.sum_gennum  , self.rowlist)
+#         self.ip = self.Read_in(self.wb, 'GenP', self.sum_gennum  , self.rowlist)
         self.pv = self.Read_in(self.wb, 'pv'  , self.pv_num      , self.rowlist)   
         
-        self.ip = [1, 2.0, 2.0, 2.0]     
+        self.ip = [1, self.feederLoad, self.feederLoad, self.feederLoad]     # Define substation real power based on given pre-run data and the scale factor
+#         self.ip = [1, 0.1, 0.1, 0.1]
            
         if self.definesolarlocation:
             self.solarindex  = self.Read_solar(self.system_folder + '/' + self.solar_index_file  , self.sum_distriGen, 3, 3)
@@ -167,9 +172,7 @@ class AC_OPF:
 #                 self.DemandRes_load.append(self.sheet1.cell(row=2, column=icol).value)
 
             # --------------------------------------------------------------------------
-            
-            
-        
+                    
         [self.token1_vm, self.token2_Reac_P, self.token3_Reac_Solar, self.token4_tot_cost, self.token5_tot_loss, self.token6_tot_swit, self.token7_demand_res,\
         self.token8_solver_stat, self.token9_model_stat, self.token4_Distribu_Gen, self.token11_DR_inc_P, self.token12_DR_dec_P, self.token13_DR_inc_Q, self.token14_DR_dec_Q,\
         self.pgen, self.demand, self.generator_voltage, self.nongenerator_voltage, self.genvoltage_deviation, self.loadvoltage_deviation, self.loadvoltage_deviation_db,\
@@ -186,10 +189,20 @@ class AC_OPF:
         self.Nb = 0
         
         # Print inputs of ACOPF
+        # ------------------------- Test -------------------------------------------
+        self.p = [7, 18, 57, 0.603339523631, 0.660845881779, 0.989795141368, 0.603339523631, 0.660845881779, 0.989795141368, 0.603339523631, 0.660845881779, 0.989795141368]
+        self.q = [7, 18, 57, 0.179719007668, 0.167613064308, 0.306499264165, 0.179719007668, 0.167613064308, 0.306499264165, 0.179719007668, 0.167613064308, 0.306499264165]
+        self.DemandRes_Price = [1, 2, 3, 4, 5, 0, 0.0423769581057, 0.0847539162113, 0.127130874317, 0.169507832423]
+        self.DemandRes_load = [1, 2, 3, 4, 5, 0, 0.00103941595117, 0.00207883190234, 0.00311824785351, 0.00415766380468]
+        self.feederLoad = 2.14421804816
+        self.ip = [1, self.feederLoad, self.feederLoad, self.feederLoad]
+        # ----------------------------------------------------------------------------
+
         print '[%s]' % ', '.join(map(str, self.p))
         print '[%s]' % ', '.join(map(str, self.q))
         print '[%s]' % ', '.join(map(str, self.DemandRes_Price))
         print '[%s]' % ', '.join(map(str, self.DemandRes_load))
+        print '%s' % self.feederLoad
         print('end of printing inputs')
         
         """ MAIN ITERATION -------------------------------------------------------- """
@@ -254,6 +267,7 @@ class AC_OPF:
             try:
                 t1.run(gams_options)  
                 ACOPF_solved = True 
+                print('ACOPF is solved') 
             except:
                 print('Could not solve ACOPF')
                  
@@ -267,7 +281,8 @@ class AC_OPF:
                 gams_options.defines["ic"] = str(self.icset[self.opt_time])
                 # Run GAMS again
                 try:
-                    t1.run(gams_options)  
+                    t1.run(gams_options) 
+                    print('ACOPF is solved') 
                     ACOPF_solved = True 
                 except:
                     print('Could not solve ACOPF')
@@ -342,44 +357,40 @@ class AC_OPF:
                 
                 # Load voltage deviation
                 #controllable load shift
-                self.token7_demand_res               = self.Get_Result(t1, self.token7_demand_res, "V_dem_Load", 1, 5) 
+#                 self.token7_demand_res               = self.Get_Result(t1, self.token7_demand_res, "V_dem_Load", 1, 5)
+                self.token7_demand_res               = list(numpy.array(self.Get_Result(t1, self.token7_demand_res, "V_dem_Load", 1, 5))*t1.out_db["baseMVA"].find_record().value) 
                 # sstat
                 self.token8_solver_stat                  = self.Get_Result(t1, self.token8_solver_stat, "sstat", 3, 1)    
                 # mstat
                 self.token9_model_stat                   = self.Get_Result(t1, self.token9_model_stat, "mstat", 3, 1)      
             
-      
-        ## EXTRA calculations
-        # Calculate voltage deviation at generators buses                    
-        self.genvoltage_deviation                    = list(numpy.array(self.generator_voltage) - numpy.array(self.Vschedule))
-        #self.genvoltage_deviation_per                = list(numpy.array(self.genvoltage_deviation) / numpy.array(self.Vschedule) * 100)
-        self.genvoltage_deviation_per=self.genvoltage_deviation
-        # Calculate voltage deviation at nongen load buses
-        self.loadvoltage_deviation_per             = [0] * self.len_nongenLoad * self.Nbend
-        for idx in range(len(self.loadvoltage_deviation)):
-            if abs(self.loadvoltage_deviation[idx]) < self.loadvoltage_deviation_db[0]:
-                self.loadvoltage_deviation_per[idx] = 0
-            elif self.loadvoltage_deviation[idx] > self.loadvoltage_deviation_db[0]:
-                self.loadvoltage_deviation_per[idx] = (self.loadvoltage_deviation[idx] - self.loadvoltage_deviation_db[0]) / 1 * 100
-            elif self.loadvoltage_deviation[idx] < (-self.loadvoltage_deviation_db[0]):
-                self.loadvoltage_deviation_per[idx] = abs(self.loadvoltage_deviation[idx] + self.loadvoltage_deviation_db[0]) / 1 * 100
-         
-            
-        """ Export the solution to spreadsheet """
-#         Export_Solution(self.Nb, self.Nbend, self.fileorder, self.busindex, self.genindex, self.genatbus, self.solaratbus, self.solarindex[:self.sum_distriGen], self.loadindex,\
-#                         self.sum_load_num, self.sum_gennum, self.sum_distriGen, self.sum_bus_num, self.switched_shunt_susceptance_buses,\
-#                         self.simutimestep, self.simuyear, self.startrow, self.token1_vm, self.token2_Reac_P, self.token3_Reac_Solar, self.token4_tot_cost, self.token5_tot_loss, self.token6_tot_swit,\
-#                         self.token7_demand_res, self.token8_solver_stat, self.token9_model_stat, self.pgen, self.demand,\
-#                         self.generator_voltage, self.nongenerator_voltage, self.genvoltage_deviation, self.loadvoltage_deviation,\
-#                         self.genvoltage_deviation_per, self.loadvoltage_deviation_per, self.rowLoadnongenatBus, self.len_nongenLoad,\
-#                         self.switched_shunt_susceptance_values, self.bus_va_degrees,\
-#                         self.export_to_spreadsheet)
         
-        """ Return values to the main function """
-        returnVal = dict()
-        returnVal['DER'] = self.token4_Distribu_Gen
-        returnVal['DRquantity'] = self.token7_demand_res[1]
-        returnVal['SocialWelfare'] = self.token4_tot_cost
+        if (ACOPF_solved == True):
+            ## EXTRA calculations
+            # Calculate voltage deviation at generators buses                    
+            self.genvoltage_deviation                    = list(numpy.array(self.generator_voltage) - numpy.array(self.Vschedule))
+            #self.genvoltage_deviation_per                = list(numpy.array(self.genvoltage_deviation) / numpy.array(self.Vschedule) * 100)
+            self.genvoltage_deviation_per=self.genvoltage_deviation
+            # Calculate voltage deviation at nongen load buses
+            self.loadvoltage_deviation_per             = [0] * self.len_nongenLoad * self.Nbend
+            for idx in range(len(self.loadvoltage_deviation)):
+                if abs(self.loadvoltage_deviation[idx]) < self.loadvoltage_deviation_db[0]:
+                    self.loadvoltage_deviation_per[idx] = 0
+                elif self.loadvoltage_deviation[idx] > self.loadvoltage_deviation_db[0]:
+                    self.loadvoltage_deviation_per[idx] = (self.loadvoltage_deviation[idx] - self.loadvoltage_deviation_db[0]) / 1 * 100
+                elif self.loadvoltage_deviation[idx] < (-self.loadvoltage_deviation_db[0]):
+                    self.loadvoltage_deviation_per[idx] = abs(self.loadvoltage_deviation[idx] + self.loadvoltage_deviation_db[0]) / 1 * 100
+            
+            """ Return values to the main function """
+            returnVal = dict()
+            returnVal['solved'] = True
+            returnVal['DER'] = [x * t1.out_db["baseMVA"].find_record().value for x in self.token4_Distribu_Gen]
+            returnVal['DRquantity'] = sum(self.token7_demand_res)
+            returnVal['substationP'] = self.pgen[0] * t1.out_db["baseMVA"].find_record().value
+            returnVal['SocialWelfare'] = self.token4_tot_cost[0]
+        
+        else:
+            returnVal['solved'] = Fasle
         
         return returnVal
 
