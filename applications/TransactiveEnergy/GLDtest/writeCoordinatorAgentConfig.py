@@ -27,7 +27,7 @@ agentName = "Coordinator1"
 market_id = 1 # Coordinator starts with market id of 1, instead of 0 as in aggregator and controller
 bid_delay = 0.0
 unit = "kW"
-periodCoordinator = 60
+periodCoordinator = 60 * 5
 price_cap = 1000
 total_feeder_load = 'total_feeder_load.csv' # The file storing total feeder loads without controllers and DGs
 

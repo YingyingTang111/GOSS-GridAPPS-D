@@ -190,12 +190,12 @@ class AC_OPF:
         
         # Print inputs of ACOPF
         # ------------------------- Test -------------------------------------------
-        self.p = [7, 18, 57, 0.603339523631, 0.660845881779, 0.989795141368, 0.603339523631, 0.660845881779, 0.989795141368, 0.603339523631, 0.660845881779, 0.989795141368]
-        self.q = [7, 18, 57, 0.179719007668, 0.167613064308, 0.306499264165, 0.179719007668, 0.167613064308, 0.306499264165, 0.179719007668, 0.167613064308, 0.306499264165]
-        self.DemandRes_Price = [1, 2, 3, 4, 5, 0, 0.0423769581057, 0.0847539162113, 0.127130874317, 0.169507832423]
-        self.DemandRes_load = [1, 2, 3, 4, 5, 0, 0.00103941595117, 0.00207883190234, 0.00311824785351, 0.00415766380468]
-        self.feederLoad = 2.14421804816
-        self.ip = [1, self.feederLoad, self.feederLoad, self.feederLoad]
+#         self.p = [7, 18, 57, 1.33808817432, 1.69949922163, 2.91930600931, 1.33808817432, 1.69949922163, 2.91930600931, 1.33808817432, 1.69949922163, 2.91930600931]
+#         self.q = [7, 18, 57, 0.781933400941, 0.503132155659, 1.04441352255, 0.781933400941, 0.503132155659, 1.04441352255, 0.781933400941, 0.503132155659, 1.04441352255]
+#         self.DemandRes_Price = [1, 2, 3, 4, 5, 0, 4.90188634973, 9.50369900228, 14.0183879718, 18.2996843444]
+#         self.DemandRes_load = [1, 2, 3, 4, 5, 0, 0.0462604737722, 0.0925209475445, 0.138781421317, 0.185041895089]
+#         self.feederLoad = 5.30274177032
+#         self.ip = [1, self.feederLoad, self.feederLoad, self.feederLoad]
         # ----------------------------------------------------------------------------
 
         print '[%s]' % ', '.join(map(str, self.p))
@@ -266,8 +266,12 @@ class AC_OPF:
             #return # uncomment this line to quit right before the first gams solve
             try:
                 t1.run(gams_options)  
-                ACOPF_solved = True 
-                print('ACOPF is solved') 
+                if (t1.out_db["mstat"].find_record().value == 2):
+                    ACOPF_solved = True 
+                    print('ACOPF is solved') 
+                else:
+                    ACOPF_solved = False
+                    print('Could not solve ACOPF - mstat is 5.0') 
             except:
                 print('Could not solve ACOPF')
                  
@@ -281,9 +285,12 @@ class AC_OPF:
                 gams_options.defines["ic"] = str(self.icset[self.opt_time])
                 # Run GAMS again
                 try:
-                    t1.run(gams_options) 
-                    print('ACOPF is solved') 
-                    ACOPF_solved = True 
+                    if (t1.out_db["mstat"].find_record().value == 2):
+                        ACOPF_solved = True 
+                        print('ACOPF is solved') 
+                    else:
+                        ACOPF_solved = False
+                        print('Could not solve ACOPF - mstat is 5.0')
                 except:
                     print('Could not solve ACOPF')
             
@@ -390,7 +397,8 @@ class AC_OPF:
             returnVal['SocialWelfare'] = self.token4_tot_cost[0]
         
         else:
-            returnVal['solved'] = Fasle
+            returnVal = dict()
+            returnVal['solved'] = False
         
         return returnVal
 

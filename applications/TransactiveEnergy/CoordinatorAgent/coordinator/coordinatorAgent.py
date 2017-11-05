@@ -62,6 +62,8 @@ def coordinator_agent(config_path, **kwargs):
             self.market['market_id'] = agentInitialVal['market_information']['market_id']
             self.market['lastmkt_id'] = self.market['market_id']
             
+#             self.market['period'] = 30 # For testing purpose only
+            
             # Read in csv file storing total feeder loads without controllers and DGs
             fileName = agentInitialVal['market_information']['total_feeder_load']
             with open(mypath + fileName, 'rb') as f:
@@ -173,7 +175,9 @@ def coordinator_agent(config_path, **kwargs):
             # Open csv file for recording cleared information during simulation
             self.csvCleared = config['agentid'] + '_cleared_information.csv'
             with open(self.csvCleared, 'w') as f:
-                f.write('Cleared_time, market_id, ACOPF_solved, cleared_price, cleared_quantity, cleared_DG1_output (kW), cleared_DG2_output (kW), expected_SubstationP (kW), social_welfare ($)')
+                temp = ['Cleared_time', 'market_id', 'ACOPF_solved', 'cleared_price', 'cleared_quantity', 'cleared_DG1_output (kW)', 'cleared_DG2_output (kW)', 'social_welfare ($)', 'planned_SubstationP (kW)', 'expected_SubstationP (kW)', 'total_uncontrollable_loads']
+                writer = csv.writer(f)
+                writer.writerow(temp)
                 f.flush()
    
         @Core.receiver('onsetup')
@@ -184,8 +188,8 @@ def coordinator_agent(config_path, **kwargs):
         def startup(self, sender, **kwargs):
             
             # Update the clear time 
-#             self.market['clearat'] = self.startTime + datetime.timedelta(0,self.market['period']) 
-            self.market['clearat'] = self.startTime + datetime.timedelta(0,10) # For testing
+            self.market['clearat'] = self.startTime + datetime.timedelta(0,self.market['period']) 
+#             self.market['clearat'] = self.startTime + datetime.timedelta(0,10) # For testing
             
             # Initialize subscription function to aggregators
             for key, val in self.subscriptions['aggregators'].items():
@@ -337,7 +341,7 @@ def coordinator_agent(config_path, **kwargs):
             DERPhaseName = topic.split("/")[-1]
             DERName = DERPhaseName.split("_")[0] + '_'+ DERPhaseName.split("_")[1]
             phaseName = topic.split("/")[-1]
-            val =  message[0]/1000 # Convert unit to kW
+            val =  -message[0]/1000 # Convert unit to kW, and pay attention to sign. DG received should be negative
             
 #             _log.info('Coordinator {0:s} recieves from GLD the measured real power {1} kW at substation.'.format(self.market['name'], val))
             
@@ -454,7 +458,7 @@ def coordinator_agent(config_path, **kwargs):
                 unknownBusLds = totalSubLds + totalDGoutputs - (totalUnctlLds + totalAggregatorLds)
                 
                 # Record feeder information before conducting ACOPF                
-                _log.info('At time {3}, coordinator agent {0} start computing ACOPF, with measured substation {1} MW, total DER outputs {2} MW, and controllable loads {3} MW'.format(config['agentid'], totalSubLds/1000.0, totalDGoutputs/1000.0, sum(quantityArray)))
+                _log.info('At time {4}, coordinator agent {0} start computing ACOPF, with measured substation {1} MW, total DER outputs {2} MW, and controllable loads {3} MW'.format(config['agentid'], totalSubLds/1000.0, totalDGoutputs/1000.0, sum(quantityArray), self.timeSim.strftime("%Y-%m-%d %H:%M:%S")))
                  
                 # Obtain unknown bus reactive power
                 totalAggregatorLds = 0
@@ -463,12 +467,12 @@ def coordinator_agent(config_path, **kwargs):
                 totalUnctlLds = 0
                 for key, val in self.meters_reactive.items():
                     totalUnctlLds += val
-                totalSubLds = 0
+                totalSubLdskVAR = 0
                 for key, val in self.substation_reactive.items():
-                    totalSubLds += val
+                    totalSubLdskVAR += val
                 
                 # Calculate unknown bus reactive power:
-                unknownBusLds_kVAR = totalSubLds - (totalUnctlLds + totalAggregatorLds) 
+                unknownBusLds_kVAR = totalSubLdskVAR - (totalUnctlLds + totalAggregatorLds) 
                 
                 # Create list of P based on ACOPF fortmat requirement: ------------------------------------------------------------------------
                 # Unit in MW
@@ -493,7 +497,8 @@ def coordinator_agent(config_path, **kwargs):
                 timeDiff = self.timeSim - self.startTime   
                 timeDiffSec = timeDiff.days * 24 * 60 * 60 + timeDiff.seconds
                 timeIndex = (timeDiffSec % (24 * 60 * 60) / 30) # index in total_feeder_load file
-                feederLoad = float(self.feederLoads[timeIndex][0]) * 0.8 # Scale to 0.7 times of the original total loads
+#                 feederLoad = float(self.feederLoads[timeIndex][0]) * 0.9 # Scale to 0.7 times of the original total loads
+                feederLoad = totalSubLds / 1000.0 * 0.9 # Scale the DSO to be 0.9 of the amount needed from real-time substation loads
                 
                 # Clear the market by using the fixed_price sent from coordinator ---------------------------------------------------------------
                 returnVal = self.ACOPF(feederLoad) 
@@ -580,19 +585,20 @@ def coordinator_agent(config_path, **kwargs):
                             headers = {
                                 headers_mod.DATE: now
                             }
-                            self.vip.pubsub.publish('pubsub', pub_topic, headers, DER_output)
+                            self.vip.pubsub.publish('pubsub', pub_topic, headers, -DER_output)
                         index += 1
                 
                 # TODOS: remove hard coding of DG outputs
                 with open(self.csvCleared, 'a') as f:
-                    temp = [self.timeSim.strftime("%Y-%m-%d-%H:%M:%S"), str(self.market['market_id']), str(returnVal['solved']), str(clear_price), str(cleared_quantity * 1000.0), str(DERoutputs[0] * 1000), str(DERoutputs[1] * 1000), str(subsPexpected * 1000), str(socialWelfare)]
-#                     writer = csv.writer(f)
+                    temp = [self.timeSim.strftime("%Y-%m-%d-%H:%M:%S"), str(self.market['market_id']), str(returnVal['solved']), str(clear_price), str(cleared_quantity * 1000.0), str(DERoutputs * 1000.0), str(DERoutputs * 1000.0), str(socialWelfare), str(feederLoad * 1000), str(subsPexpected * 1000.0), (bus7_P + bus18_P + bus57_P) * 1000]
+                    writer = csv.writer(f)
                     writer.writerow(temp)
                     f.flush()
                     
                 # Display the opening of the next market
                 tiemDiff = (self.timeSim + datetime.timedelta(0,self.market['period']) - self.market['clearat']).total_seconds() % self.market['period']
-                self.market['clearat'] = self.timeSim + datetime.timedelta(0,self.market['period'] - tiemDiff)
+#                 self.market['clearat'] = self.timeSim + datetime.timedelta(0,self.market['period'] - tiemDiff)
+                self.market['clearat'] = self.market['clearat'] + datetime.timedelta(0,self.market['period'])
 
                 
         

@@ -417,7 +417,8 @@ def aggregator_agent(config_path, **kwargs):
                 
                 # Display the opening of the next market
                 tiemDiff = (self.timeSim + datetime.timedelta(0,self.market['period']) - self.market['clearat']).total_seconds() % self.market['period']
-                self.market['clearat'] = self.timeSim + datetime.timedelta(0,self.market['period'] - tiemDiff)
+#                 self.market['clearat'] = self.timeSim + datetime.timedelta(0,self.market['period'] - tiemDiff)
+                self.market['clearat'] = self.market['clearat'] + datetime.timedelta(0,self.market['period'])
                 # self.market['clearat'] = self.timeSim + self.market['period'] - (self.timeSim + self.market['period']) % self.market['period']
             
                 # Update to be published values only when market clears
@@ -703,7 +704,7 @@ def aggregator_agent(config_path, **kwargs):
                 marginal_frac = 0.0
             
 
-            print(self.timeSim.strftime("%Y-%m-%d %H:%M:%S"),'(Type,Price,MargQ,MargT,MargF)',clearing_type, self.nextClear['price'], marginal_quantity, marginal_total, marginal_frac)
+#             print(self.timeSim.strftime("%Y-%m-%d %H:%M:%S"),'(Type,Price,MargQ,MargT,MargF)',clearing_type, self.nextClear['price'], marginal_quantity, marginal_total, marginal_frac)
 
             # Store cleared market information into JSON metrics
             self.aggregator_cleared_metrics[self.timeSim.strftime("%Y-%m-%d %H:%M:%S")] = self.nextClear['price']

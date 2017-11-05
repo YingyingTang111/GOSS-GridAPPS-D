@@ -171,7 +171,7 @@ class FNCS_VOLTTRON_Bridge(Agent):
         if not fncs.is_initialized():
             raise RuntimeError("FNCS connection was terminated. Killing Bridge.")
         elif self.simtime > self.simlength:
-            fncs_bridge_termination_topic = fncs_zpl['name']+'/simulation_end'
+            fncs_bridge_termination_topic = self.fncs_zpl['name']+'/simulation_end'
             fncsmessage = ['True', {'units' : 'NA', 'tz' : 'UTC', 'type': 'String'}]
             self.vip.pubsub.publish('pubsub', fncs_bridge_termination_topic, headers, fncsmessage).get(timeout=5)
             fncs.finalize()

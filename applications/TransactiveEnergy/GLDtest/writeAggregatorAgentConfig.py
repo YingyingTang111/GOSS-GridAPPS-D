@@ -22,7 +22,7 @@ fncs_zpl['name'] = 'FNCS_Volttron_Bridge'
 fncs_zpl['fncs_bridge_termination_topic'] = fncs_zpl['name']+'/simulation_end'
 
 # controller data:
-periodController = 60
+periodController = 60 * 5
 control_mode = "CN_RAMP"
 min_ramp_high = 1.5
 max_ramp_high = 2.5
@@ -35,14 +35,14 @@ min_range_low = -3.0
 max_range_low = -2.0
 min_base_setpoint = 76.0
 max_base_setpoint = 80.0
-bid_delay = 10
+bid_delay = 15 # 10
 use_predictive_bidding = 0
 use_override = "OFF"
 
 # market data:
 marketName = "Aggregator_1"
 unit = "kW"
-periodMarket = 60
+periodMarket = periodController
 initial_price = 65
 fixed_price = 65
 std_dev = 16
