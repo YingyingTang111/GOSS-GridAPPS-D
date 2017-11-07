@@ -370,7 +370,9 @@ def coordinator_agent(config_path, **kwargs):
 
             val =  message[0] # value True
             if (val == 'True'):
+                _log.info('Coordinator {0:s} recieves from fncs_bridge the siimulation ending signal.'.format(self.market['name']))
                 self.core.stop() 
+                
  
         @Core.periodic(1)
         def clear_market(self):
@@ -497,18 +499,21 @@ def coordinator_agent(config_path, **kwargs):
                 timeDiff = self.timeSim - self.startTime   
                 timeDiffSec = timeDiff.days * 24 * 60 * 60 + timeDiff.seconds
                 timeIndex = (timeDiffSec % (24 * 60 * 60) / 30) # index in total_feeder_load file
-#                 feederLoad = float(self.feederLoads[timeIndex][0]) * 0.9 # Scale to 0.7 times of the original total loads
-                feederLoad = totalSubLds / 1000.0 * 0.9 # Scale the DSO to be 0.9 of the amount needed from real-time substation loads
+                feederLoad = float(self.feederLoads[timeIndex][0]) * 0.9 # Scale to 0.9 times of the original total loads
+#                 feederLoad = totalSubLds / 1000.0 * 0.9 # Scale the DSO to be 0.9 of the amount needed from real-time substation loads
                 
                 # Clear the market by using the fixed_price sent from coordinator ---------------------------------------------------------------
                 returnVal = self.ACOPF(feederLoad) 
+                
+#                 returnVal['solved'] = False # Hard corded for one case without any market involvment
+                
                 if returnVal['solved'] == True:
                     DERoutputs = returnVal['DER'] 
                     cleared_quantity = returnVal['DRquantity'] 
                     socialWelfare = returnVal['SocialWelfare']
                     subsPexpected = returnVal['substationP']
                 else:
-                    DERoutputs = 0
+                    DERoutputs = [0, 0]
                     cleared_quantity = 0
                     socialWelfare = 0
                     subsPexpected = 0
@@ -517,7 +522,7 @@ def coordinator_agent(config_path, **kwargs):
                 self.market['lastmkt_id'] = self.market['market_id']
                 self.market['market_id'] += 1 # Go to wait for the next market
 
-                # Publish cleared aggregator bidding price based on quantity solved by ACOPF
+                # Publish cleared aggregator bidding price based on quantity solved by ACOPF               
                 if len(priceArray) != 0 and returnVal['solved'] == True:
                     # When there are bids from aggregator (there are controllable loads)
                     clear_price = sumQuantityArray[-1]
@@ -590,7 +595,7 @@ def coordinator_agent(config_path, **kwargs):
                 
                 # TODOS: remove hard coding of DG outputs
                 with open(self.csvCleared, 'a') as f:
-                    temp = [self.timeSim.strftime("%Y-%m-%d-%H:%M:%S"), str(self.market['market_id']), str(returnVal['solved']), str(clear_price), str(cleared_quantity * 1000.0), str(DERoutputs * 1000.0), str(DERoutputs * 1000.0), str(socialWelfare), str(feederLoad * 1000), str(subsPexpected * 1000.0), (bus7_P + bus18_P + bus57_P) * 1000]
+                    temp = [self.timeSim.strftime("%Y-%m-%d-%H:%M:%S"), str(self.market['market_id']), str(returnVal['solved']), str(clear_price), str(cleared_quantity * 1000.0), str(DERoutputs[0] * 1000.0), str(DERoutputs[1] * 1000.0), str(socialWelfare), str(feederLoad * 1000), str(subsPexpected * 1000.0), (bus7_P + bus18_P + bus57_P) * 1000]
                     writer = csv.writer(f)
                     writer.writerow(temp)
                     f.flush()

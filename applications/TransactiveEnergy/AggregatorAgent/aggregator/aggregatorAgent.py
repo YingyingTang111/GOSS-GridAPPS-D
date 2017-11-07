@@ -23,6 +23,7 @@ def aggregator_agent(config_path, **kwargs):
     config = utils.load_config(config_path)
     agentSubscription = config['subscriptions']
     agentInitialVal = config['initial_value']
+    mypath = "/home/yingying/git/volttron/TransactiveEnergy/GLDtest/Output/"
     
     class aggregatorAgent(Agent):
         '''This agent is the middle level aggregator that collects the bid from lower level controller agent,
@@ -226,8 +227,8 @@ def aggregator_agent(config_path, **kwargs):
         def startup(self, sender, **kwargs):
             
             # Open the JSON file
-            self.aggregator_op = open ("aggregator_" + config['agentid'] + "_metrics.json", "w")
-            self.controller_op = open ("controller_" + config['agentid'] + "_metrics.json", "w")
+            self.aggregator_op = open (mypath + "aggregator_" + config['agentid'] + "_metrics.json", "w")
+            self.controller_op = open (mypath + "controller_" + config['agentid'] + "_metrics.json", "w")
 
             # Initialize subscription function to controllers
             for topic in self.subscriptions['controller']:
@@ -375,6 +376,7 @@ def aggregator_agent(config_path, **kwargs):
             val =  message[0] # value True
 #             _log.info('Aggregator {0:s} recieves from fncs_bridge the simulation ends message {1:s}'.format(self.market['name'], val))
             if (val == 'True'):
+                _log.info('Aggregator {0:s} recieves from fncs_bridge the siimulation ending signal.'.format(self.market['name']))
                 # Dump to JSON fies and close the files
                 with open(self.controller_op, 'w') as outfile:
                     json.dumps(self.controller_bids_metrics, outfile)
