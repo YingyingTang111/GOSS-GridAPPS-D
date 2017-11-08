@@ -6,6 +6,7 @@ import math
 import numpy as np
 from copy import deepcopy
 import warnings
+import json
 
 from get_curve import curve
 
@@ -227,8 +228,8 @@ def aggregator_agent(config_path, **kwargs):
         def startup(self, sender, **kwargs):
             
             # Open the JSON file
-            self.aggregator_op = open (mypath + "aggregator_" + config['agentid'] + "_metrics.json", "w")
-            self.controller_op = open (mypath + "controller_" + config['agentid'] + "_metrics.json", "w")
+            self.aggregator_op = mypath + "aggregator_" + config['agentid'] + "_metrics.json"
+            self.controller_op = mypath + "controller_" + config['agentid'] + "_metrics.json"
 
             # Initialize subscription function to controllers
             for topic in self.subscriptions['controller']:
@@ -445,7 +446,7 @@ def aggregator_agent(config_path, **kwargs):
                                 'initial_price': {'units': '$', 'tz': 'UTC', 'type': 'float'}                          
                                 }]
                 pub_topic = 'aggregator/' + self.market['name'] + '/all'
-                _log.info('Aggregator agent {0} publishes cleared data to controllers with market_id {1}, average_price: {2}, clear_price: {3}'.format(self.market['name'], self.market_output['market_id'], self.market_output['mean'], self.market_output['clear_price']))
+                _log.info('Aggregator agent {0} publishes cleared data to controllers with market_id {1}, std_dev: {4}, average_price: {2}, clear_price: {3}'.format(self.market['name'], self.market_output['market_id'], self.market_output['mean'], self.market_output['clear_price'], self.market_output['std']))
                 #Create timestamp
                 now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
                 headers = {
