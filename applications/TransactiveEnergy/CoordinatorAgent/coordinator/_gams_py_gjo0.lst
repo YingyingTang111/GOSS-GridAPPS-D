@@ -1,4 +1,4 @@
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/07/17 22:38:35 Page 1
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/08/17 12:15:29 Page 1
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -56,7 +56,7 @@ C o m p i l a t i o n
   74  * initial starting point
   76   
   77  * quadratic penalty on distance to previous solution
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/07/17 22:38:35 Page 2
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/08/17 12:15:29 Page 2
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -114,7 +114,7 @@ BATINCLUDE /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
  152  *==== SECTION: Data (pre) declaration
  154  sets
  155  * New sets
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/07/17 22:38:35 Page 3
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/08/17 12:15:29 Page 3
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -172,7 +172,7 @@ GDXIN   /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinat
 --- LOAD  total_cost = 2:total_cost
 --- LOAD  bus = 6:bus
 --- LOAD  gen = 7:gen
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/07/17 22:38:35 Page 4
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/08/17 12:15:29 Page 4
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -230,7 +230,7 @@ GDXIN   /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinat
  252    PgSch(gen)        "gen scheduled power output"
  253    Pmax(gen)         "gen maximum real power output"
  254    Pmin(gen)         "gen minimum real power output"
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/07/17 22:38:35 Page 5
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/08/17 12:15:29 Page 5
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -288,7 +288,7 @@ C o m p i l a t i o n
  305  *x(i,j,c)$line(i,j,c) = branchinfo(i,j,c,'x','given');
  306  *branchstatus(i,j,c)$line(i,j,c) = branchinfo(i,j,c,'branchstatus','%timeperiod%');
  307   
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/07/17 22:38:35 Page 6
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/08/17 12:15:29 Page 6
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -346,7 +346,7 @@ GDXIN   /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinat
  364  *$call 'GDXXRW input=solarindex.xlsx output=solarlocation.gdx par=solarlocation rng=Sheet1!B1:CX3 Cdim=2 ';
 GDXIN   /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/solarlocation.gdx
 --- LOAD  solarlocation = 1:solarlocation
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/07/17 22:38:35 Page 7
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/08/17 12:15:29 Page 7
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -404,7 +404,7 @@ GDXIN   /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinat
  419  *Va(bus) = 0;
  420  *Voltage magnitude information
  421  Vm(bus) = businfo(bus,'Vm','1');
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/07/17 22:38:35 Page 8
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/08/17 12:15:29 Page 8
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -462,7 +462,7 @@ GDXIN   /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinat
  475  *Qg(gen) =Qg(gen)/baseMVA;
  476  *Qg is zero from gdx.
  477  Qg(gen)=geninfo(gen,'Qg','1')/baseMVA;
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/07/17 22:38:35 Page 9
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      11/08/17 12:15:29 Page 9
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -520,7 +520,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
  532  * switched shunt penalty parameters
  533  parameter
  534    shuntSwitchingPenalty1 /0.001/
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 10
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 10
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -578,7 +578,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
  585      V_imag_prior(i)          "Imaginary part of bus voltage",
  586      Solar_p_curtail_prior(i)    "the amount of real power cutailed from controllable",
  587      De_response_Dec_P_prior(i)         "the decrease in demand response",
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 11
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 11
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -636,7 +636,7 @@ C o m p i l a t i o n
  638      V_objcost_start
  639  * variable bound violations
  640      gen_p_lo_viol_start(gen)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 12
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 12
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -694,7 +694,7 @@ C o m p i l a t i o n
  691      max_c_V_limit_lo_viol_start
  692      max_c_V_limit_up_viol_start
  693      max_v_generator_hardupl_viol_start
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 13
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 13
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -752,7 +752,7 @@ C o m p i l a t i o n
  744      p_generator_add_viol_sol(gen)
  745      c_I_limit_viol_sol(i,j,c)
  746      c_V_limit_lo_viol_sol(i)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 14
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 14
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -810,7 +810,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
  798  * set shunt penalties to 0
  799  * if this is the first time step
  801  shuntSwitchingPenalty1 = 0;
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 15
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 15
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -868,7 +868,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
  854      V_real(i)          "Real part of bus voltage",
  855      V_imag(i)          "Imaginary part of bus voltage",
  856   
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 16
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 16
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -926,7 +926,7 @@ C o m p i l a t i o n
  907  *===== SECTION: EQUATION DECLARATION
 INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/eqn_declaration.gms
  909  equations
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 17
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 17
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -984,7 +984,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
  960        =g=
  961      previous_solution_penalty_2 * (
  962          sum(gen, sqr(V_P_prior(gen) - V_P(gen)))
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 18
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 18
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -1042,7 +1042,7 @@ C o m p i l a t i o n
 1013        =g=
 1014      shuntSwitchingPenalty1 * V_shuntSwitching(i,bus_s)
 1015  ;
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 19
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 19
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -1100,7 +1100,7 @@ C o m p i l a t i o n
 1066   
 1067  *Real current flowing from bus j into bus i along line c
 1068  c_LineIrji(i,j,c)$(branchstatus(i,j,c))..
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 20
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 20
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -1158,7 +1158,7 @@ C o m p i l a t i o n
 1119              =e=
 1120            V_real(i) *
 1121          ( sum((j,c)$(branchstatus(i,j,c) ), V_LineIr(i,j,c))
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 21
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 21
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -1216,7 +1216,7 @@ C o m p i l a t i o n
 1172  ;
 1173   
 1174  * Loss on line c connecting bus i and bus j
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 22
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 22
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -1274,7 +1274,7 @@ C o m p i l a t i o n
 1225  * causes infeasibility
 1226  * e.g. 0 =g= 1e-6
 1227  *
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 23
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 23
 "AC optimal power flow model, rectangular current-voltage formulation"
 C o m p i l a t i o n
 
@@ -1288,7 +1288,7 @@ C o m p i l a t i o n
 1234   
 1235  * Objective functions and pwl costs are listed in a separate file
 1236  *$batinclude "%filepath%objective_voltage_stability_addterm.gms" obj demandbids
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 24
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 24
 Cost objective calculations for OPF models
 C o m p i l a t i o n
 
@@ -1346,7 +1346,7 @@ C o m p i l a t i o n
 1291           - demand_response_decrease_penalty * sum(i,De_response_Dec_P(i))
 1292  *the demand response q is comment out because it change with respose to p
 1293  *+5*sum(i,De_response_Inc_Q(i))-5*sum(i,De_response_Dec_Q(i))
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 25
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 25
 Cost objective calculations for OPF models
 C o m p i l a t i o n
 
@@ -1404,7 +1404,7 @@ C o m p i l a t i o n
 1344  *display Pmax, Pmin, V_P.l;
 1345  *===== SECTION: MODEL DEFINITION
 INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/mod_definition.gms
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 26
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 26
 Cost objective calculations for OPF models
 C o m p i l a t i o n
 
@@ -1462,7 +1462,7 @@ C o m p i l a t i o n
 1398      c_obj /;
 1399  display Pmax, Pmin, Pd, Va, Vm, Qg, Gs, b, bc;
 1400  *===== SECTION: VARIABLE BOUNDS
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 27
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 27
 Cost objective calculations for OPF models
 C o m p i l a t i o n
 
@@ -1520,7 +1520,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
 1456  *$ifthen %qlim% == 0
 1457  V_Q.lo(gen)$status(gen) = Qmin(gen);
 1458  V_Q.up(gen)$status(gen) = Qmax(gen);
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 28
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 28
 Cost objective calculations for OPF models
 C o m p i l a t i o n
 
@@ -1578,7 +1578,7 @@ BATINCLUDE /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
 1517  V_imag.l(bus) = Vm(bus)*sin(Va(bus));
 1518  V_switchedshuntB.l(i)$sum(bus_s$numBswitched(i,bus_s), 1) = switchedshuntB_init(i);
 1519  V_shunt.l(bus,bus_s)$numBswitched(bus,bus_s)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 29
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 29
 Cost objective calculations for OPF models
 C o m p i l a t i o n
 
@@ -1636,7 +1636,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
 1572      max(0,
 1573      sqrt(sqr(V_real.l(i)) + sqr(V_imag.l(i))) - voltageran_high*Vsch(i));
 1574   
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 30
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 30
 Cost objective calculations for OPF models
 C o m p i l a t i o n
 
@@ -1694,7 +1694,7 @@ C o m p i l a t i o n
 1625             V_shuntSwitchingTotalPenalty.l
 1626           + V_load_bus_volt_pen.l
 1627           + solar_curtail_penalty * sum(i,Solar_p_curtail.l(i))
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 31
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 31
 Cost objective calculations for OPF models
 C o m p i l a t i o n
 
@@ -1729,7 +1729,7 @@ C o m p i l a t i o n
 1656   
 1657  *===== SECTION: COMPUTE START METRICS
 INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/compute_start_metrics.gms
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 32
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 32
 compute_start_metrics
 C o m p i l a t i o n
 
@@ -1787,7 +1787,7 @@ C o m p i l a t i o n
 1712          + sum(i, sqr(P_S_prior(i) - P_S_start(i)))
 1713          + sum(i, sqr(Q_S_prior(i) - Q_S_start(i)))
 1714          + sum(i, sqr(V_real_prior(i) - V_real_start(i)))
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 33
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 33
 compute_start_metrics
 C o m p i l a t i o n
 
@@ -1845,7 +1845,7 @@ C o m p i l a t i o n
 1765          + V_real_start(i) *
 1766            (  sum((j,c)$(branchstatus(i,j,c) ), V_LineIq_start(i,j,c))
 1767             + sum((j,c)$(branchstatus(j,i,c) and not(branchstatus(i,j,c))  ), V_LineIq_start(i,j,c)))
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 34
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 34
 compute_start_metrics
 C o m p i l a t i o n
 
@@ -1903,7 +1903,7 @@ C o m p i l a t i o n
 1818  *    v_previous_solution_penalty_start
 1819  *    v_objcost_start
 1820      max_gen_p_lo_viol_start = smax(gen$status(gen), gen_p_lo_viol_start(gen));
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 35
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 35
 compute_start_metrics
 C o m p i l a t i o n
 
@@ -1927,7 +1927,7 @@ C o m p i l a t i o n
 1837   
 1838  *===== SECTION: DISPLAY START METRICS
 INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/display_start.gms
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 36
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 36
 display_start
 C o m p i l a t i o n
 
@@ -1985,7 +1985,7 @@ C o m p i l a t i o n
 1893      c_V_limit_up_viol_start
 1894      v_generator_hardupl_viol_start
 1895      v_generator_harddownl_viol_start
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 37
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 37
 display_start
 C o m p i l a t i o n
 
@@ -2043,7 +2043,7 @@ C o m p i l a t i o n
 1947      'v_load_bus_volt_pen'
 1948      v_load_bus_volt_pen_start /
 1949      'v_totalshuntswitching'
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 38
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 38
 display_start
 C o m p i l a t i o n
 
@@ -2101,7 +2101,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
 2001  option SysOut = On;
 2002  *feastol =1e-7
 2003   
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 39
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 39
 display_start
 C o m p i l a t i o n
 
@@ -2159,7 +2159,7 @@ C o m p i l a t i o n
 2088  * TODO JH - feasibility problems with these solves
 2089  * need to fix this
 2090  *$ontext
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 40
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 40
 display_start
 C o m p i l a t i o n
 
@@ -2217,7 +2217,7 @@ C o m p i l a t i o n
 2142           solve acopf min V_objcost using rminlp;
 2143  *         if(acopf.modelstat ne 2,
 2144  *            abort "failed to solve acopf after fixing V at saturated buses";);
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 41
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 41
 display_start
 C o m p i l a t i o n
 
@@ -2275,7 +2275,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
 2196  *    RMSVoltageDeviation=sqrt(sum(bus$load(bus), sqr(load_bus_voltage_goal - sqrt(sqr(V_real.l(bus)) + sqr(V_imag.l(bus))))) / max(sum(bus$load(bus),1),1));
 2197      AverageLoadBusVoltageDeviation = sum(bus$load(bus), abs(load_bus_voltage_goal - sqrt(sqr(V_real.l(bus)) + sqr(V_imag.l(bus))))) / max(sum(bus$load(bus),1),1);
 2198      VoltageDevNongen(bus)$(bus_penalize_volt_mag_target(bus) and type(bus) eq 1)=  load_bus_voltage_goal - sqrt(sqr(V_real.l(bus)) + sqr(V_imag.l(bus)));
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 42
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 42
 display_start
 C o m p i l a t i o n
 
@@ -2333,7 +2333,7 @@ C o m p i l a t i o n
 2249  * Marginal for active power on a line
 2250  *    LineSP(i,j,c)$branchstatus(i,j,c) = c_I_Limit.m(i,j,c);
 2251  *    LineSP(j,i,c)$branchstatus(i,j,c) = c_I_Limit.m(j,i,c);
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 43
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 43
 display_start
 C o m p i l a t i o n
 
@@ -2368,7 +2368,7 @@ INCLUDE    /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordi
 **** STRAY NAME gen_s OF TYPE SET  
 **** STRAY NAME interface_t OF TYPE SET  
 **** STRAY NAME Nb OF TYPE PARAM
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 44
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 44
 display_start
 Include File Summary
 
@@ -2408,25 +2408,25 @@ Include File Summary
     31     2259 INCLUDE        1     202  ./home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/solution_save.gms
 
 
-COMPILATION TIME     =        0.016 SECONDS      3 MB  24.9.1 r63795 LEX-LEG
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 45
+COMPILATION TIME     =        0.009 SECONDS      3 MB  24.9.1 r63795 LEX-LEG
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 45
 display_start
 E x e c u t i o n
 
 
 ----    319 PARAMETER demLoad  demandresponse load
 
-2 0.023,    3 0.045,    4 0.068,    5 0.090
+                      ( ALL       0.000 )
 
 
 ----    328 PARAMETER demLoad  demandresponse load
 
-2 0.005,    3 0.009,    4 0.014,    5 0.018
+                      ( ALL       0.000 )
 
 
 ----    328 PARAMETER demPrice  demandresponse price
 
-2 2.571,    3 4.759,    4 6.705,    5 8.432
+                      ( ALL       0.000 )
 
 
 ----    328 PARAMETER demLocation  location of demand response
@@ -2436,7 +2436,7 @@ E x e c u t i o n
 
 ----    328 PARAMETER demSlope  slope
 
-2 570.885,    3 485.730,    4 432.100,    5 383.531
+                      ( ALL       0.000 )
 
 
 ----    808 PARAMETER Bswitched  susceptance of switched shunts
@@ -2456,14 +2456,14 @@ E x e c u t i o n
 
 ----   1399 PARAMETER Pd  bus real power demand
 
-7  0.086,    18 0.097,    57 0.199
+                      ( ALL       0.000 )
 
 
 ----   1399 PARAMETER Va  bus voltage angle
 
                       ( ALL       0.000 )
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 46
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 46
 display_start
 E x e c u t i o n
 
@@ -2518,7 +2518,7 @@ E x e c u t i o n
 57 .54  1.323935E-7
 56 .54  1.891335E-7
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 47
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 47
 display_start
 E x e c u t i o n
 
@@ -2542,17 +2542,17 @@ E x e c u t i o n
 
 ----   1846 PARAMETER Pd  bus real power demand
 
-7  0.086,    18 0.097,    57 0.199
+                      ( ALL       0.000 )
 
 
 ----   1846 PARAMETER Qd  bus reactive power demand
 
-7  0.032,    18 0.028,    57 0.061
+                      ( ALL       0.000 )
 
 
 ----   1846 PARAMETER V_P_start  
 
-1 0.220
+1 0.384
 
 
 ----   1846 PARAMETER V_Q_start  
@@ -2574,7 +2574,7 @@ E x e c u t i o n
 
 7   1.000,    13  1.000,    18  1.000,    149 1.000,    54  1.000,    57  1.000,    56  1.000
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 48
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 48
 display_start
 E x e c u t i o n
 
@@ -2632,7 +2632,7 @@ E x e c u t i o n
 54 .56  9.456675E-8
 57 .54  6.619675E-8
 56 .54  9.456675E-8
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 49
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 49
 display_start
 E x e c u t i o n
 
@@ -2656,10 +2656,10 @@ E x e c u t i o n
 
 ----   1846 PARAMETER V_load_bus_volt_pen_dev_start  
 
-7  0.010,    18 0.010,    57 0.010
+                      ( ALL       0.000 )
 
 
-----   1846 PARAMETER V_load_bus_volt_pen_start =        0.030  
+----   1846 PARAMETER V_load_bus_volt_pen_start =        0.000  
 
 ----   1846 PARAMETER V_shuntSwitching_start  
 
@@ -2676,7 +2676,7 @@ E x e c u t i o n
 ----   1846 PARAMETER V_shuntTotalSwitchingPenalty_start =        0.000  
             PARAMETER V_shuntSwitchingTotalPenalty_start =        0.000  
             PARAMETER V_previous_solution_penalty_start =        0.000  
-            PARAMETER V_objcost_start      =        0.030  
+            PARAMETER V_objcost_start      =  7.37984E-16  
 
 ----   1846 PARAMETER gen_p_lo_viol_start  
 
@@ -2690,7 +2690,7 @@ E x e c u t i o n
 
 ----   1846 PARAMETER gen_q_lo_viol_start  
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 50
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 50
 display_start
 E x e c u t i o n
 
@@ -2720,12 +2720,12 @@ E x e c u t i o n
 
 ----   1846 PARAMETER balance_p_viol_start  
 
-7   -0.086,    18  -0.097,    149  0.220,    57  -0.199
+149 0.384
 
 
 ----   1846 PARAMETER balance_q_viol_start  
 
-7        -0.032,    13  3.120703E-7,    18       -0.028,    149       0.085,    54  2.222319E-7,    57       -0.061,    56  9.456675E-8
+7   2.269602E-7,    13  3.120703E-7,    18  1.560352E-7,    149       0.085,    54  2.222319E-7,    57  6.619675E-8,    56  9.456675E-8
 
 
 ----   1846 PARAMETER p_generator_add_viol_start  
@@ -2747,7 +2747,7 @@ E x e c u t i o n
 
                       ( ALL       0.000 )
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 51
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 51
 display_start
 E x e c u t i o n
 
@@ -2773,15 +2773,15 @@ E x e c u t i o n
 
 
 ----   1846 display start summary
-            PARAMETER p_load_start         =        0.382  
-            PARAMETER p_gen_start          =        0.220  
+            PARAMETER p_load_start         =        0.000  
+            PARAMETER p_gen_start          =        0.384  
             PARAMETER p_shunt_start        =        0.000  
             PARAMETER sum_loss_start       =  7.37984E-16  
-            PARAMETER V_load_bus_volt_pen_start =        0.030  
+            PARAMETER V_load_bus_volt_pen_start =        0.000  
             PARAMETER V_totalShuntSwitching_start =        0.000  
             PARAMETER V_shuntSwitchingTotalPenalty_start =        0.000  
             PARAMETER V_previous_solution_penalty_start =        0.000  
-            PARAMETER V_objcost_start      =        0.030  
+            PARAMETER V_objcost_start      =  7.37984E-16  
             PARAMETER max_gen_p_lo_viol_start =        0.000  
             PARAMETER max_gen_p_up_viol_start =        0.000  
             PARAMETER max_gen_q_lo_viol_start =        0.000  
@@ -2789,7 +2789,7 @@ E x e c u t i o n
             PARAMETER max_De_response_Inc_P_up_viol_start =         -INF  
             PARAMETER max_De_response_dec_P_lo_viol_start =         -INF  
             PARAMETER max_v_shunt_up_viol_start =         -INF  
-            PARAMETER max_balance_p_viol_start =        0.220  
+            PARAMETER max_balance_p_viol_start =        0.384  
             PARAMETER max_balance_q_viol_start =        0.085  
             PARAMETER max_p_generator_add_viol_start =        0.000  
             PARAMETER max_c_I_limit_viol_start =        0.000  
@@ -2805,7 +2805,7 @@ E x e c u t i o n
 
 **** PUT ERROR FOR FILE report_file AT LINE 1931: NOT ENOUGH SPACE FOR E-FORMAT - RESET
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 52
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 52
 display_start
 E x e c u t i o n
 
@@ -2863,7 +2863,7 @@ E x e c u t i o n
 
 **** PUT ERROR FOR FILE report_file AT LINE 1931: NOT ENOUGH SPACE FOR E-FORMAT - RESET
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 53
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 53
 display_start
 E x e c u t i o n
 
@@ -2894,7 +2894,7 @@ E x e c u t i o n
 
 **** PUT ERROR FOR FILE report_file AT LINE 1931: NOT ENOUGH SPACE FOR E-FORMAT - RESET
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 54
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 54
 display_start
 Equation Listing    SOLVE acopf Using RMINLP From line 2107
 
@@ -2945,18 +2945,18 @@ REMAINING 3 ENTRIES SKIPPED
 
 ---- c_BalanceP_nosolar  =E=  Balance of real power for bus without solar
 
-c_BalanceP_nosolar(7)..  (0)*V_real(7) - (2.26960203519866E-7)*V_imag(7) - (1)*V_LineIr(7,13,1) - (1)*V_LineIr(7,149,1) + (0)*V_LineIq(7,13,1) + (0)*V_LineIq(7,149,1) =E= 0.08576703061738 ; (LHS = 0, INFES = 0.08576703061738 ****)
+c_BalanceP_nosolar(7)..  (0)*V_real(7) - (2.26960203519866E-7)*V_imag(7) - (1)*V_LineIr(7,13,1) - (1)*V_LineIr(7,149,1) + (0)*V_LineIq(7,13,1) + (0)*V_LineIq(7,149,1) =E= 0 ; (LHS = 0)
      
-c_BalanceP_nosolar(18)..  (0)*V_real(18) - (1.56035198983773E-7)*V_imag(18) - (1)*V_LineIr(18,13,1) + (0)*V_LineIq(18,13,1) - V_dem_Load(2) - V_dem_Load(3) - V_dem_Load(4) - V_dem_Load(5) =E= 0.09670607500162 ; (LHS = 0, INFES = 0.09670607500162 ****)
+c_BalanceP_nosolar(18)..  (0)*V_real(18) - (1.56035198983773E-7)*V_imag(18) - (1)*V_LineIr(18,13,1) + (0)*V_LineIq(18,13,1) =E= 0 ; (LHS = 0)
      
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 55
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 55
 display_start
 Equation Listing    SOLVE acopf Using RMINLP From line 2107
 
 
      c_BalanceP_nosolar  =E=  Balance of real power for bus without solar
 
-c_BalanceP_nosolar(149)..  V_P(1) + (0)*V_real(149) - (1)*V_LineIr(149,7,1) =E= 0 ; (LHS = 0.220418935452, INFES = 0.220418935452 ****)
+c_BalanceP_nosolar(149)..  V_P(1) + (0)*V_real(149) - (1)*V_LineIr(149,7,1) =E= 0 ; (LHS = 0.384353867196, INFES = 0.384353867196 ****)
      
 REMAINING 2 ENTRIES SKIPPED
 
@@ -2967,14 +2967,14 @@ c_BalanceP_solar(13)..  P_S(13) + (0)*V_real(13) - (3.12070348229554E-7)*V_imag(
      
       (LHS = 0.006, INFES = 0.006 ****)
      
-c_BalanceP_solar(57)..  P_S(57) + (0)*V_real(57) - (6.61967476389691E-8)*V_imag(57) - (1)*V_LineIr(57,54,1) + (0)*V_LineIq(57,54,1) =E= 0.1992437708212 ; (LHS = 0.004, INFES = 0.1952437708212 ****)
+c_BalanceP_solar(57)..  P_S(57) + (0)*V_real(57) - (6.61967476389691E-8)*V_imag(57) - (1)*V_LineIr(57,54,1) + (0)*V_LineIq(57,54,1) =E= 0 ; (LHS = 0.004, INFES = 0.004 ****)
      
 
 ---- c_BalanceQ_nosolar  =E=  Balance of reactive power for bus without solar
 
-c_BalanceQ_nosolar(7)..  (2.26960203519866E-7)*V_real(7) + (0)*V_imag(7) + (0)*V_LineIr(7,13,1) + (0)*V_LineIr(7,149,1) + (1)*V_LineIq(7,13,1) + (1)*V_LineIq(7,149,1) =E= 0.03183248005334 ; (LHS = 2.26960203519866E-7, INFES = 0.0318322530931365 ****)
+c_BalanceQ_nosolar(7)..  (2.26960203519866E-7)*V_real(7) + (0)*V_imag(7) + (0)*V_LineIr(7,13,1) + (0)*V_LineIr(7,149,1) + (1)*V_LineIq(7,13,1) + (1)*V_LineIq(7,149,1) =E= 0 ; (LHS = 2.26960203519866E-7, INFES = 2.26960203519866E-7 ****)
      
-c_BalanceQ_nosolar(18)..  (1.56035198983773E-7)*V_real(18) + (0)*V_imag(18) + (0)*V_LineIr(18,13,1) + (1)*V_LineIq(18,13,1) =E= 0.027732604007 ; (LHS = 1.56035198983773E-7, INFES = 0.027732447971801 ****)
+c_BalanceQ_nosolar(18)..  (1.56035198983773E-7)*V_real(18) + (0)*V_imag(18) + (0)*V_LineIr(18,13,1) + (1)*V_LineIq(18,13,1) =E= 0 ; (LHS = 1.56035198983773E-7, INFES = 1.56035198983773E-7 ****)
      
 c_BalanceQ_nosolar(149)..  V_Q(1) + (1.32393452645374E-7)*V_real(149) + (1)*V_LineIq(149,7,1) =E= 0 ; (LHS = 0.0852001323934526, INFES = 0.0852001323934526 ****)
      
@@ -2987,7 +2987,7 @@ c_BalanceQ_solar(13)..  Q_S(13) + (3.12070348229554E-7)*V_real(13) + (0)*V_imag(
      
       (LHS = 3.12070348229554E-7, INFES = 3.12070348229554E-7 ****)
      
-c_BalanceQ_solar(57)..  Q_S(57) + (6.61967476389691E-8)*V_real(57) + (0)*V_imag(57) + (0)*V_LineIr(57,54,1) + (1)*V_LineIq(57,54,1) =E= 0.061181516791 ; (LHS = 6.61967476389691E-8, INFES = 0.0611814505942524 ****)
+c_BalanceQ_solar(57)..  Q_S(57) + (6.61967476389691E-8)*V_real(57) + (0)*V_imag(57) + (0)*V_LineIr(57,54,1) + (1)*V_LineIq(57,54,1) =E= 0 ; (LHS = 6.61967476389691E-8, INFES = 6.61967476389691E-8 ****)
      
 
 ---- c_Lossijc  =E=  Loss on line c connecting bus i and bus j
@@ -3005,7 +3005,7 @@ REMAINING 3 ENTRIES SKIPPED
 
 c_Lossi(7)..  - V_Lossijc(7,13,1) + V_Lossi(7) =E= 0 ; (LHS = 0)
      
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 56
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 56
 display_start
 Equation Listing    SOLVE acopf Using RMINLP From line 2107
 
@@ -3043,7 +3043,7 @@ REMAINING 4 ENTRIES SKIPPED
 
 ---- p_generator_add  =E=  enforces generator participation factor in adjustment from schedule
 
-p_generator_add(1)..  V_P(1) - V_P_system_deviation =E= 0.220418935452 ; (LHS = 0.220418935452)
+p_generator_add(1)..  V_P(1) - V_P_system_deviation =E= 0.384353867196 ; (LHS = 0.384353867196)
      
 
 ---- c_BalanceP_control_solar  =E=  balance of real power for controllable solar
@@ -3060,7 +3060,7 @@ p_generator_add(1)..  V_P(1) - V_P_system_deviation =E= 0.220418935452 ; (LHS = 
 
                 NONE
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 57
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 57
 display_start
 Equation Listing    SOLVE acopf Using RMINLP From line 2107
 
@@ -3112,11 +3112,9 @@ v_generator_addlow(149)..  (1)*V_real(149) =G= 1 ; (LHS = 1)
 
 ---- c_obj  =E=  Objective function
 
-c_obj..  - 5000000*V_P(1) - (153)*P_S(13) - (210.5)*P_S(57) - V_shuntSwitchingTotalPenalty + 570.884700414478*V_dem_Load(2) + 485.73031315682*V_dem_Load(3) + 432.099845343922*V_dem_Load(4) + 383.530754912241*V_dem_Load(5) - V_previous_solution_penalty
+c_obj..  - 5000000*V_P(1) - (153)*P_S(13) - (210.5)*P_S(57) - V_shuntSwitchingTotalPenalty - V_previous_solution_penalty + V_objcost =E= -1921768.70598 ; (LHS = -1921770.74698, INFES = 2.041 ****)
      
-      + V_objcost =E= -1102094.04726 ; (LHS = -1102096.08826, INFES = 2.041 ****)
-     
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 58
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 58
 display_start
 Column Listing      SOLVE acopf Using RMINLP From line 2107
 
@@ -3124,7 +3122,7 @@ Column Listing      SOLVE acopf Using RMINLP From line 2107
 ---- V_P  Real power generation of generator
 
 V_P(1)
-                (.LO, .L, .UP, .M = 0.220418935452, 0.220418935452, 20.0886, 0)
+                (.LO, .L, .UP, .M = 0.384353867196, 0.384353867196, 20.0886, 0)
         1       c_BalanceP_nosolar(149)
         1       p_generator_add(1)
   -5.000000E+6  c_obj
@@ -3174,7 +3172,7 @@ V_real(7)
        46.9432  c_LineIqij(7,13,1)
       -33.6238  c_LineIqij(149,7,1)
       -46.9432  c_LineIqji(7,13,1)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 59
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 59
 display_start
 Column Listing      SOLVE acopf Using RMINLP From line 2107
 
@@ -3232,7 +3230,7 @@ V_imag(7)
        22.9258  c_LineIqji(7,13,1)
       -16.4129  c_LineIqji(149,7,1)
  (-2.269602E-7) c_BalanceP_nosolar(7)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 60
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 60
 display_start
 Column Listing      SOLVE acopf Using RMINLP From line 2107
 
@@ -3290,7 +3288,7 @@ V_LineIr(7,149,1)
       (-1)      c_BalanceP_nosolar(7)
        (0)      c_BalanceQ_nosolar(7)
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 61
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 61
 display_start
 Column Listing      SOLVE acopf Using RMINLP From line 2107
 
@@ -3346,7 +3344,7 @@ V_Lossijc(13,54,1)
        -1       c_Lossi(13)
 
 REMAINING 3 ENTRIES SKIPPED
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 62
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 62
 display_start
 Column Listing      SOLVE acopf Using RMINLP From line 2107
 
@@ -3390,32 +3388,6 @@ V_shuntSwitchingTotalPenalty
        -1       c_obj
 
 
----- V_dem_Load  demand load level
-
-V_dem_Load(2)
-                (.LO, .L, .UP, .M = 0, 0, 0.004503739861945, 0)
-       -1       c_BalanceP_nosolar(18)
-      570.8847  c_obj
-
-V_dem_Load(3)
-                (.LO, .L, .UP, .M = 0, 0, 0.004503739861945, 0)
-       -1       c_BalanceP_nosolar(18)
-      485.7303  c_obj
-
-V_dem_Load(4)
-                (.LO, .L, .UP, .M = 0, 0, 0.004503739861945, 0)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 63
-display_start
-Column Listing      SOLVE acopf Using RMINLP From line 2107
-
-
-     V_dem_Load  demand load level
-
-       -1       c_BalanceP_nosolar(18)
-      432.0998  c_obj
-
-REMAINING ENTRY SKIPPED
-
 ---- V_previous_solution_penalty  total penalty on deviation to previous solution
 
 V_previous_solution_penalty
@@ -3430,6 +3402,10 @@ V_objcost
                 (.LO, .L, .UP, .M = -INF, 7.37984193494078E-16, +INF, 0)
         1       c_obj
 
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 63
+display_start
+Column Listing      SOLVE acopf Using RMINLP From line 2107
+
 
 ---- V_P_system_deviation  system total adjustment from real generation schedule
 
@@ -3437,7 +3413,7 @@ V_P_system_deviation
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
        -1       p_generator_add(1)
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 64
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 64
 display_start
 Model Statistics    SOLVE acopf Using RMINLP From line 2107
 
@@ -3445,17 +3421,17 @@ Model Statistics    SOLVE acopf Using RMINLP From line 2107
 MODEL STATISTICS
 
 BLOCKS OF EQUATIONS          26     SINGLE EQUATIONS           73
-BLOCKS OF VARIABLES          17     SINGLE VARIABLES           66  2 projected
-NON ZERO ELEMENTS           274     NON LINEAR N-Z            114
+BLOCKS OF VARIABLES          16     SINGLE VARIABLES           62  2 projected
+NON ZERO ELEMENTS           266     NON LINEAR N-Z            114
 DERIVATIVE POOL              20     CONSTANT POOL              27
 CODE LENGTH                 328
 
 
-GENERATION TIME      =        0.001 SECONDS      4 MB  24.9.1 r63795 LEX-LEG
+GENERATION TIME      =        0.002 SECONDS      4 MB  24.9.1 r63795 LEX-LEG
 
 
 EXECUTION TIME       =        0.004 SECONDS      4 MB  24.9.1 r63795 LEX-LEG
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 65
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 65
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
@@ -3468,9 +3444,9 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
 **** SOLVER STATUS     1 Normal Completion         
 **** MODEL STATUS      2 Locally Optimal           
-**** OBJECTIVE VALUE           264406.6730
+**** OBJECTIVE VALUE                2.0410
 
- RESOURCE USAGE, LIMIT          0.033        60.000
+ RESOURCE USAGE, LIMIT          0.120        60.000
  ITERATION COUNT, LIMIT         0    2000000000
  EVALUATION ERRORS              0             0
 
@@ -3501,19 +3477,19 @@ Knitro changing bar_penaltyrule from AUTO to 2.
 Knitro changing bar_switchrule from AUTO to 2.
 Knitro changing linesearch from AUTO to 1.
 Knitro changing linsolver from AUTO to 2.
-Knitro shifted start point to satisfy presolved bounds (11 variables).
+Knitro shifted start point to satisfy presolved bounds (7 variables).
 Knitro fixing 3 variables eliminated from the presolve.
 Knitro reinitializing 1 variable eliminated from the presolve.
 
 Problem Characteristics                    ( Presolved)
 -----------------------
 Objective goal:  Minimize
-Number of variables:                          65 (        57)
+Number of variables:                          61 (        53)
     bounded below only:                        4 (         4)
     bounded above only:                        0 (         0)
-    bounded below and above:                  23 (        23)
+    bounded below and above:                  19 (        19)
     fixed:                                     0 (         0)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 66
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 66
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
@@ -3526,28 +3502,29 @@ Number of constraints:                        72 (        61)
     nonlinear one-sided inequalities:         16 (        16)
     linear two-sided inequalities:             0 (         0)
     nonlinear two-sided inequalities:          0 (         0)
-Number of nonzeros in Jacobian:              264 (       246)
+Number of nonzeros in Jacobian:              260 (       242)
 Number of nonzeros in Hessian:                79 (        79)
 
   Iter      Objective      FeasError   OptError    ||Step||    CGits 
 --------  --------------  ----------  ----------  ----------  -------
-       0    4.950015e+06   1.210e+00
-       4    2.644067e+05   6.044e-08   1.348e-06   1.047e+00        0
+       0    4.950019e+06   1.374e+00
+      10    4.008801e+01   1.488e-03   4.031e-04   1.110e+03        0
+      16    2.041002e+00   2.214e-11   1.208e-09   5.949e-05        0
 
 EXIT: Locally optimal solution found.
 
 Final Statistics
 ----------------
-Final objective value               =   2.64406673003980e+05
-Final feasibility error (abs / rel) =   6.04e-08 / 4.99e-08
-Final optimality error  (abs / rel) =   1.35e-06 / 1.35e-08
-# of iterations                     =          4 
+Final objective value               =   2.04100221302360e+00
+Final feasibility error (abs / rel) =   2.21e-11 / 1.61e-11
+Final optimality error  (abs / rel) =   1.21e-09 / 1.21e-11
+# of iterations                     =         16 
 # of CG iterations                  =          0 
-# of function evaluations           =          6
-# of gradient evaluations           =          6
-# of Hessian evaluations            =          4
-Total program time (secs)           =       0.00158 (     0.000 CPU time)
-Time spent in evaluations (secs)    =       0.00022
+# of function evaluations           =         18
+# of gradient evaluations           =         18
+# of Hessian evaluations            =         16
+Total program time (secs)           =       0.01329 (     0.004 CPU time)
+Time spent in evaluations (secs)    =       0.00096
 
 ===============================================================================
 
@@ -3557,72 +3534,67 @@ Solve finished: status = optimal
 
                 LOWER          LEVEL          UPPER         MARGINAL
 
-7  .13.1          .              .              .       5014652.2649      
-13 .18.1          .              .              .       5024332.1293      
-13 .54.1          .              .              .       5024332.1294      
-149.7 .1          .              .              .       4999998.7507      
-54 .57.1          .              .              .       5028356.7822      
-54 .56.1          .              .              .       5028356.7822      
+7  .13.1          .              .              .       -7.624447E-5      
+13 .18.1          .              .              .       -7.198573E-5      
+13 .54.1          .              .              .       -7.246841E-5      
+149.7 .1          .              .              .       -8.221415E-5      
+54 .57.1          .              .              .       -7.588747E-5      
+54 .56.1          .              .              .       -7.588747E-5      
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 67
+display_start
+Solution Report     SOLVE acopf Using RMINLP From line 2107
+
 
 ---- EQU c_LineIrji  Real  current flowing from bus j into bus i along line c
 
                 LOWER          LEVEL          UPPER         MARGINAL
 
-7  .13.1          .              .              .       5024332.1297      
-13 .18.1          .              .              .       5026951.7884      
-13 .54.1          .              .              .       5028356.7823      
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 67
-display_start
-Solution Report     SOLVE acopf Using RMINLP From line 2107
-
-
-     EQU c_LineIrji  Real  current flowing from bus j into bus i along line c
-
-                LOWER          LEVEL          UPPER         MARGINAL
-
-149.7 .1          .              .              .       5014652.2654      
-54 .57.1          .              .              .       5032755.8447      
-54 .56.1          .              .              .       5028356.7904      
+7  .13.1          .              .              .       -7.198574E-5      
+13 .18.1          .              .              .       -7.160767E-5      
+13 .54.1          .              .              .       -7.588733E-5      
+149.7 .1          .              .              .       -7.624447E-5      
+54 .57.1          .              .              .       -7.950995E-5      
+54 .56.1          .              .              .       -7.590023E-5      
 
 ---- EQU c_LineIqij  Reactive current  flowing from bus i into bus j along line c
 
                 LOWER          LEVEL          UPPER         MARGINAL
 
-7  .13.1          .              .              .        -33960.1499      
-13 .18.1          .              .              .        -49475.0805      
-13 .54.1          .              .              .        -49475.0805      
-149.7 .1          .              .              .       -2.758816E-5      
-54 .57.1          .              .              .        -58036.9813      
-54 .56.1          .              .              .        -58036.9813      
+7  .13.1          .              .              .       -1.504283E-6      
+13 .18.1          .              .              .       -2.550528E-6      
+13 .54.1          .              .              .       5.7781663E-5      
+149.7 .1          .              .              .       -8.34920E-10      
+54 .57.1          .              .              .       5.5172560E-5      
+54 .56.1          .              .              .       1.8915151E-5      
 
 ---- EQU c_LineIqji  Reactive current flowing from bus j into bus i along line c
 
                 LOWER          LEVEL          UPPER         MARGINAL
 
-7  .13.1          .              .              .        -49475.0805      
-13 .18.1          .              .              .        -65405.7572      
-13 .54.1          .              .              .        -58036.9813      
-149.7 .1          .              .              .        -33960.1499      
-54 .57.1          .              .              .        -67211.3121      
-54 .56.1          .              .              .        -58036.9773      
+7  .13.1          .              .              .       -2.550530E-6      
+13 .18.1          .              .              .       -3.263197E-6      
+13 .54.1          .              .              .       5.3328275E-5      
+149.7 .1          .              .              .       -1.504284E-6      
+54 .57.1          .              .              .       5.0318059E-5      
+54 .56.1          .              .              .       1.8940786E-5      
 
 ---- EQU c_BalanceP_nosolar  Balance of real power for bus without solar
 
            LOWER          LEVEL          UPPER         MARGINAL
 
-7           0.0858         0.0858         0.0858   5032350.4864      
-18          0.0967         0.0967         0.0967   5062006.0027      
-149          .       6.0440353E-8          .       4999998.7251      
-54           .              .              .       5056574.1870      
-56           .              .              .       5056574.1869      
+7            .              .              .       -8.121950E-5      
+18           .              .              .       -8.004822E-5      
+149          .              .              .       -8.221415E-5      
+54           .              .              .       -7.958848E-5      
+56           .              .              .       -7.980619E-5      
 
 ---- EQU c_BalanceP_solar  Balance of real power for bus with solar
 
           LOWER          LEVEL          UPPER         MARGINAL
 
-13          .              .              .       5048325.1683      
-57         0.1992         0.1992         0.1992   5065602.3460      
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 68
+13          .              .              .       -8.044231E-5      
+57          .              .              .       -8.004057E-5      
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 68
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
@@ -3631,29 +3603,29 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
            LOWER          LEVEL          UPPER         MARGINAL
 
-7           0.0318         0.0318         0.0318      1697.6578      
-18          0.0277         0.0277         0.0277      3958.5443      
-149          .       1.1060144E-8          .       9.6194250E-6      
-54           .              .              .            15.2632      
-56           .              .              .            15.2550      
+7            .              .              .       4.5580992E-9      
+18           .              .              .       8.0104490E-7      
+149          .              .              .       8.354976E-10      
+54           .              .              .       -5.856330E-5      
+56           .              .              .       -2.029458E-5      
 
 ---- EQU c_BalanceQ_solar  Balance of reactive power for bus with solar
 
           LOWER          LEVEL          UPPER         MARGINAL
 
-13          .              .              .       -6.677409E-6      
-57         0.0612         0.0612         0.0612   -3.508536E-6      
+13          .              .              .       -9.42978E-11      
+57          .              .              .       -4.783974E-5      
 
 ---- EQU c_Lossijc  Loss on line c connecting bus i and bus j
 
                 LOWER          LEVEL          UPPER         MARGINAL
 
-7  .13.1          .              .              .       -1.64154E-14      
-13 .18.1          .              .              .       3.999559E-21      
-13 .54.1          .              .              .       -2.36759E-15      
-149.7 .1          .              .              .       -3.20757E-14      
-54 .57.1          .              .              .       -2.78580E-15      
-54 .56.1          .              .              .       3.417797E-22      
+7  .13.1          .              .              .       -2.34304E-14      
+13 .18.1          .              .              .       2.180745E-29      
+13 .54.1          .              .              .       2.308969E-14      
+149.7 .1          .              .              .       -3.27022E-14      
+54 .57.1          .              .              .       2.522762E-14      
+54 .56.1          .              .              .       1.587697E-29      
 
 ---- EQU c_Lossi  Loss on lines connected with bus i
 
@@ -3671,14 +3643,14 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
            LOWER          LEVEL          UPPER         MARGINAL
 
-7          -INF            0.9965         1.1500        -0.0007      
-13         -INF            0.9953         1.1500        -0.0009      
-18         -INF            0.9932         1.1500        -0.0009      
-149        -INF            1.0000         1.1500        -0.0008      
-54         -INF            0.9945         1.1500        -0.0009      
-57         -INF            0.9936         1.1500        -0.0009      
-56         -INF            0.9945         1.1500        -0.0009      
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 69
+7          -INF            0.9377         1.1500   -3.240299E-6      
+13         -INF            0.8934         1.1500   -2.705320E-6      
+18         -INF            0.8934         1.1500   -2.705320E-6      
+149        -INF            1.0000         1.1500   -4.489159E-6      
+54         -INF            0.9473         1.1500   -3.475486E-6      
+57         -INF            1.0060         1.1500   -5.019459E-6      
+56         -INF            0.9473         1.1500   -3.475486E-6      
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 69
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
@@ -3687,19 +3659,19 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
            LOWER          LEVEL          UPPER         MARGINAL
 
-7           0.8800         0.9965        +INF            0.0010      
-13          0.8800         0.9953        +INF            0.0009      
-18          0.8800         0.9932        +INF            0.0010      
-149         0.8800         1.0000        +INF            0.0012      
-54          0.8800         0.9945        +INF            0.0009      
-57          0.8800         0.9936        +INF            0.0009      
-56          0.8800         0.9945        +INF            0.0009      
+7           0.8800         0.9377        +INF      1.0931260E-5      
+13          0.8800         0.8934        +INF      3.1240757E-5      
+18          0.8800         0.8934        +INF      3.2497442E-5      
+149         0.8800         1.0000        +INF      5.6114482E-6      
+54          0.8800         0.9473        +INF      8.8160287E-6      
+57          0.8800         1.0060        +INF      4.8501692E-6      
+56          0.8800         0.9473        +INF      8.8160285E-6      
 
 ---- EQU p_generator_add  enforces generator participation factor in adjustment from schedule
 
          LOWER          LEVEL          UPPER         MARGINAL
 
-1         0.2204         0.2204         0.2204         EPS         
+1         0.3844         0.3844         0.3844         EPS         
 
 ---- EQU c_BalanceP_control_solar  balance of real power for controllable solar
 
@@ -3723,7 +3695,7 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
                            LOWER          LEVEL          UPPER         MARGINAL
 
----- EQU c_totalSh~          .             1.0647        +INF            EPS         
+---- EQU c_totalSh~          .         67030.4826        +INF            EPS         
 
   c_totalShuntSwitchingDef  defines total number of steps switched
 
@@ -3731,16 +3703,16 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
                 NONE
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 70
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 70
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
 
                            LOWER          LEVEL          UPPER         MARGINAL
 
----- EQU c_shuntTo~          .             0.0009        +INF            EPS         
----- EQU c_shuntSw~          .             0.0002        +INF            0.4018      
----- EQU c_previou~          .             0.0006        +INF            EPS         
+---- EQU c_shuntTo~          .       4.7427329E-7        +INF            EPS         
+---- EQU c_shuntSw~          .       4.7417696E-7        +INF            0.6523      
+---- EQU c_previou~          .       3.1617498E-7        +INF            EPS         
 
   c_shuntTotalSwitchingPenalty  defines penalty incurred by total shunt switching
   c_shuntSwitchingTotalPenaltyDef   defines total penalty incurrent by shunt switching
@@ -3750,17 +3722,17 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
            LOWER          LEVEL          UPPER         MARGINAL
 
-149        -INF            1.0000         1.0000    -57393.6277      
+149        -INF            1.0000         1.0000   -616925.6429      
 
 ---- EQU v_generator_addlow  generator voltage constraints added
 
            LOWER          LEVEL          UPPER         MARGINAL
 
-149         1.0000         1.0000        +INF        41465.4490      
+149         1.0000         1.0000        +INF       616925.6427      
 
                            LOWER          LEVEL          UPPER         MARGINAL
 
----- EQU c_obj        -1.102094E+6   -1.102094E+6   -1.102094E+6         1.0000      
+---- EQU c_obj        -1.921769E+6   -1.921769E+6   -1.921769E+6         1.0000      
 
   c_obj  Objective function
 
@@ -3768,21 +3740,21 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
          LOWER          LEVEL          UPPER         MARGINAL
 
-1         0.2204         0.2733        20.0886         1.2749      
+1         0.3844         0.3844        20.0886   5000000.0001      
 
 ---- VAR V_Q  Reactive power generation of generator
 
          LOWER          LEVEL          UPPER         MARGINAL
 
-1       -60.0000         0.0129        60.0000   -9.619425E-6      
+1       -60.0000         2.4128        60.0000   -8.35498E-10      
 
 ---- VAR P_S  real power generation of solar bus
 
           LOWER          LEVEL          UPPER         MARGINAL
 
-13         0.0060         0.0600         0.0600   -5.047497E+6      
-57         0.0040         0.0500         0.0500   -5.064679E+6      
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 71
+13         0.0060         0.0060         0.0600       153.0001      
+57         0.0040         0.0040         0.0500       210.5001      
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 71
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
@@ -3791,49 +3763,49 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
           LOWER          LEVEL          UPPER         MARGINAL
 
-13      -300.0000         0.0493       300.0000   6.6774092E-6      
-57      -300.0000         0.0617       300.0000   3.5084790E-6      
+13      -300.0000        -6.5596       300.0000   9.429776E-11      
+57      -300.0000         4.9559       300.0000   1.5628597E-7      
 
 ---- VAR V_real  Real part of bus voltage
 
            LOWER          LEVEL          UPPER         MARGINAL
 
-7          -1.0500         0.9965         1.0500        -0.0184      
-13         -1.0500         0.9952         1.0500        -0.0126      
-18         -1.0500         0.9931         1.0500        -0.0750      
-149        -1.0500         1.0000         1.0500         0.0207      
-54         -1.0500         0.9944         1.0500        -0.0104      
-57         -1.0500         0.9935         1.0500        -0.0456      
-56         -1.0500         0.9944         1.0500        -0.0104      
+7          -1.0500         0.9375         1.0500   -5.907156E-6      
+13         -1.0500         0.8928         1.0500   -7.787376E-5      
+18         -1.0500         0.8928         1.0500   -4.164333E-6      
+149        -1.0500         1.0000         1.0500   -1.313873E-5      
+54         -1.0500         0.9473         1.0500   -6.836659E-6      
+57         -1.0500         1.0057         1.0500   -1.919536E-5      
+56         -1.0500         0.9473         1.0500   -6.836454E-6      
 
 ---- VAR V_imag  Imaginary part of bus voltage
 
           LOWER          LEVEL          UPPER         MARGINAL
 
-7         -1.0500        -0.0064         1.0500         0.0029      
-13        -1.0500        -0.0098         1.0500        -0.0377      
-18        -1.0500        -0.0121         1.0500         0.0049      
-54        -1.0500        -0.0115         1.0500   -1.738545E-5      
-57        -1.0500        -0.0133         1.0500        -0.0069      
-56        -1.0500        -0.0115         1.0500   -1.738545E-5      
+7         -1.0500         0.0191         1.0500   -3.197436E-8      
+13        -1.0500         0.0327         1.0500   -6.462858E-6      
+18        -1.0500         0.0327         1.0500   -1.276197E-7      
+54        -1.0500         0.0047         1.0500   1.5202537E-8      
+57        -1.0500        -0.0258         1.0500   -1.552514E-6      
+56        -1.0500         0.0047         1.0500   -2.011975E-8      
 
 ---- VAR V_LineIr  Real current flowing from bus i towards bus j on line c
 
                  LOWER          LEVEL          UPPER         MARGINAL
 
-7  .13 .1        -INF            0.1874        +INF            EPS         
-7  .149.1        -INF           -0.2733        +INF            EPS         
-13 .7  .1        -INF           -0.1874        +INF            EPS         
-13 .18 .1        -INF            0.0970        +INF            EPS         
-13 .54 .1        -INF            0.1502        +INF            EPS         
-18 .13 .1        -INF           -0.0970        +INF            EPS         
-149.7  .1        -INF            0.2733        +INF            EPS         
-54 .13 .1        -INF           -0.1502        +INF            EPS         
-54 .57 .1        -INF            0.1502        +INF            EPS         
-54 .56 .1        -INF      2.1702172E-9        +INF            EPS         
-57 .54 .1        -INF           -0.1502        +INF            EPS         
-56 .54 .1        -INF      9.113969E-16        +INF            EPS         
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 72
+7  .13 .1        -INF            0.3844        +INF            EPS         
+7  .149.1        -INF           -0.3844        +INF            EPS         
+13 .7  .1        -INF           -0.3844        +INF            EPS         
+13 .18 .1        -INF      -1.020847E-8        +INF            EPS         
+13 .54 .1        -INF            0.1222        +INF            EPS         
+18 .13 .1        -INF      -4.15254E-15        +INF            EPS         
+149.7  .1        -INF            0.3844        +INF            EPS         
+54 .13 .1        -INF           -0.1222        +INF            EPS         
+54 .57 .1        -INF            0.1222        +INF            EPS         
+54 .56 .1        -INF      -8.98358E-10        +INF            EPS         
+57 .54 .1        -INF           -0.1222        +INF            EPS         
+56 .54 .1        -INF      -9.87361E-20        +INF            EPS         
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 72
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
@@ -3842,72 +3814,60 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 
                  LOWER          LEVEL          UPPER         MARGINAL
 
-7  .13 .1        -INF            0.0196        +INF            EPS         
-7  .149.1        -INF            0.0129        +INF            EPS         
-13 .7  .1        -INF           -0.0196        +INF            EPS         
-13 .18 .1        -INF           -0.0291        +INF            EPS         
-13 .54 .1        -INF           -0.0015        +INF            EPS         
-18 .13 .1        -INF            0.0291        +INF            EPS         
-149.7  .1        -INF           -0.0129        +INF            EPS         
-54 .13 .1        -INF            0.0015        +INF            EPS         
-54 .57 .1        -INF           -0.0015        +INF            EPS         
-54 .56 .1        -INF      1.8807808E-7        +INF            EPS         
-57 .54 .1        -INF            0.0015        +INF            EPS         
-56 .54 .1        -INF      3.279293E-15        +INF            EPS         
+7  .13 .1        -INF           -2.4128        +INF            EPS         
+7  .149.1        -INF            2.4128        +INF            EPS         
+13 .7  .1        -INF            2.4128        +INF            EPS         
+13 .18 .1        -INF      2.7862106E-7        +INF            EPS         
+13 .54 .1        -INF            4.9247        +INF            EPS         
+18 .13 .1        -INF      2.089256E-13        +INF            EPS         
+149.7  .1        -INF           -2.4128        +INF            EPS         
+54 .13 .1        -INF           -4.9247        +INF            EPS         
+54 .57 .1        -INF            4.9247        +INF            EPS         
+54 .56 .1        -INF      1.7916852E-7        +INF            EPS         
+57 .54 .1        -INF           -4.9247        +INF            EPS         
+56 .54 .1        -INF      -4.96073E-22        +INF            EPS         
 
 ---- VAR V_Lossijc  Loss on line c connecting bus i and bus j
 
                 LOWER          LEVEL          UPPER         MARGINAL
 
-7  .13.1        -INF            0.0003        +INF            EPS         
-13 .18.1        -INF            0.0001        +INF            EPS         
-13 .54.1        -INF            0.0001        +INF            EPS         
-149.7 .1        -INF            0.0009        +INF            EPS         
-54 .57.1        -INF            0.0001        +INF            EPS         
-54 .56.1        -INF      2.971757E-16        +INF            EPS         
+7  .13.1        -INF            0.0501        +INF            EPS         
+13 .18.1        -INF      1.072727E-15        +INF            EPS         
+13 .54.1        -INF            0.1310        +INF            EPS         
+149.7 .1        -INF            0.0700        +INF            EPS         
+54 .57.1        -INF            0.1432        +INF            EPS         
+54 .56.1        -INF      2.696582E-16        +INF            EPS         
 
 ---- VAR V_Lossi  Loss on lines connecting with bus i
 
            LOWER          LEVEL          UPPER         MARGINAL
 
-7          -INF            0.0003        +INF            EPS         
-13         -INF            0.0003        +INF            EPS         
+7          -INF            0.0501        +INF            EPS         
+13         -INF            0.1310        +INF            EPS         
 18         -INF             .            +INF            EPS         
-149        -INF            0.0009        +INF            EPS         
-54         -INF            0.0001        +INF            EPS         
+149        -INF            0.0700        +INF            EPS         
+54         -INF            0.1432        +INF            EPS         
 57         -INF             .            +INF            EPS         
 56         -INF             .            +INF            EPS         
 
                            LOWER          LEVEL          UPPER         MARGINAL
 
----- VAR V_totalSh~          .             1.0647        +INF            EPS         
----- VAR V_shuntTo~          .             0.0009        +INF            0.4018      
----- VAR V_shuntSw~          .             0.0012        +INF            0.5982      
+---- VAR V_totalSh~          .         67030.4826        +INF            EPS         
+---- VAR V_shuntTo~          .       4.7427329E-7        +INF            0.6523      
+---- VAR V_shuntSw~          .       9.4845024E-7        +INF            0.3477      
+---- VAR V_previou~          .       3.1617498E-7        +INF            1.0000      
+---- VAR V_objcost         -INF            2.0410        +INF             .          
+---- VAR V_P_syste~        -INF      6.322720E-14        +INF            EPS         
 
   V_totalShuntSwitching  total number of steps switched
   V_shuntTotalSwitchingPenalty  penalty incurred by total shunt switching
   V_shuntSwitchingTotalPenalty  total penalty incurrent by shunt switching
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 73
+  V_previous_solution_penalty  total penalty on deviation to previous solution
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 73
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
 
----- VAR V_dem_Load  demand load level
-
-         LOWER          LEVEL          UPPER         MARGINAL
-
-2          .              .             0.0045   5061435.1180      
-3          .              .             0.0045   5061520.2724      
-4          .              .             0.0045   5061573.9028      
-5          .              .             0.0045   5061622.4719      
-
-                           LOWER          LEVEL          UPPER         MARGINAL
-
----- VAR V_previou~          .             0.0006        +INF            1.0000      
----- VAR V_objcost         -INF       264406.6730        +INF             .          
----- VAR V_P_syste~        -INF            0.0529        +INF            EPS         
-
-  V_previous_solution_penalty  total penalty on deviation to previous solution
   V_objcost  Total cost of objective function
   V_P_system_deviation  system total adjustment from real generation schedule
 
@@ -3916,8 +3876,8 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
                              0 INFEASIBLE
                              0  UNBOUNDED
                              0     ERRORS
-                            50  PROJECTED
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 74
+                            48  PROJECTED
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 74
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
@@ -3957,17 +3917,17 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 ?CKnitro changing bar_switchrule from AUTO to 2.
 ?CKnitro changing linesearch from AUTO to 1.
 ?CKnitro changing linsolver from AUTO to 2.
-?CKnitro shifted start point to satisfy presolved bounds (11 variables).
+?CKnitro shifted start point to satisfy presolved bounds (7 variables).
 ?CKnitro fixing 3 variables eliminated from the presolve.
 ?CKnitro reinitializing 1 variable eliminated from the presolve.
 ?C
 ?CProblem Characteristics                    ( Presolved)
 ?C-----------------------
 ?CObjective goal:  Minimize
-?CNumber of variables:                          65 (        57)
+?CNumber of variables:                          61 (        53)
 ?C    bounded below only:                        4 (         4)
 ?C    bounded above only:                        0 (         0)
-?C    bounded below and above:                  23 (        23)
+?C    bounded below and above:                  19 (        19)
 ?C    fixed:                                     0 (         0)
 ?C    free:                                     38 (        30)
 ?CNumber of constraints:                        72 (        61)
@@ -3975,52 +3935,53 @@ Solution Report     SOLVE acopf Using RMINLP From line 2107
 ?C    nonlinear equalities:                     20 (        20)
 ?C    linear one-sided inequalities:             4 (         1)
 ?C    nonlinear one-sided inequalities:         16 (        16)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 75
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 75
 display_start
 Solution Report     SOLVE acopf Using RMINLP From line 2107
 
 
 ?C    linear two-sided inequalities:             0 (         0)
 ?C    nonlinear two-sided inequalities:          0 (         0)
-?CNumber of nonzeros in Jacobian:              264 (       246)
+?CNumber of nonzeros in Jacobian:              260 (       242)
 ?CNumber of nonzeros in Hessian:                79 (        79)
 ?C
 ?C  Iter      Objective      FeasError   OptError    ||Step||    CGits 
 ?C--------  --------------  ----------  ----------  ----------  -------
-?C       0    4.950015e+06   1.210e+00
-?C       4    2.644067e+05   6.044e-08   1.348e-06   1.047e+00        0
+?C       0    4.950019e+06   1.374e+00
+?C      10    4.008801e+01   1.488e-03   4.031e-04   1.110e+03        0
+?C      16    2.041002e+00   2.214e-11   1.208e-09   5.949e-05        0
 ?C
 ?CEXIT: Locally optimal solution found.
 ?C
 ?CFinal Statistics
 ?C----------------
-?CFinal objective value               =   2.64406673003980e+05
-?CFinal feasibility error (abs / rel) =   6.04e-08 / 4.99e-08
-?CFinal optimality error  (abs / rel) =   1.35e-06 / 1.35e-08
-?C# of iterations                     =          4 
+?CFinal objective value               =   2.04100221302360e+00
+?CFinal feasibility error (abs / rel) =   2.21e-11 / 1.61e-11
+?CFinal optimality error  (abs / rel) =   1.21e-09 / 1.21e-11
+?C# of iterations                     =         16 
 ?C# of CG iterations                  =          0 
-?C# of function evaluations           =          6
-?C# of gradient evaluations           =          6
-?C# of Hessian evaluations            =          4
-?CTotal program time (secs)           =       0.00158 (     0.000 CPU time)
-?CTime spent in evaluations (secs)    =       0.00022
+?C# of function evaluations           =         18
+?C# of gradient evaluations           =         18
+?C# of Hessian evaluations            =         16
+?CTotal program time (secs)           =       0.01329 (     0.004 CPU time)
+?CTime spent in evaluations (secs)    =       0.00096
 ?C
 ?C===============================================================================
 ?C
 ?9=
 =CSolve finished: status = optimal
 **** SOLVER STATUS FILE LISTED ABOVE
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 76
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 76
 display_start
 E x e c u t i o n
 
 
-----   2209 PARAMETER TotalLoss            =        0.002   Total Loss of all the lines
+----   2209 PARAMETER TotalLoss            =        0.394   Total Loss of all the lines
             PARAMETER infeas               =        0.000  Number of infeasibilities from model solve
 
 ----   2234 PARAMETER Vm  bus voltage magnitude
 
-7   0.997,    13  0.995,    18  0.993,    149 1.000,    54  0.994,    57  0.994,    56  0.994
+7   0.938,    13  0.893,    18  0.893,    149 1.000,    54  0.947,    57  1.006,    56  0.947
 
 
 ----   2273 PARAMETER Pmax  gen maximum real power output
@@ -4065,14 +4026,14 @@ E x e c u t i o n
 
                       ( ALL       0.000 )
 
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 77
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 77
 display_start
 E x e c u t i o n
 
 
 ----   2273 VARIABLE V_P.L  Real power generation of generator
 
-1 0.273
+1 0.384
 
 
 ----   2273 VARIABLE V_P.Up (+INF) Real power generation of generator
@@ -4082,12 +4043,12 @@ E x e c u t i o n
 
 ----   2273 VARIABLE V_P.Lo (-INF) Real power generation of generator
 
-1 0.220
+1 0.384
 
 
 ----   2273 VARIABLE V_Q.L  Reactive power generation of generator
 
-1 0.013
+1 2.413
 
 
 ----   2273 VARIABLE V_Q.Up (+INF) Reactive power generation of generator
@@ -4115,8 +4076,8 @@ E x e c u t i o n
 report_file /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/report.txt
 
 
-EXECUTION TIME       =        0.010 SECONDS      3 MB  24.9.1 r63795 LEX-LEG
-GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/07/17 22:38:35 Page 78
+EXECUTION TIME       =        0.002 SECONDS      3 MB  24.9.1 r63795 LEX-LEG
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                     11/08/17 12:15:29 Page 78
 display_start
 E x e c u t i o n
 
