@@ -1,0 +1,411 @@
+
+--- Job iv_acopf_reformulation_lop_adj.gms Start 10/06/17 13:38:31 24.8.5 r61358 WEX-WEI x86 64bit/MS Windows
+GAMS 24.8.5   Copyright (C) 1987-2017 GAMS Development. All rights reserved
+Licensee: Small MUD - 5 User License                     G170430:2356CN-WIN
+          Pacific Northwest National Laboratory                     DC12422
+          License Admin: Nader Samaan, nader.samaan@pnnl.gov               
+--- Starting compilation
+--- iv_acopf_reformulation_lop_adj.gms(151) 2 Mb
+--- .extract_data_SunLamp_newformulation_cle.gms(57) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\7bus.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(73) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\solarbus2.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(164) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\geni_st.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(168) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\demand_response.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(172) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\demandresponseload.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(176) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\demandresponseprice.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(244) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\solarlocation.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(289) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\UC_OPF_load_elwi_BV.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(327) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\geni_p.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(343) 3 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\UC_OPF_load_elwi_Q.gdx
+--- .extract_data_SunLamp_newformulation_cle.gms(421) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(158) 3 Mb
+--- .params_from_user.gms(28) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(161) 3 Mb
+--- .model_params.gms(231) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(164) 3 Mb
+--- .data_manipulation.gms(56) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(167) 3 Mb
+--- .var_declaration.gms(57) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(170) 3 Mb
+--- .eqn_declaration.gms(44) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(173) 3 Mb
+--- .eqn_definition.gms(393) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(176) 3 Mb
+--- .mod_definition.gms(54) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(179) 3 Mb
+--- .var_bounds.gms(96) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(182) 3 Mb
+--- .start_point.gms(3) 3 Mb
+--- ..preset.gms(18) 3 Mb
+--- .start_point.gms(4) 3 Mb
+--- ..given.gms(23) 3 Mb
+--- ...calc_derived_vars.gms(108) 3 Mb
+--- ..given.gms(24) 3 Mb
+--- .start_point.gms(31) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(184) 3 Mb
+--- .compute_start_metrics.gms(178) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(187) 3 Mb
+--- .display_start.gms(329) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(193) 3 Mb
+--- .solve_procedure.gms(134) 3 Mb
+--- Found nested $IfThen within $If statement (line 1989).
+--- Use unique tag to ensure correct behavior.
+--- .solve_procedure.gms(174) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(199) 3 Mb
+--- .solution_analysis.gms(89) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(202) 3 Mb
+--- .solution_save.gms(32) 3 Mb
+--- iv_acopf_reformulation_lop_adj.gms(203) 3 Mb
+--- Starting execution: elapsed 0:00:00.089
+--- iv_acopf_reformulation_lop_adj.gms(527) 4 Mb
+--- GDXin=C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\switched_shunt_current.gdx
+--- iv_acopf_reformulation_lop_adj.gms(2042) 4 Mb
+--- Generating RMINLP model acopf
+--- iv_acopf_reformulation_lop_adj.gms(2102) 6 Mb
+---   73 rows  94 columns  309 non-zeroes
+---   313 nl-code  112 nl-non-zeroes
+--- iv_acopf_reformulation_lop_adj.gms(2102) 4 Mb
+--- Executing KNITRO: elapsed 0:00:00.135
+
+KNITRO           24.8.5 r61358 Released May 10, 2017 WEI x86 64bit/MS Windows 
+
+Reading parameter(s) from "C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\knitro.opt"
+>>  honorbnds = 1
+>>  *outlev = 6
+>>  *mip_heuristic 1
+>>  *mip_heuristic_maxit 1
+>>  *mip_method = 2
+>>  mip_rounding = 4
+>>  *infeastol=  1.0e-10
+>>  *ms_enable=1
+>>  *feastol=1.0e-7
+>>  presolve=1
+>>  *algorithm=3
+>>  *bar_penaltycons = 2
+>>  *bar_feasible = 1
+>>  *bar_relaxcons = 3
+Finished reading from "C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\knitro.opt"
+Artelys Knitro Optimizer 10.2.0
+
+=======================================
+          Commercial License
+         Artelys Knitro 10.2.0
+=======================================
+
+Knitro presolve eliminated 8 variables 
+and 10 constraints.
+
+datacheck:               0
+hessian_no_f:            1
+honorbnds:               1
+maxtime_real:            60
+newpoint:                3
+par_concurrent_evals:    0
+Knitro changing algorithm from AUTO to 1.
+Knitro changing bar_initpt from AUTO to 3.
+Knitro changing bar_murule from AUTO to 4.
+Knitro changing bar_penaltycons from AUTO to 1.
+Knitro changing bar_penaltyrule from AUTO to 2.
+Knitro changing bar_switchrule from AUTO to 2.
+Knitro changing linesearch from AUTO to 1.
+Knitro changing linsolver from AUTO to 2.
+Knitro shifted start point to satisfy presolved bounds (38 variables).
+Knitro fixing 3 variables eliminated from the presolve.
+
+Problem Characteristics                    ( Presolved)
+-----------------------
+Objective goal:  Minimize
+Number of variables:                    93 (        85)
+    bounded below:                       4 (         4)
+    bounded above:                       0 (         0)
+    bounded below and above:            51 (        51)
+    fixed:                               0 (         0)
+    free:                               38 (        30)
+Number of constraints:                  72 (        62)
+    linear equalities:                  32 (        24)
+    nonlinear equalities:               20 (        20)
+    linear inequalities:                 4 (         2)
+    nonlinear inequalities:             16 (        16)
+    range:                               0 (         0)
+Number of nonzeros in Jacobian:        293 (       276)
+Number of nonzeros in Hessian:          77 (        77)
+
+  Iter      Objective      FeasError   OptError    ||Step||    CGits 
+--------  --------------  ----------  ----------  ----------  -------
+       0   3.123510e+004  1.080e+003
+      10   2.468021e+004  8.400e+002  2.306e+003  6.356e-001        0
+      20   2.285773e+004  7.464e+002  8.670e+000  4.722e+001        0
+      30   2.191545e+004  4.552e+002  2.705e+004  2.322e+003        0
+      40   3.060465e+004  3.057e+002  3.236e+000  2.277e+002        1
+      50   1.131975e+004  3.210e+002  1.050e+000  6.200e+000        1
+      60   7.900077e+003  2.438e+002  1.909e+001  3.935e+002        0
+      70   3.279313e+003  4.012e+001  2.949e+001  1.099e+003        0
+      80   7.332541e+003  1.199e+000  2.938e+001  9.543e+000        0
+      90   7.412152e+003  1.257e+000  2.936e+001  3.266e-001       14
+     100   7.365397e+003  1.187e+000  2.936e+001  4.032e+000       12
+     110   7.363508e+003  1.140e+000  2.936e+001  1.051e+001       17
+     120   7.202314e+006  1.131e+000  2.936e+001  2.550e+001        0
+     122   7.202321e+006  1.131e+000  2.936e+001  5.101e-002        0
+
+EXIT: Convergence to an infeasible point. Problem appears to be locally
+      infeasible. If problem is believed to be feasible, try multistart 
+      to search for feasible points, or decrease infeastol.
+
+Final Statistics
+----------------
+Final objective value               =  7.20232138423451e+006
+Final feasibility error (abs / rel) =   1.13e+000 / 1.05e-003
+Final optimality error  (abs / rel) =   2.94e+001 / 9.85e-001
+# of iterations                     =        122 
+# of CG iterations                  =        327 
+# of function evaluations           =        342
+# of gradient evaluations           =        124
+# of Hessian evaluations            =        124
+Total program time (secs)           =       0.154 (     0.063 CPU time)
+Time spent in evaluations (secs)    =       0.008
+
+===============================================================================
+
+--- Restarting execution
+--- iv_acopf_reformulation_lop_adj.gms(2102) 2 Mb
+--- Reading solution for model acopf
+--- Executing after solve: elapsed 0:00:00.396
+--- iv_acopf_reformulation_lop_adj.gms(2115) 3 Mb
+--- Generating RMINLP model acopf_check
+--- iv_acopf_reformulation_lop_adj.gms(2121) 5 Mb
+---   73 rows  96 columns  313 non-zeroes
+---   313 nl-code  112 nl-non-zeroes
+--- iv_acopf_reformulation_lop_adj.gms(2121) 3 Mb
+--- Executing KNITRO: elapsed 0:00:00.420
+
+KNITRO           24.8.5 r61358 Released May 10, 2017 WEI x86 64bit/MS Windows 
+
+Reading parameter(s) from "C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\knitro.opt"
+>>  honorbnds = 1
+>>  *outlev = 6
+>>  *mip_heuristic 1
+>>  *mip_heuristic_maxit 1
+>>  *mip_method = 2
+>>  mip_rounding = 4
+>>  *infeastol=  1.0e-10
+>>  *ms_enable=1
+>>  *feastol=1.0e-7
+>>  presolve=1
+>>  *algorithm=3
+>>  *bar_penaltycons = 2
+>>  *bar_feasible = 1
+>>  *bar_relaxcons = 3
+Finished reading from "C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\knitro.opt"
+Artelys Knitro Optimizer 10.2.0
+
+=======================================
+          Commercial License
+         Artelys Knitro 10.2.0
+=======================================
+
+Knitro presolve eliminated 8 variables 
+and 10 constraints.
+
+datacheck:               0
+hessian_no_f:            1
+honorbnds:               1
+maxtime_real:            60
+newpoint:                3
+par_concurrent_evals:    0
+Knitro changing algorithm from AUTO to 1.
+Knitro changing bar_initpt from AUTO to 3.
+Knitro changing bar_murule from AUTO to 4.
+Knitro changing bar_penaltycons from AUTO to 1.
+Knitro changing bar_penaltyrule from AUTO to 2.
+Knitro changing bar_switchrule from AUTO to 2.
+Knitro changing linesearch from AUTO to 1.
+Knitro changing linsolver from AUTO to 2.
+Knitro shifted start point to satisfy presolved bounds (29 variables).
+Knitro fixing 3 variables eliminated from the presolve.
+
+Problem Characteristics                    ( Presolved)
+-----------------------
+Objective goal:  Minimize
+Number of variables:                    95 (        87)
+    bounded below:                       6 (         6)
+    bounded above:                       0 (         0)
+    bounded below and above:            51 (        51)
+    fixed:                               0 (         0)
+    free:                               38 (        30)
+Number of constraints:                  72 (        62)
+    linear equalities:                  32 (        24)
+    nonlinear equalities:               20 (        20)
+    linear inequalities:                 4 (         2)
+    nonlinear inequalities:             16 (        16)
+    range:                               0 (         0)
+Number of nonzeros in Jacobian:        295 (       278)
+Number of nonzeros in Hessian:          77 (        77)
+
+  Iter      Objective      FeasError   OptError    ||Step||    CGits 
+--------  --------------  ----------  ----------  ----------  -------
+       0   7.400316e+006  1.950e+000
+      10   4.886948e+006  3.016e+001  8.544e-001  1.284e+006        0
+      20   4.875461e+006  2.829e+000  6.442e+000  3.798e+001        0
+      30   7.432754e+007  8.750e-001  1.000e+002  6.459e+000        0
+      40   7.433755e+007  8.781e-001  1.000e+002  3.497e+001        0
+      50   8.244215e+007  1.390e+000  1.000e+002  2.107e+005        0
+      60   1.007750e+008  8.778e-001  1.000e+002  1.630e+005        0
+      70   1.091934e+008  8.777e-001  1.000e+002  2.475e+000        0
+      80   1.092210e+008  8.776e-001  1.000e+002  2.069e+001        0
+      90   1.092508e+008  8.773e-001  1.000e+002  3.935e+001        0
+     100   1.135455e+008  8.769e-001  1.000e+002  4.877e+000        0
+     110   1.345190e+008  8.755e-001  1.000e+002  1.686e+006        0
+     120   6.930306e+010  8.753e-001  1.000e+002  9.316e+000        0
+
+EXIT: Convergence to an infeasible point. Problem appears to be locally
+      infeasible. If problem is believed to be feasible, try multistart 
+      to search for feasible points, or decrease infeastol.
+
+Final Statistics
+----------------
+Final objective value               =  6.93030624814305e+010
+Final feasibility error (abs / rel) =   8.75e-001 / 4.49e-001
+Final optimality error  (abs / rel) =   1.00e+002 / 1.00e+000
+# of iterations                     =        120 
+# of CG iterations                  =        236 
+# of function evaluations           =        302
+# of gradient evaluations           =        122
+# of Hessian evaluations            =        121
+Total program time (secs)           =       0.075 (     0.063 CPU time)
+Time spent in evaluations (secs)    =       0.009
+
+===============================================================================
+
+--- Restarting execution
+--- iv_acopf_reformulation_lop_adj.gms(2121) 2 Mb
+--- Reading solution for model acopf_check
+--- Executing after solve: elapsed 0:00:00.588
+--- iv_acopf_reformulation_lop_adj.gms(2115) 3 Mb
+--- Generating RMINLP model acopf
+--- iv_acopf_reformulation_lop_adj.gms(2137) 5 Mb
+---   71 rows  93 columns  306 non-zeroes
+---   303 nl-code  110 nl-non-zeroes
+--- iv_acopf_reformulation_lop_adj.gms(2137) 3 Mb
+--- Executing KNITRO: elapsed 0:00:00.611
+
+KNITRO           24.8.5 r61358 Released May 10, 2017 WEI x86 64bit/MS Windows 
+
+Reading parameter(s) from "C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\knitro.opt"
+>>  honorbnds = 1
+>>  *outlev = 6
+>>  *mip_heuristic 1
+>>  *mip_heuristic_maxit 1
+>>  *mip_method = 2
+>>  mip_rounding = 4
+>>  *infeastol=  1.0e-10
+>>  *ms_enable=1
+>>  *feastol=1.0e-7
+>>  presolve=1
+>>  *algorithm=3
+>>  *bar_penaltycons = 2
+>>  *bar_feasible = 1
+>>  *bar_relaxcons = 3
+Finished reading from "C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\knitro.opt"
+Artelys Knitro Optimizer 10.2.0
+
+=======================================
+          Commercial License
+         Artelys Knitro 10.2.0
+=======================================
+
+Knitro presolve eliminated 8 variables 
+and 10 constraints.
+
+datacheck:               0
+hessian_no_f:            1
+honorbnds:               1
+maxtime_real:            60
+newpoint:                3
+par_concurrent_evals:    0
+Knitro changing algorithm from AUTO to 1.
+Knitro changing bar_initpt from AUTO to 3.
+Knitro changing bar_murule from AUTO to 4.
+Knitro changing bar_penaltycons from AUTO to 1.
+Knitro changing bar_penaltyrule from AUTO to 2.
+Knitro changing bar_switchrule from AUTO to 2.
+Knitro changing linesearch from AUTO to 1.
+Knitro changing linsolver from AUTO to 2.
+Knitro shifted start point to satisfy presolved bounds (26 variables).
+Knitro fixing 3 variables eliminated from the presolve.
+
+Problem Characteristics                    ( Presolved)
+-----------------------
+Objective goal:  Minimize
+Number of variables:                    92 (        84)
+    bounded below:                       4 (         4)
+    bounded above:                       0 (         0)
+    bounded below and above:            50 (        50)
+    fixed:                               0 (         0)
+    free:                               38 (        30)
+Number of constraints:                  70 (        60)
+    linear equalities:                  32 (        24)
+    nonlinear equalities:               20 (        20)
+    linear inequalities:                 4 (         2)
+    nonlinear inequalities:             14 (        14)
+    range:                               0 (         0)
+Number of nonzeros in Jacobian:        290 (       273)
+Number of nonzeros in Hessian:          77 (        77)
+
+  Iter      Objective      FeasError   OptError    ||Step||    CGits 
+--------  --------------  ----------  ----------  ----------  -------
+       0   3.987468e+008  1.960e+000
+      10   7.698102e+006  1.175e+001  2.964e+001  1.470e-001        0
+      20   7.698102e+006  1.175e+001  2.980e+001  1.066e+002        0
+      30   7.698103e+006  3.450e+002  2.980e+001  1.589e+004        0
+      40   7.698103e+006  4.929e+002  2.980e+001  3.700e+004        0
+      50   7.699049e+006  8.533e+002  4.638e+001  9.375e+000        1
+      60   7.699086e+006  3.797e+002  2.972e+001  1.062e+001        1
+      70   7.699105e+006  3.459e+002  2.891e+001  8.024e+000        0
+      80   7.699096e+006  2.693e+002  2.891e+001  4.249e-001        0
+      90   7.699087e+006  2.428e+002  2.892e+001  3.848e+000        0
+     100   7.699063e+006  2.137e+002  2.896e+001  7.785e+000        1
+     110   7.699133e+006  1.665e+001  2.892e+001  1.188e+002        0
+     120   1.694376e+008  6.050e+000  7.055e+001  1.189e+008        0
+     130   1.709879e+009  8.767e-001  2.930e+001  3.219e+000        0
+     140   1.709898e+009  8.754e-001  2.931e+001  3.086e+002        0
+     149   1.709898e+009  8.753e-001  2.931e+001  1.234e-003        0
+
+EXIT: Convergence to an infeasible point. Problem appears to be locally
+      infeasible. If problem is believed to be feasible, try multistart 
+      to search for feasible points, or decrease infeastol.
+
+Final Statistics
+----------------
+Final objective value               =  1.70989806002598e+009
+Final feasibility error (abs / rel) =   8.75e-001 / 4.47e-001
+Final optimality error  (abs / rel) =   2.93e+001 / 9.84e-001
+# of iterations                     =        149 
+# of CG iterations                  =         78 
+# of function evaluations           =        174
+# of gradient evaluations           =        151
+# of Hessian evaluations            =        150
+Total program time (secs)           =       0.088 (     0.078 CPU time)
+Time spent in evaluations (secs)    =       0.012
+
+===============================================================================
+
+--- Restarting execution
+--- iv_acopf_reformulation_lop_adj.gms(2137) 2 Mb
+--- Reading solution for model acopf
+--- Executing after solve: elapsed 0:00:00.795
+--- iv_acopf_reformulation_lop_adj.gms(2215) 3 Mb
+--- GDX File C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\switched_shunt_current.gdx
+--- iv_acopf_reformulation_lop_adj.gms(2268) 3 Mb
+--- Putfile report_file C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\report.txt
+--- GDX File C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distribution_ACOPF\temp.gdx
+*** Status: Normal completion
+--- Job iv_acopf_reformulation_lop_adj.gms Stop 10/06/17 13:38:31 elapsed 0:00:00.820

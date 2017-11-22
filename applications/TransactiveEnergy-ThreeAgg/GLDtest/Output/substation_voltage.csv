@@ -1,0 +1,15 @@
+# file...... Output/substation_voltage.csv
+# date...... Tue Nov 21 20:24:35 2017
+# user...... yingying
+# host...... (null)
+# target.... substation 29
+# trigger... (none)
+# interval.. 30
+# limit..... 0
+# timestamp,positive_sequence_voltage
+2010-08-16 00:00:00 UTC,+345000+0i
+2010-08-16 00:00:30 UTC,+345000+0i
+2010-08-16 00:01:00 UTC,+345000+0i
+2010-08-16 00:01:30 UTC,+345000+0i
+2010-08-16 00:02:00 UTC,+345000+0i
+2010-08-16 00:02:30 UTC,+345000+0i

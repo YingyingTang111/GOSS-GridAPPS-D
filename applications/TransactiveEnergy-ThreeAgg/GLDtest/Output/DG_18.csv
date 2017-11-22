@@ -1,0 +1,15 @@
+# file...... Output/DG_18.csv
+# date...... Tue Nov 21 20:24:35 2017
+# user...... yingying
+# host...... (null)
+# target.... load 14
+# trigger... (none)
+# interval.. 30
+# limit..... 0
+# timestamp,constant_power_A_real,constant_power_B_real,constant_power_C_real
+2010-08-16 00:00:00 UTC,+0,+0,+0
+2010-08-16 00:00:30 UTC,+0,+0,+0
+2010-08-16 00:01:00 UTC,+0,+0,+0
+2010-08-16 00:01:30 UTC,+0,+0,+0
+2010-08-16 00:02:00 UTC,+0,+0,+0
+2010-08-16 00:02:30 UTC,+0,+0,+0

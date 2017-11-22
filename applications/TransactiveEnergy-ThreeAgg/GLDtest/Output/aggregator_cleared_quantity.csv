@@ -1,0 +1,10 @@
+# file...... Output/aggregator_cleared_quantity.csv
+# date...... Tue Nov 21 20:24:35 2017
+# user...... yingying
+# host...... (null)
+# target.... dummy_class 4
+# trigger... (none)
+# interval.. 300
+# limit..... 0
+# timestamp,aggregator_1_cleared_quantity,aggregator_2_cleared_quantity,aggregator_3_cleared_quantity
+2010-08-16 00:00:00 UTC,+0,+0,+0

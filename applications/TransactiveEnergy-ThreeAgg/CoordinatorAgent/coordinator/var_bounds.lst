@@ -1,0 +1,161 @@
+GAMS 24.8.5  r61358 Released May 10, 2017 WEX-WEI x86 64bit/MS Windows 10/04/17 21:35:20 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1   
+   2  * shunt switching
+   3  V_shunt.lo(bus,bus_s)$numBswitched(bus,bus_s) = 0;
+****           $140$120  $120          $140
+   4  V_shunt.up(bus,bus_s)$numBswitched(bus,bus_s) = numBswitched(bus,bus_s);
+   6   
+   7  * Generator active power generation limits
+   8  V_P.lo(gen)$(status(gen) and abs(gen_participation_factor(gen))) = Pmin(ge
+****       $140$120     $140                                  $140          $140
+      n);
+**** LINE     10 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+   9  V_P.up(gen)$(status(gen) and abs(gen_participation_factor(gen))) = Pmax(ge
+****                                                                        $140
+      n);
+**** LINE     11 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  10  V_P.fx(gen)$(status(gen) and not abs(gen_participation_factor(gen))) = PgS
+      ch(gen);
+****   $140
+**** LINE     12 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  11  V_P.fx(gen)$(not status(gen)) = 0;
+  12   
+  13   
+  15  Solar_p_curtail.up(bus)$contro_solar_location(bus)=contro_solar_pout(bus);
+****                   $140                       $140                   $140
+**** LINE     20 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  16  Solar_p_curtail.lo(bus)$contro_solar_location(bus)=0;
+  17  Solar_p_curtail.fx(bus)$(not contro_solar_location(bus))=0;
+  19   
+  20   
+  22  Q_S.lo(i)$isSolar(i) = -min(abs(solar_s(i))*0.48, sqrt(abs(sqr(solar_s(i))
+****       $140,120   $140                  $140                                
+       - sqr(solar_r(i)))));
+                   $140
+**** LINE     34 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  23  Q_S.up(i)$isSolar(i) = min(abs(solar_s(i))*0.48, sqrt(abs(sqr(solar_s(i)) 
+      - sqr(solar_r(i)))));
+  25   
+  26   
+  27   
+  28  P_S.fx(i)$(isSolar(i) and contro_solar_location(i) ne 1) = solar_r(i);
+****       $140
+**** LINE     40 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  29  P_S.fx(i)$(isSolar(i) and contro_solar_location(i) eq 1) = contro_solar_po
+      ut(i);
+  30   
+  31   
+  32  De_response_Inc_P.up(bus)$(Pd_respon_location(bus))=Pd_respon_p_up(bus);
+****                     $140                     $140                 $140
+**** LINE     44 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  33  De_response_Inc_P.lo(bus)$(Pd_respon_location(bus))=0;
+  34  De_response_Inc_P.fx(bus)$(not Pd_respon_location(bus))=0;
+  35   
+  36  De_response_Dec_P.lo(bus)$(Pd_respon_location(bus))=Pd_respon_p_down(bus);
+****                     $140                                            $140
+**** LINE     48 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  37  De_response_Dec_P.up(bus)$(Pd_respon_location(bus))=0;
+  38  De_response_Dec_P.fx(bus)$(not Pd_respon_location(bus))=0;
+  39   
+  40   
+  41   
+  42  * disable demand response
+  44   
+  45  * Generator reactive power generation limits
+  46  * Does not impose Qmax, Qmin limits when the D-curve contraint is applied
+  47  *$ifthen %qlim% == 0
+  48  V_Q.lo(gen)$status(gen) = Qmin(gen);
+****       $140                    $140
+**** LINE     64 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  49  V_Q.up(gen)$status(gen) = Qmax(gen);
+****                               $140
+**** LINE     65 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  50  *$endif
+  51  V_Q.fx(gen)$(not status(gen)) = 0;
+  52  *display V_Q.l, V_Q.up, V_Q.lo;
+  53  * Bus voltage magnitude limits
+  54  * Note these bounds are numerically helpful
+  55  * even if they are not necessary for the correctness
+  56  * of the formulation
+  57  V_real.lo(bus) = -MaxVm(bus); V_real.up(bus) = MaxVm(bus);
+****          $140          $140
+**** LINE     73 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  58  V_imag.lo(bus) = -MaxVm(bus); V_imag.up(bus) = MaxVm(bus);
+****          $140
+**** LINE     74 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  59  V_imag.fx(bus)$(type(bus) eq 3) = 0;
+****                     $140
+**** LINE     75 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  60   
+  61  * disable solar q
+  63   
+  64   
+  65  * soft power balance constraints
+  66  balance_real_bound=0.01;
+****                   $140
+**** LINE     84 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  67  balance_react_bound=0.01;
+****                    $140
+**** LINE     85 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  69  V_p_over.up(i) = balance_real_bound;
+****            $140
+**** LINE     92 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  70  V_p_under.up(i) = balance_real_bound;
+****             $140
+**** LINE     93 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  71  V_q_over.up(i) = balance_react_bound;
+****            $140
+**** LINE     94 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  72  V_q_under.up(i) = balance_react_bound;
+****             $140
+**** LINE     95 INPUT       C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_
+                             control\Distribution_ACOPF\var_bounds.gms
+  73   
+GAMS 24.8.5  r61358 Released May 10, 2017 WEX-WEI x86 64bit/MS Windows 10/04/17 21:35:20 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Error Messages
+
+
+120  Unknown identifier entered as set
+140  Unknown symbol
+
+**** 38 ERROR(S)   0 WARNING(S)
+
+
+COMPILATION TIME     =        0.109 SECONDS      3 MB  24.8.5 r61358 WEX-WEI
+
+
+USER: Small MUD - 5 User License                     G170430:2356CN-WIN
+      Pacific Northwest National Laboratory                     DC12422
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distributi
+           on_ACOPF\var_bounds.gms
+Output     C:\Users\kexi955\SyncDrive\PNNL_Project\Trasactive_control\Distributi
+           on_ACOPF\var_bounds.lst
+
+**** USER ERROR(S) ENCOUNTERED

@@ -1,0 +1,10 @@
+# file...... Output/Toutside.csv
+# date...... Tue Nov 21 20:24:35 2017
+# user...... yingying
+# host...... (null)
+# target.... climate 2
+# trigger... (none)
+# interval.. 300
+# limit..... 0
+# timestamp,temperature
+2010-08-16 00:00:00 UTC,+76.406

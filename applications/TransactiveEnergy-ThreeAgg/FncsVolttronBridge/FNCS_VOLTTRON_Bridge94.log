@@ -1,0 +1,1035 @@
+2017-11-21 20:18:14,186 volttron.platform.vip.agent.core DEBUG: address: tcp://127.0.0.1:22916?serverkey=XDMM3_KrXqSaaPXEM3vL7rumk4nd-A30dcksjfFWNyM&publickey=cDc4_Lli13dt-__ju-vpgAeOEbbRPaOVzQoeQ5KHjUk&secretkey=k19_VwSSfbFUzm4Op3DGBlOH6Vd7rMJWy4iQo_t-wuw
+2017-11-21 20:18:14,186 volttron.platform.vip.agent.core DEBUG: identity: FNCS_Volttron_Bridge94
+2017-11-21 20:18:14,186 volttron.platform.vip.agent.core DEBUG: agent_uuid: None
+2017-11-21 20:18:14,187 volttron.platform.vip.agent.core DEBUG: serverkey: None
+2017-11-21 20:18:15,503 volttron.platform.vip.agent.core INFO: Connected to platform: router: 783ba6c5-7811-4df4-bf1d-888a0732edee version: 1.0 identity: FNCS_Volttron_Bridge94
+2017-11-21 20:18:15,503 volttron.platform.vip.agent.core DEBUG: Running onstart methods.
+2017-11-21 20:18:25,553 volttron.platform.vip.agent.subsystems.configstore DEBUG: Processing callbacks for affected files: {}
+publish_heartbeat 2017-11-22 04:18:20.056956Z
+fncs.time_request( 1 ) request
+fncs.time_request() response 1
+Values recieved from fncs.time_request() 1
+it takes 17.1336150169  seconds to process fncs->volttron messages
+1
+publish_heartbeat 2017-11-22 04:18:37.190724Z
+fncs.time_request( 2 ) request
+fncs.time_request() response 2
+Did not receive anything from fncs.time_request() 2
+publish_heartbeat 2017-11-22 04:18:38.210637Z
+fncs.time_request( 3 ) request
+fncs.time_request() response 3
+Did not receive anything from fncs.time_request() 3
+publish_heartbeat 2017-11-22 04:18:39.200021Z
+fncs.time_request( 4 ) request
+fncs.time_request() response 4
+Did not receive anything from fncs.time_request() 4
+publish_heartbeat 2017-11-22 04:18:40.222528Z
+fncs.time_request( 5 ) request
+fncs.time_request() response 5
+Did not receive anything from fncs.time_request() 5
+publish_heartbeat 2017-11-22 04:18:41.212566Z
+fncs.time_request( 6 ) request
+fncs.time_request() response 6
+Did not receive anything from fncs.time_request() 6
+publish_heartbeat 2017-11-22 04:18:42.228540Z
+fncs.time_request( 7 ) request
+fncs.time_request() response 7
+Did not receive anything from fncs.time_request() 7
+publish_heartbeat 2017-11-22 04:18:43.233209Z
+fncs.time_request( 8 ) request
+fncs.time_request() response 8
+Did not receive anything from fncs.time_request() 8
+publish_heartbeat 2017-11-22 04:18:44.235514Z
+fncs.time_request( 9 ) request
+fncs.time_request() response 9
+Did not receive anything from fncs.time_request() 9
+publish_heartbeat 2017-11-22 04:18:45.244506Z
+fncs.time_request( 10 ) request
+fncs.time_request() response 10
+Did not receive anything from fncs.time_request() 10
+publish_heartbeat 2017-11-22 04:18:46.241823Z
+fncs.time_request( 11 ) request
+fncs.time_request() response 11
+Did not receive anything from fncs.time_request() 11
+publish_heartbeat 2017-11-22 04:18:47.254168Z
+fncs.time_request( 12 ) request
+fncs.time_request() response 12
+Did not receive anything from fncs.time_request() 12
+publish_heartbeat 2017-11-22 04:18:48.260667Z
+fncs.time_request( 13 ) request
+fncs.time_request() response 13
+Did not receive anything from fncs.time_request() 13
+publish_heartbeat 2017-11-22 04:18:49.337643Z
+fncs.time_request( 14 ) request
+fncs.time_request() response 14
+Did not receive anything from fncs.time_request() 14
+publish_heartbeat 2017-11-22 04:18:50.299012Z
+fncs.time_request( 15 ) request
+fncs.time_request() response 15
+Did not receive anything from fncs.time_request() 15
+publish_heartbeat 2017-11-22 04:18:51.419734Z
+fncs.time_request( 16 ) request
+fncs.time_request() response 16
+Did not receive anything from fncs.time_request() 16
+publish_heartbeat 2017-11-22 04:18:52.297549Z
+fncs.time_request( 17 ) request
+fncs.time_request() response 17
+Did not receive anything from fncs.time_request() 17
+publish_heartbeat 2017-11-22 04:18:53.476899Z
+fncs.time_request( 18 ) request
+fncs.time_request() response 18
+Did not receive anything from fncs.time_request() 18
+publish_heartbeat 2017-11-22 04:18:54.354167Z
+fncs.time_request( 19 ) request
+fncs.time_request() response 19
+Did not receive anything from fncs.time_request() 19
+publish_heartbeat 2017-11-22 04:18:55.497827Z
+fncs.time_request( 20 ) request
+fncs.time_request() response 20
+Did not receive anything from fncs.time_request() 20
+publish_heartbeat 2017-11-22 04:18:56.434764Z
+fncs.time_request( 21 ) request
+fncs.time_request() response 21
+Did not receive anything from fncs.time_request() 21
+publish_heartbeat 2017-11-22 04:18:57.523667Z
+fncs.time_request( 22 ) request
+fncs.time_request() response 22
+Did not receive anything from fncs.time_request() 22
+publish_heartbeat 2017-11-22 04:18:58.462304Z
+fncs.time_request( 23 ) request
+fncs.time_request() response 23
+Did not receive anything from fncs.time_request() 23
+publish_heartbeat 2017-11-22 04:18:59.530820Z
+fncs.time_request( 24 ) request
+fncs.time_request() response 24
+Did not receive anything from fncs.time_request() 24
+publish_heartbeat 2017-11-22 04:19:00.484825Z
+fncs.time_request( 25 ) request
+fncs.time_request() response 25
+Did not receive anything from fncs.time_request() 25
+publish_heartbeat 2017-11-22 04:19:01.585789Z
+fncs.time_request( 26 ) request
+fncs.time_request() response 26
+Did not receive anything from fncs.time_request() 26
+publish_heartbeat 2017-11-22 04:19:02.592991Z
+fncs.time_request( 27 ) request
+fncs.time_request() response 27
+Did not receive anything from fncs.time_request() 27
+publish_heartbeat 2017-11-22 04:19:03.606267Z
+fncs.time_request( 28 ) request
+fncs.time_request() response 28
+Did not receive anything from fncs.time_request() 28
+publish_heartbeat 2017-11-22 04:19:04.676509Z
+fncs.time_request( 29 ) request
+fncs.time_request() response 29
+Did not receive anything from fncs.time_request() 29
+publish_heartbeat 2017-11-22 04:19:05.639771Z
+fncs.time_request( 30 ) request
+fncs.time_request() response 30
+Did not receive anything from fncs.time_request() 30
+publish_heartbeat 2017-11-22 04:19:07.074912Z
+fncs.time_request( 31 ) request
+fncs.time_request() response 31
+Did not receive anything from fncs.time_request() 31
+publish_heartbeat 2017-11-22 04:19:07.680690Z
+fncs.time_request( 32 ) request
+fncs.time_request() response 32
+Did not receive anything from fncs.time_request() 32
+publish_heartbeat 2017-11-22 04:19:09.478622Z
+fncs.time_request( 33 ) request
+fncs.time_request() response 33
+Did not receive anything from fncs.time_request() 33
+publish_heartbeat 2017-11-22 04:19:10.037868Z
+fncs.time_request( 34 ) request
+fncs.time_request() response 34
+Did not receive anything from fncs.time_request() 34
+publish_heartbeat 2017-11-22 04:19:12.139549Z
+fncs.time_request( 35 ) request
+fncs.time_request() response 35
+Did not receive anything from fncs.time_request() 35
+publish_heartbeat 2017-11-22 04:19:12.174248Z
+fncs.time_request( 36 ) request
+fncs.time_request() response 36
+Did not receive anything from fncs.time_request() 36
+publish_heartbeat 2017-11-22 04:19:14.260963Z
+fncs.time_request( 37 ) request
+fncs.time_request() response 37
+Did not receive anything from fncs.time_request() 37
+publish_heartbeat 2017-11-22 04:19:14.356123Z
+fncs.time_request( 38 ) request
+fncs.time_request() response 38
+Did not receive anything from fncs.time_request() 38
+publish_heartbeat 2017-11-22 04:19:16.429242Z
+fncs.time_request( 39 ) request
+fncs.time_request() response 39
+Did not receive anything from fncs.time_request() 39
+publish_heartbeat 2017-11-22 04:19:16.460639Z
+fncs.time_request( 40 ) request
+fncs.time_request() response 40
+Did not receive anything from fncs.time_request() 40
+publish_heartbeat 2017-11-22 04:19:18.483883Z
+fncs.time_request( 41 ) request
+fncs.time_request() response 41
+Did not receive anything from fncs.time_request() 41
+publish_heartbeat 2017-11-22 04:19:18.503293Z
+fncs.time_request( 42 ) request
+fncs.time_request() response 42
+Did not receive anything from fncs.time_request() 42
+publish_heartbeat 2017-11-22 04:19:20.524949Z
+fncs.time_request( 43 ) request
+fncs.time_request() response 43
+Values recieved from fncs.time_request() 43
+it takes 0.169924974442  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:19:20.694970Z
+fncs.time_request( 44 ) request
+fncs.time_request() response 44
+Did not receive anything from fncs.time_request() 44
+publish_heartbeat 2017-11-22 04:19:22.693214Z
+fncs.time_request( 45 ) request
+fncs.time_request() response 45
+Did not receive anything from fncs.time_request() 45
+publish_heartbeat 2017-11-22 04:19:22.770137Z
+fncs.time_request( 46 ) request
+fncs.time_request() response 46
+Did not receive anything from fncs.time_request() 46
+publish_heartbeat 2017-11-22 04:19:24.700242Z
+fncs.time_request( 47 ) request
+fncs.time_request() response 47
+Did not receive anything from fncs.time_request() 47
+publish_heartbeat 2017-11-22 04:19:24.829997Z
+fncs.time_request( 48 ) request
+fncs.time_request() response 48
+Did not receive anything from fncs.time_request() 48
+publish_heartbeat 2017-11-22 04:19:26.848406Z
+fncs.time_request( 49 ) request
+fncs.time_request() response 49
+Did not receive anything from fncs.time_request() 49
+publish_heartbeat 2017-11-22 04:19:26.928111Z
+fncs.time_request( 50 ) request
+fncs.time_request() response 50
+Did not receive anything from fncs.time_request() 50
+publish_heartbeat 2017-11-22 04:19:29.009065Z
+fncs.time_request( 51 ) request
+fncs.time_request() response 51
+Did not receive anything from fncs.time_request() 51
+publish_heartbeat 2017-11-22 04:19:29.054395Z
+fncs.time_request( 52 ) request
+fncs.time_request() response 52
+Did not receive anything from fncs.time_request() 52
+publish_heartbeat 2017-11-22 04:19:31.117607Z
+fncs.time_request( 53 ) request
+fncs.time_request() response 53
+Did not receive anything from fncs.time_request() 53
+publish_heartbeat 2017-11-22 04:19:31.146415Z
+fncs.time_request( 54 ) request
+fncs.time_request() response 54
+Did not receive anything from fncs.time_request() 54
+publish_heartbeat 2017-11-22 04:19:33.234511Z
+fncs.time_request( 55 ) request
+fncs.time_request() response 55
+Did not receive anything from fncs.time_request() 55
+publish_heartbeat 2017-11-22 04:19:33.309972Z
+fncs.time_request( 56 ) request
+fncs.time_request() response 56
+Did not receive anything from fncs.time_request() 56
+publish_heartbeat 2017-11-22 04:19:35.423562Z
+fncs.time_request( 57 ) request
+fncs.time_request() response 57
+Did not receive anything from fncs.time_request() 57
+publish_heartbeat 2017-11-22 04:19:35.465652Z
+fncs.time_request( 58 ) request
+fncs.time_request() response 58
+Did not receive anything from fncs.time_request() 58
+publish_heartbeat 2017-11-22 04:19:37.565922Z
+fncs.time_request( 59 ) request
+fncs.time_request() response 59
+Did not receive anything from fncs.time_request() 59
+publish_heartbeat 2017-11-22 04:19:37.615265Z
+fncs.time_request( 60 ) request
+fncs.time_request() response 60
+Did not receive anything from fncs.time_request() 60
+publish_heartbeat 2017-11-22 04:19:39.683992Z
+fncs.time_request( 61 ) request
+fncs.time_request() response 61
+Did not receive anything from fncs.time_request() 61
+publish_heartbeat 2017-11-22 04:19:39.827227Z
+fncs.time_request( 62 ) request
+fncs.time_request() response 62
+Did not receive anything from fncs.time_request() 62
+publish_heartbeat 2017-11-22 04:19:42.048118Z
+fncs.time_request( 63 ) request
+fncs.time_request() response 63
+Did not receive anything from fncs.time_request() 63
+publish_heartbeat 2017-11-22 04:19:42.078166Z
+fncs.time_request( 64 ) request
+fncs.time_request() response 64
+Did not receive anything from fncs.time_request() 64
+publish_heartbeat 2017-11-22 04:19:44.170898Z
+fncs.time_request( 65 ) request
+fncs.time_request() response 65
+Did not receive anything from fncs.time_request() 65
+publish_heartbeat 2017-11-22 04:19:44.200929Z
+fncs.time_request( 66 ) request
+fncs.time_request() response 66
+Values recieved from fncs.time_request() 66
+it takes 1.21318006516  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:19:45.414234Z
+fncs.time_request( 67 ) request
+fncs.time_request() response 67
+Did not receive anything from fncs.time_request() 67
+publish_heartbeat 2017-11-22 04:19:47.375837Z
+fncs.time_request( 68 ) request
+fncs.time_request() response 68
+Did not receive anything from fncs.time_request() 68
+publish_heartbeat 2017-11-22 04:19:47.472218Z
+fncs.time_request( 69 ) request
+fncs.time_request() response 69
+Did not receive anything from fncs.time_request() 69
+publish_heartbeat 2017-11-22 04:19:49.433669Z
+fncs.time_request( 70 ) request
+fncs.time_request() response 70
+Did not receive anything from fncs.time_request() 70
+publish_heartbeat 2017-11-22 04:19:49.579302Z
+fncs.time_request( 71 ) request
+fncs.time_request() response 71
+Did not receive anything from fncs.time_request() 71
+publish_heartbeat 2017-11-22 04:19:51.599840Z
+fncs.time_request( 72 ) request
+fncs.time_request() response 72
+Did not receive anything from fncs.time_request() 72
+publish_heartbeat 2017-11-22 04:19:51.758943Z
+fncs.time_request( 73 ) request
+fncs.time_request() response 73
+Did not receive anything from fncs.time_request() 73
+publish_heartbeat 2017-11-22 04:19:53.799366Z
+fncs.time_request( 74 ) request
+fncs.time_request() response 74
+Values recieved from fncs.time_request() 74
+it takes 1.20483899117  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:19:55.004499Z
+fncs.time_request( 75 ) request
+fncs.time_request() response 75
+Did not receive anything from fncs.time_request() 75
+publish_heartbeat 2017-11-22 04:19:56.963130Z
+fncs.time_request( 76 ) request
+fncs.time_request() response 76
+Values recieved from fncs.time_request() 76
+it takes 0.564451932907  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:19:57.527650Z
+fncs.time_request( 77 ) request
+fncs.time_request() response 77
+Did not receive anything from fncs.time_request() 77
+publish_heartbeat 2017-11-22 04:19:59.182746Z
+fncs.time_request( 78 ) request
+fncs.time_request() response 78
+Did not receive anything from fncs.time_request() 78
+publish_heartbeat 2017-11-22 04:19:59.570084Z
+fncs.time_request( 79 ) request
+fncs.time_request() response 79
+Did not receive anything from fncs.time_request() 79
+publish_heartbeat 2017-11-22 04:20:01.242014Z
+fncs.time_request( 80 ) request
+fncs.time_request() response 80
+Did not receive anything from fncs.time_request() 80
+publish_heartbeat 2017-11-22 04:20:01.646245Z
+fncs.time_request( 81 ) request
+fncs.time_request() response 81
+Did not receive anything from fncs.time_request() 81
+publish_heartbeat 2017-11-22 04:20:03.272377Z
+fncs.time_request( 82 ) request
+fncs.time_request() response 82
+Values recieved from fncs.time_request() 82
+it takes 0.508284807205  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:03.780848Z
+fncs.time_request( 83 ) request
+fncs.time_request() response 83
+Values recieved from fncs.time_request() 83
+it takes 2.55705904961  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:06.337988Z
+fncs.time_request( 84 ) request
+fncs.time_request() response 84
+Did not receive anything from fncs.time_request() 84
+publish_heartbeat 2017-11-22 04:20:08.225517Z
+fncs.time_request( 85 ) request
+fncs.time_request() response 85
+Did not receive anything from fncs.time_request() 85
+publish_heartbeat 2017-11-22 04:20:08.357886Z
+fncs.time_request( 86 ) request
+fncs.time_request() response 86
+Did not receive anything from fncs.time_request() 86
+publish_heartbeat 2017-11-22 04:20:10.267375Z
+fncs.time_request( 87 ) request
+fncs.time_request() response 87
+Did not receive anything from fncs.time_request() 87
+publish_heartbeat 2017-11-22 04:20:10.388729Z
+fncs.time_request( 88 ) request
+fncs.time_request() response 88
+Did not receive anything from fncs.time_request() 88
+publish_heartbeat 2017-11-22 04:20:12.305039Z
+fncs.time_request( 89 ) request
+fncs.time_request() response 89
+Values recieved from fncs.time_request() 89
+it takes 0.597812891006  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:12.902938Z
+fncs.time_request( 90 ) request
+fncs.time_request() response 90
+Values recieved from fncs.time_request() 90
+it takes 2.53431606293  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:15.437322Z
+fncs.time_request( 91 ) request
+fncs.time_request() response 91
+Values recieved from fncs.time_request() 91
+it takes 0.400134086609  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:16.438370Z
+fncs.time_request( 92 ) request
+fncs.time_request() response 92
+Did not receive anything from fncs.time_request() 92
+publish_heartbeat 2017-11-22 04:20:17.853258Z
+fncs.time_request( 93 ) request
+fncs.time_request() response 93
+Values recieved from fncs.time_request() 93
+it takes 0.653100013733  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:18.506436Z
+fncs.time_request( 94 ) request
+fncs.time_request() response 94
+Did not receive anything from fncs.time_request() 94
+publish_heartbeat 2017-11-22 04:20:21.057427Z
+fncs.time_request( 95 ) request
+fncs.time_request() response 95
+Did not receive anything from fncs.time_request() 95
+publish_heartbeat 2017-11-22 04:20:21.084952Z
+fncs.time_request( 96 ) request
+fncs.time_request() response 96
+Did not receive anything from fncs.time_request() 96
+publish_heartbeat 2017-11-22 04:20:23.123526Z
+fncs.time_request( 97 ) request
+fncs.time_request() response 97
+Values recieved from fncs.time_request() 97
+it takes 1.31915307045  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:24.442768Z
+fncs.time_request( 98 ) request
+fncs.time_request() response 98
+Did not receive anything from fncs.time_request() 98
+publish_heartbeat 2017-11-22 04:20:26.429835Z
+fncs.time_request( 99 ) request
+fncs.time_request() response 99
+Did not receive anything from fncs.time_request() 99
+publish_heartbeat 2017-11-22 04:20:26.619290Z
+fncs.time_request( 100 ) request
+fncs.time_request() response 100
+Values recieved from fncs.time_request() 100
+it takes 2.31888413429  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:28.938272Z
+fncs.time_request( 101 ) request
+fncs.time_request() response 101
+Did not receive anything from fncs.time_request() 101
+publish_heartbeat 2017-11-22 04:20:30.969367Z
+fncs.time_request( 102 ) request
+fncs.time_request() response 102
+Did not receive anything from fncs.time_request() 102
+publish_heartbeat 2017-11-22 04:20:31.063138Z
+fncs.time_request( 103 ) request
+fncs.time_request() response 103
+Values recieved from fncs.time_request() 103
+it takes 2.52649497986  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:33.589733Z
+fncs.time_request( 104 ) request
+fncs.time_request() response 104
+Values recieved from fncs.time_request() 104
+it takes 1.55748605728  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:35.147345Z
+fncs.time_request( 105 ) request
+fncs.time_request() response 105
+Did not receive anything from fncs.time_request() 105
+publish_heartbeat 2017-11-22 04:20:37.452829Z
+fncs.time_request( 106 ) request
+fncs.time_request() response 106
+Did not receive anything from fncs.time_request() 106
+publish_heartbeat 2017-11-22 04:20:37.575958Z
+fncs.time_request( 107 ) request
+fncs.time_request() response 107
+Did not receive anything from fncs.time_request() 107
+publish_heartbeat 2017-11-22 04:20:39.655880Z
+fncs.time_request( 108 ) request
+fncs.time_request() response 108
+Did not receive anything from fncs.time_request() 108
+publish_heartbeat 2017-11-22 04:20:39.730851Z
+fncs.time_request( 109 ) request
+fncs.time_request() response 109
+Values recieved from fncs.time_request() 109
+it takes 2.51104998589  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:42.241981Z
+fncs.time_request( 110 ) request
+fncs.time_request() response 110
+Values recieved from fncs.time_request() 110
+it takes 1.44936299324  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:43.691407Z
+fncs.time_request( 111 ) request
+fncs.time_request() response 111
+Values recieved from fncs.time_request() 111
+it takes 1.72076320648  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:45.412216Z
+fncs.time_request( 112 ) request
+fncs.time_request() response 112
+Values recieved from fncs.time_request() 112
+it takes 1.4092259407  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:46.821490Z
+fncs.time_request( 113 ) request
+fncs.time_request() response 113
+Did not receive anything from fncs.time_request() 113
+publish_heartbeat 2017-11-22 04:20:48.697025Z
+fncs.time_request( 114 ) request
+fncs.time_request() response 114
+Did not receive anything from fncs.time_request() 114
+publish_heartbeat 2017-11-22 04:20:48.836235Z
+fncs.time_request( 115 ) request
+fncs.time_request() response 115
+Values recieved from fncs.time_request() 115
+it takes 0.933429956436  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:49.822310Z
+fncs.time_request( 116 ) request
+fncs.time_request() response 116
+Values recieved from fncs.time_request() 116
+it takes 1.01680397987  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:20:50.839212Z
+fncs.time_request( 117 ) request
+fncs.time_request() response 117
+Did not receive anything from fncs.time_request() 117
+publish_heartbeat 2017-11-22 04:20:53.078863Z
+fncs.time_request( 118 ) request
+fncs.time_request() response 118
+Did not receive anything from fncs.time_request() 118
+publish_heartbeat 2017-11-22 04:20:53.103046Z
+fncs.time_request( 119 ) request
+fncs.time_request() response 119
+Did not receive anything from fncs.time_request() 119
+publish_heartbeat 2017-11-22 04:20:55.147891Z
+fncs.time_request( 120 ) request
+fncs.time_request() response 120
+Did not receive anything from fncs.time_request() 120
+publish_heartbeat 2017-11-22 04:20:55.164056Z
+fncs.time_request( 121 ) request
+fncs.time_request() response 121
+Did not receive anything from fncs.time_request() 121
+publish_heartbeat 2017-11-22 04:20:57.206546Z
+fncs.time_request( 122 ) request
+fncs.time_request() response 122
+Did not receive anything from fncs.time_request() 122
+publish_heartbeat 2017-11-22 04:20:57.270920Z
+fncs.time_request( 123 ) request
+fncs.time_request() response 123
+Did not receive anything from fncs.time_request() 123
+publish_heartbeat 2017-11-22 04:20:59.345033Z
+fncs.time_request( 124 ) request
+fncs.time_request() response 124
+Did not receive anything from fncs.time_request() 124
+publish_heartbeat 2017-11-22 04:20:59.366801Z
+fncs.time_request( 125 ) request
+fncs.time_request() response 125
+Values recieved from fncs.time_request() 125
+it takes 2.16720700264  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:01.534096Z
+fncs.time_request( 126 ) request
+fncs.time_request() response 126
+Did not receive anything from fncs.time_request() 126
+publish_heartbeat 2017-11-22 04:21:04.783507Z
+fncs.time_request( 127 ) request
+fncs.time_request() response 127
+Did not receive anything from fncs.time_request() 127
+publish_heartbeat 2017-11-22 04:21:04.820909Z
+fncs.time_request( 128 ) request
+fncs.time_request() response 128
+Did not receive anything from fncs.time_request() 128
+publish_heartbeat 2017-11-22 04:21:06.956573Z
+fncs.time_request( 129 ) request
+fncs.time_request() response 129
+Did not receive anything from fncs.time_request() 129
+publish_heartbeat 2017-11-22 04:21:06.971466Z
+fncs.time_request( 130 ) request
+fncs.time_request() response 130
+Values recieved from fncs.time_request() 130
+it takes 2.30917191505  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:09.280745Z
+fncs.time_request( 131 ) request
+fncs.time_request() response 131
+Did not receive anything from fncs.time_request() 131
+publish_heartbeat 2017-11-22 04:21:12.467023Z
+fncs.time_request( 132 ) request
+fncs.time_request() response 132
+Did not receive anything from fncs.time_request() 132
+publish_heartbeat 2017-11-22 04:21:12.512129Z
+fncs.time_request( 133 ) request
+fncs.time_request() response 133
+Did not receive anything from fncs.time_request() 133
+publish_heartbeat 2017-11-22 04:21:14.585158Z
+fncs.time_request( 134 ) request
+fncs.time_request() response 134
+Did not receive anything from fncs.time_request() 134
+publish_heartbeat 2017-11-22 04:21:14.594883Z
+fncs.time_request( 135 ) request
+fncs.time_request() response 135
+Did not receive anything from fncs.time_request() 135
+publish_heartbeat 2017-11-22 04:21:16.839987Z
+fncs.time_request( 136 ) request
+fncs.time_request() response 136
+Did not receive anything from fncs.time_request() 136
+publish_heartbeat 2017-11-22 04:21:16.897991Z
+fncs.time_request( 137 ) request
+fncs.time_request() response 137
+Values recieved from fncs.time_request() 137
+it takes 2.01198983192  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:18.910054Z
+fncs.time_request( 138 ) request
+fncs.time_request() response 138
+Did not receive anything from fncs.time_request() 138
+publish_heartbeat 2017-11-22 04:21:22.279302Z
+fncs.time_request( 139 ) request
+fncs.time_request() response 139
+Did not receive anything from fncs.time_request() 139
+publish_heartbeat 2017-11-22 04:21:22.314351Z
+fncs.time_request( 140 ) request
+fncs.time_request() response 140
+Did not receive anything from fncs.time_request() 140
+publish_heartbeat 2017-11-22 04:21:24.375850Z
+fncs.time_request( 141 ) request
+fncs.time_request() response 141
+Did not receive anything from fncs.time_request() 141
+publish_heartbeat 2017-11-22 04:21:24.400867Z
+fncs.time_request( 142 ) request
+fncs.time_request() response 142
+Did not receive anything from fncs.time_request() 142
+publish_heartbeat 2017-11-22 04:21:26.427906Z
+fncs.time_request( 143 ) request
+fncs.time_request() response 143
+Values recieved from fncs.time_request() 143
+it takes 0.423273086548  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:26.851380Z
+fncs.time_request( 144 ) request
+fncs.time_request() response 144
+Values recieved from fncs.time_request() 144
+it takes 2.93885803223  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:29.790354Z
+fncs.time_request( 145 ) request
+fncs.time_request() response 145
+Did not receive anything from fncs.time_request() 145
+publish_heartbeat 2017-11-22 04:21:31.132582Z
+fncs.time_request( 146 ) request
+fncs.time_request() response 146
+Values recieved from fncs.time_request() 146
+it takes 0.0818581581116  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:31.791236Z
+fncs.time_request( 147 ) request
+fncs.time_request() response 147
+Values recieved from fncs.time_request() 147
+it takes 1.66428804398  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:33.455595Z
+fncs.time_request( 148 ) request
+fncs.time_request() response 148
+Did not receive anything from fncs.time_request() 148
+publish_heartbeat 2017-11-22 04:21:35.640189Z
+fncs.time_request( 149 ) request
+fncs.time_request() response 149
+Did not receive anything from fncs.time_request() 149
+publish_heartbeat 2017-11-22 04:21:35.689299Z
+fncs.time_request( 150 ) request
+fncs.time_request() response 150
+Did not receive anything from fncs.time_request() 150
+publish_heartbeat 2017-11-22 04:21:37.690626Z
+fncs.time_request( 151 ) request
+fncs.time_request() response 151
+Did not receive anything from fncs.time_request() 151
+publish_heartbeat 2017-11-22 04:21:37.710384Z
+fncs.time_request( 152 ) request
+fncs.time_request() response 152
+Did not receive anything from fncs.time_request() 152
+publish_heartbeat 2017-11-22 04:21:39.734105Z
+fncs.time_request( 153 ) request
+fncs.time_request() response 153
+Did not receive anything from fncs.time_request() 153
+publish_heartbeat 2017-11-22 04:21:39.796270Z
+fncs.time_request( 154 ) request
+fncs.time_request() response 154
+Values recieved from fncs.time_request() 154
+it takes 1.64239788055  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:41.438740Z
+fncs.time_request( 155 ) request
+fncs.time_request() response 155
+Did not receive anything from fncs.time_request() 155
+publish_heartbeat 2017-11-22 04:21:43.448361Z
+fncs.time_request( 156 ) request
+fncs.time_request() response 156
+Did not receive anything from fncs.time_request() 156
+publish_heartbeat 2017-11-22 04:21:43.498434Z
+fncs.time_request( 157 ) request
+fncs.time_request() response 157
+Values recieved from fncs.time_request() 157
+it takes 2.0938270092  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:45.597714Z
+fncs.time_request( 158 ) request
+fncs.time_request() response 158
+Did not receive anything from fncs.time_request() 158
+publish_heartbeat 2017-11-22 04:21:48.877737Z
+fncs.time_request( 159 ) request
+fncs.time_request() response 159
+Did not receive anything from fncs.time_request() 159
+publish_heartbeat 2017-11-22 04:21:48.932483Z
+fncs.time_request( 160 ) request
+fncs.time_request() response 160
+Did not receive anything from fncs.time_request() 160
+publish_heartbeat 2017-11-22 04:21:50.989648Z
+fncs.time_request( 161 ) request
+fncs.time_request() response 161
+Values recieved from fncs.time_request() 161
+it takes 0.34686589241  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:51.336697Z
+fncs.time_request( 162 ) request
+fncs.time_request() response 162
+Did not receive anything from fncs.time_request() 162
+publish_heartbeat 2017-11-22 04:21:53.256932Z
+fncs.time_request( 163 ) request
+fncs.time_request() response 163
+Values recieved from fncs.time_request() 163
+it takes 2.23730397224  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:55.494328Z
+fncs.time_request( 164 ) request
+fncs.time_request() response 164
+Values recieved from fncs.time_request() 164
+it takes 1.8630759716  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:21:57.357465Z
+fncs.time_request( 165 ) request
+fncs.time_request() response 165
+Did not receive anything from fncs.time_request() 165
+publish_heartbeat 2017-11-22 04:21:58.923825Z
+fncs.time_request( 166 ) request
+fncs.time_request() response 166
+Did not receive anything from fncs.time_request() 166
+publish_heartbeat 2017-11-22 04:21:59.524697Z
+fncs.time_request( 167 ) request
+fncs.time_request() response 167
+Did not receive anything from fncs.time_request() 167
+publish_heartbeat 2017-11-22 04:22:00.947317Z
+fncs.time_request( 168 ) request
+fncs.time_request() response 168
+Did not receive anything from fncs.time_request() 168
+publish_heartbeat 2017-11-22 04:22:01.576155Z
+fncs.time_request( 169 ) request
+fncs.time_request() response 169
+Did not receive anything from fncs.time_request() 169
+publish_heartbeat 2017-11-22 04:22:03.012591Z
+fncs.time_request( 170 ) request
+fncs.time_request() response 170
+Did not receive anything from fncs.time_request() 170
+publish_heartbeat 2017-11-22 04:22:03.591172Z
+fncs.time_request( 171 ) request
+fncs.time_request() response 171
+Did not receive anything from fncs.time_request() 171
+publish_heartbeat 2017-11-22 04:22:05.048439Z
+fncs.time_request( 172 ) request
+fncs.time_request() response 172
+Did not receive anything from fncs.time_request() 172
+publish_heartbeat 2017-11-22 04:22:05.650288Z
+fncs.time_request( 173 ) request
+fncs.time_request() response 173
+Did not receive anything from fncs.time_request() 173
+publish_heartbeat 2017-11-22 04:22:07.067901Z
+fncs.time_request( 174 ) request
+fncs.time_request() response 174
+Values recieved from fncs.time_request() 174
+it takes 1.97699594498  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:22:09.045015Z
+fncs.time_request( 175 ) request
+fncs.time_request() response 175
+Values recieved from fncs.time_request() 175
+it takes 2.08997297287  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:22:11.135058Z
+fncs.time_request( 176 ) request
+fncs.time_request() response 176
+Did not receive anything from fncs.time_request() 176
+publish_heartbeat 2017-11-22 04:22:13.095985Z
+fncs.time_request( 177 ) request
+fncs.time_request() response 177
+Did not receive anything from fncs.time_request() 177
+publish_heartbeat 2017-11-22 04:22:13.239504Z
+fncs.time_request( 178 ) request
+fncs.time_request() response 178
+Did not receive anything from fncs.time_request() 178
+publish_heartbeat 2017-11-22 04:22:15.172425Z
+fncs.time_request( 179 ) request
+fncs.time_request() response 179
+Did not receive anything from fncs.time_request() 179
+publish_heartbeat 2017-11-22 04:22:15.281797Z
+fncs.time_request( 180 ) request
+fncs.time_request() response 180
+Did not receive anything from fncs.time_request() 180
+publish_heartbeat 2017-11-22 04:22:17.315596Z
+fncs.time_request( 181 ) request
+fncs.time_request() response 181
+Did not receive anything from fncs.time_request() 181
+publish_heartbeat 2017-11-22 04:22:17.390518Z
+fncs.time_request( 182 ) request
+fncs.time_request() response 182
+Did not receive anything from fncs.time_request() 182
+publish_heartbeat 2017-11-22 04:22:19.518764Z
+fncs.time_request( 183 ) request
+fncs.time_request() response 183
+Did not receive anything from fncs.time_request() 183
+publish_heartbeat 2017-11-22 04:22:19.547766Z
+fncs.time_request( 184 ) request
+fncs.time_request() response 184
+Did not receive anything from fncs.time_request() 184
+publish_heartbeat 2017-11-22 04:22:21.603665Z
+fncs.time_request( 185 ) request
+fncs.time_request() response 185
+Did not receive anything from fncs.time_request() 185
+publish_heartbeat 2017-11-22 04:22:21.651162Z
+fncs.time_request( 186 ) request
+fncs.time_request() response 186
+Values recieved from fncs.time_request() 186
+it takes 1.13665103912  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:22:22.787859Z
+fncs.time_request( 187 ) request
+fncs.time_request() response 187
+Did not receive anything from fncs.time_request() 187
+publish_heartbeat 2017-11-22 04:22:24.778788Z
+fncs.time_request( 188 ) request
+fncs.time_request() response 188
+Did not receive anything from fncs.time_request() 188
+publish_heartbeat 2017-11-22 04:22:24.907240Z
+fncs.time_request( 189 ) request
+fncs.time_request() response 189
+Did not receive anything from fncs.time_request() 189
+publish_heartbeat 2017-11-22 04:22:26.819326Z
+fncs.time_request( 190 ) request
+fncs.time_request() response 190
+Values recieved from fncs.time_request() 190
+it takes 2.16860198975  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:22:28.987996Z
+fncs.time_request( 191 ) request
+fncs.time_request() response 191
+Did not receive anything from fncs.time_request() 191
+publish_heartbeat 2017-11-22 04:22:30.768470Z
+fncs.time_request( 192 ) request
+fncs.time_request() response 192
+Did not receive anything from fncs.time_request() 192
+publish_heartbeat 2017-11-22 04:22:31.064770Z
+fncs.time_request( 193 ) request
+fncs.time_request() response 193
+Did not receive anything from fncs.time_request() 193
+publish_heartbeat 2017-11-22 04:22:32.775035Z
+fncs.time_request( 194 ) request
+fncs.time_request() response 194
+Did not receive anything from fncs.time_request() 194
+publish_heartbeat 2017-11-22 04:22:33.138340Z
+fncs.time_request( 195 ) request
+fncs.time_request() response 195
+Did not receive anything from fncs.time_request() 195
+publish_heartbeat 2017-11-22 04:22:34.826218Z
+fncs.time_request( 196 ) request
+fncs.time_request() response 196
+Did not receive anything from fncs.time_request() 196
+publish_heartbeat 2017-11-22 04:22:35.191135Z
+fncs.time_request( 197 ) request
+fncs.time_request() response 197
+Did not receive anything from fncs.time_request() 197
+publish_heartbeat 2017-11-22 04:22:36.840631Z
+fncs.time_request( 198 ) request
+fncs.time_request() response 198
+Did not receive anything from fncs.time_request() 198
+publish_heartbeat 2017-11-22 04:22:37.248471Z
+fncs.time_request( 199 ) request
+fncs.time_request() response 199
+Did not receive anything from fncs.time_request() 199
+publish_heartbeat 2017-11-22 04:22:38.884776Z
+fncs.time_request( 200 ) request
+fncs.time_request() response 200
+Values recieved from fncs.time_request() 200
+it takes 1.75818395615  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:22:40.643042Z
+fncs.time_request( 201 ) request
+fncs.time_request() response 201
+Did not receive anything from fncs.time_request() 201
+publish_heartbeat 2017-11-22 04:22:43.074177Z
+fncs.time_request( 202 ) request
+fncs.time_request() response 202
+Did not receive anything from fncs.time_request() 202
+publish_heartbeat 2017-11-22 04:22:43.109584Z
+fncs.time_request( 203 ) request
+fncs.time_request() response 203
+Did not receive anything from fncs.time_request() 203
+publish_heartbeat 2017-11-22 04:22:45.126663Z
+fncs.time_request( 204 ) request
+fncs.time_request() response 204
+Did not receive anything from fncs.time_request() 204
+publish_heartbeat 2017-11-22 04:22:45.286244Z
+fncs.time_request( 205 ) request
+fncs.time_request() response 205
+Values recieved from fncs.time_request() 205
+it takes 1.17223286629  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:22:46.458632Z
+fncs.time_request( 206 ) request
+fncs.time_request() response 206
+Values recieved from fncs.time_request() 206
+it takes 1.1196231842  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:22:47.578331Z
+fncs.time_request( 207 ) request
+fncs.time_request() response 207
+Did not receive anything from fncs.time_request() 207
+publish_heartbeat 2017-11-22 04:22:49.516300Z
+fncs.time_request( 208 ) request
+fncs.time_request() response 208
+Did not receive anything from fncs.time_request() 208
+publish_heartbeat 2017-11-22 04:22:49.621686Z
+fncs.time_request( 209 ) request
+fncs.time_request() response 209
+Values recieved from fncs.time_request() 209
+it takes 1.01186084747  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:22:50.633638Z
+fncs.time_request( 210 ) request
+fncs.time_request() response 210
+Did not receive anything from fncs.time_request() 210
+publish_heartbeat 2017-11-22 04:22:52.718714Z
+fncs.time_request( 211 ) request
+fncs.time_request() response 211
+Did not receive anything from fncs.time_request() 211
+publish_heartbeat 2017-11-22 04:22:52.740878Z
+fncs.time_request( 212 ) request
+fncs.time_request() response 212
+Did not receive anything from fncs.time_request() 212
+publish_heartbeat 2017-11-22 04:22:54.890052Z
+fncs.time_request( 213 ) request
+fncs.time_request() response 213
+Did not receive anything from fncs.time_request() 213
+publish_heartbeat 2017-11-22 04:22:54.983361Z
+fncs.time_request( 214 ) request
+fncs.time_request() response 214
+Did not receive anything from fncs.time_request() 214
+publish_heartbeat 2017-11-22 04:22:56.996462Z
+fncs.time_request( 215 ) request
+fncs.time_request() response 215
+Did not receive anything from fncs.time_request() 215
+publish_heartbeat 2017-11-22 04:22:57.042711Z
+fncs.time_request( 216 ) request
+fncs.time_request() response 216
+Values recieved from fncs.time_request() 216
+it takes 3.37867212296  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:23:00.421468Z
+fncs.time_request( 217 ) request
+fncs.time_request() response 217
+Did not receive anything from fncs.time_request() 217
+publish_heartbeat 2017-11-22 04:23:02.082427Z
+fncs.time_request( 218 ) request
+fncs.time_request() response 218
+Did not receive anything from fncs.time_request() 218
+publish_heartbeat 2017-11-22 04:23:02.459390Z
+fncs.time_request( 219 ) request
+fncs.time_request() response 219
+Did not receive anything from fncs.time_request() 219
+publish_heartbeat 2017-11-22 04:23:04.206338Z
+fncs.time_request( 220 ) request
+fncs.time_request() response 220
+Did not receive anything from fncs.time_request() 220
+publish_heartbeat 2017-11-22 04:23:04.513165Z
+fncs.time_request( 221 ) request
+fncs.time_request() response 221
+Did not receive anything from fncs.time_request() 221
+publish_heartbeat 2017-11-22 04:23:06.251021Z
+fncs.time_request( 222 ) request
+fncs.time_request() response 222
+Did not receive anything from fncs.time_request() 222
+publish_heartbeat 2017-11-22 04:23:06.522116Z
+fncs.time_request( 223 ) request
+fncs.time_request() response 223
+Values recieved from fncs.time_request() 223
+it takes 3.03202199936  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:23:09.554196Z
+fncs.time_request( 224 ) request
+fncs.time_request() response 224
+Did not receive anything from fncs.time_request() 224
+publish_heartbeat 2017-11-22 04:23:10.704758Z
+fncs.time_request( 225 ) request
+fncs.time_request() response 225
+Did not receive anything from fncs.time_request() 225
+publish_heartbeat 2017-11-22 04:23:11.571489Z
+fncs.time_request( 226 ) request
+fncs.time_request() response 226
+Did not receive anything from fncs.time_request() 226
+publish_heartbeat 2017-11-22 04:23:12.731890Z
+fncs.time_request( 227 ) request
+fncs.time_request() response 227
+Did not receive anything from fncs.time_request() 227
+publish_heartbeat 2017-11-22 04:23:13.602579Z
+fncs.time_request( 228 ) request
+fncs.time_request() response 228
+Values recieved from fncs.time_request() 228
+it takes 4.64174413681  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:23:18.244893Z
+fncs.time_request( 229 ) request
+fncs.time_request() response 229
+Did not receive anything from fncs.time_request() 229
+publish_heartbeat 2017-11-22 04:23:19.507562Z
+fncs.time_request( 230 ) request
+fncs.time_request() response 230
+Did not receive anything from fncs.time_request() 230
+publish_heartbeat 2017-11-22 04:23:20.261843Z
+fncs.time_request( 231 ) request
+fncs.time_request() response 231
+Did not receive anything from fncs.time_request() 231
+publish_heartbeat 2017-11-22 04:23:21.545104Z
+fncs.time_request( 232 ) request
+fncs.time_request() response 232
+Did not receive anything from fncs.time_request() 232
+publish_heartbeat 2017-11-22 04:23:22.311009Z
+fncs.time_request( 233 ) request
+fncs.time_request() response 233
+Did not receive anything from fncs.time_request() 233
+publish_heartbeat 2017-11-22 04:23:23.746739Z
+fncs.time_request( 234 ) request
+fncs.time_request() response 234
+Values recieved from fncs.time_request() 234
+it takes 4.49226522446  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:23:28.263427Z
+fncs.time_request( 235 ) request
+fncs.time_request() response 235
+Values recieved from fncs.time_request() 235
+it takes 2.36436319351  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:23:30.627845Z
+fncs.time_request( 236 ) request
+fncs.time_request() response 236
+Did not receive anything from fncs.time_request() 236
+publish_heartbeat 2017-11-22 04:23:31.833534Z
+fncs.time_request( 237 ) request
+fncs.time_request() response 237
+Did not receive anything from fncs.time_request() 237
+publish_heartbeat 2017-11-22 04:23:32.700184Z
+fncs.time_request( 238 ) request
+fncs.time_request() response 238
+Did not receive anything from fncs.time_request() 238
+publish_heartbeat 2017-11-22 04:23:33.910493Z
+fncs.time_request( 239 ) request
+fncs.time_request() response 239
+Did not receive anything from fncs.time_request() 239
+publish_heartbeat 2017-11-22 04:23:34.741562Z
+fncs.time_request( 240 ) request
+fncs.time_request() response 240
+Did not receive anything from fncs.time_request() 240
+publish_heartbeat 2017-11-22 04:23:35.914013Z
+fncs.time_request( 241 ) request
+fncs.time_request() response 241
+Did not receive anything from fncs.time_request() 241
+publish_heartbeat 2017-11-22 04:23:36.774971Z
+fncs.time_request( 242 ) request
+fncs.time_request() response 242
+Values recieved from fncs.time_request() 242
+it takes 0.716740131378  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:23:37.629115Z
+fncs.time_request( 243 ) request
+fncs.time_request() response 243
+Did not receive anything from fncs.time_request() 243
+publish_heartbeat 2017-11-22 04:23:39.184091Z
+fncs.time_request( 244 ) request
+fncs.time_request() response 244
+Values recieved from fncs.time_request() 244
+it takes 3.37469696999  seconds to process fncs->volttron messages
+publish_heartbeat 2017-11-22 04:23:42.558855Z
+fncs.time_request( 245 ) request
+ERROR: unrecognized message type
