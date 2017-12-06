@@ -39,7 +39,7 @@ positive variables
     V_shuntSwitchingTotalPenalty "total penalty incurrent by shunt switching"
     V_devi(bus)          "absolute value of voltage deviation"
     V_pw_cost(gen)    "Generator piecewise cost"
-    V_dem_Load(demanStep)        "demand load level"
+    V_dem_Load(bus, demanStep)        "demand load level"
 *    V_Pd_elastic(demandbid)     "Elastic incremental demand"
 *    V_demandbid_rev(demandbid)  "Revenue from elastic incremental demand"
     V_artup(bus)       "artificial variablers"

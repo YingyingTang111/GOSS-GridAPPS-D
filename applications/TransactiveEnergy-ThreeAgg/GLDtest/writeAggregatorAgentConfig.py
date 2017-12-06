@@ -106,10 +106,12 @@ for ind in range(len(aggregator_nodes)):
         # Meter data (real power from switch) subscribed  
         meters = {}      
         if ((marketName in line) and (aggregator_lines[ind] in line) and ('VAR' not in line)):
-            lst = line.split('-> ')
-            temp = lst[1].split(';')
-            meter = temp[0]
-            meters[meter] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
+            line = line.replace(':', '.')
+            lst = line.split('.')
+            meter = lst[1]
+            prop = lst[2].split('->')[0].replace(" ", "")
+            meters[meter] = {}
+            meters[meter][prop] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
             subscriptions['meter'].append(meters)      
             
     subscriptions['controller'].append(controllers)

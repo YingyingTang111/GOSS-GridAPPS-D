@@ -14,7 +14,7 @@ import time
 import sys
 import getopt
 # import solver
-from AC_OPF_class_test import AC_OPF_test
+from AC_OPF_class import AC_OPF
 # -----------------------------------------------------------------------------
 
 system = "7bus"
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     # get options from python call --------------------------------------------
     try:
         opts, args = getopt.getopt(
-            sys.argv[1:],
+            [],
             "hn:s:v:d:b:c:a:r:u:t:p:f:b:",
             ["help",
              "num_time_steps",
@@ -101,54 +101,42 @@ if __name__ == '__main__':
         elif opt in ("-b", "--debug_start_from_certan_point"):
             startrow = int(arg)  
     # -------------------------------------------------------------------------
-
-        
-    # Calculate the program running time
-    start_time = time.time()   
     
-    """ For Editing Excel """
-    # The file 'switched_shunt_current.gdx' contains the switched shunt 
-    # settings from the previous time step. Each time step the GAMS model
-    # checks for the existence of this file.
-    # - If the file exists then the GAMS model assumes that it is not the
-    # first time step (and therefore enforces shunt switching penalties).
-    # - If the file does not exist then the GAMS model
-    # assumes it is the first time step (and therefore removes all shunt
-    # switching penalties).
-    #   At the end of the GAMS model this file is overwritten with the 
-    # shunt settings produced by the solution of the ACOPF model. Hence 
-    # this file should be removed prior to the first time step.
-    if os.path.isfile("switched_shunt_current.gdx"):
-        os.remove("switched_shunt_current.gdx")           
+    # Calculate the program running time
+    ACOPF_start_time = time.time()  
+    
+    # For Editing Excel
+    if os.path.isfile(mypath + "switched_shunt_current.gdx"):
+        os.remove(mypath + "switched_shunt_current.gdx")           
     # Temporary invalid for test purpose
-    if os.path.isfile("one_step_solution.gdx"):
-        os.remove("one_step_solution.gdx")
+    if os.path.isfile(mypath + "one_step_solution.gdx"):
+        os.remove(mypath + "one_step_solution.gdx")
     
 
     try:
             
         if system == "7bus":
             # 118-BUS SYSTEM PARAMETERS ----------------------------------------------
-            system_folder                           = '7bus'
+            system_folder                           = mypath + '7bus'
             sum_bus_num                             = 7
             sum_load_num                            = 3
             sum_gennum                              = 1 
             # Define the location of solar bus and solar apparent power
-            definegenlocation                     = True
+            definegenlocation                       = True
             sum_distributed_gen                     = 2
-            control_load_BusID                         = 18    
+            control_load_BusID                      = 18    
             solar_qlimit_busID                      = 18
             # Nbend is for the number of steps we'd like to run
-            Nbend                                   = 3 #(12*duration[hour]+1)  
+            Nbend                                   = 1 #(12*duration[hour]+1)  
             # Define start row
             startrow                                = 2   #(12*stating_hour+1)    
-            Nbend2                                  = 5
+            Nbend2                                  = 5   # DR step size
             #nbend2 is the column of the price signal    
-            # file order specify the date    W
+            # file order specify the date   
             fileorder                               = 1
             simuyear                                = 2006
             simutimestep                            = 5
-            GDXcaseName                             = '7bus.gdx'
+            GDXcaseName                             = mypath + '7bus.gdx'
             # Time-stamp in the input excel file? (this option is temporary)
             TimeStamp                               = False
             solar_curtail_busid                     = 84
@@ -160,14 +148,11 @@ if __name__ == '__main__':
     except NameError:
         assert False, "specify system in main python code"
 
-
-
-
  
     ## OPTIMIZATION PROBLEM PARAMETERS ----------------------------------------
     load_bus_voltage_goal                   = 1.0
     solar_curtailment_off                   = 1
-    control_load_off                     = 0
+    control_load_off                        = 0
     solar_q_off                             = 0
     shunt_switching_off                     = 1
     previous_solution_as_start_point        = 0 
@@ -180,6 +165,7 @@ if __name__ == '__main__':
     load_bus_volt_pen_coeff_1               = 1
     load_bus_volt_pen_coeff_2               = 0
     load_bus_volt_dead_band                 = 1e-2
+    DRnum                                  = 2
 
     # can use values 0,1,2,3,9, where 0 start from last solution point, 1 from random all, 2 from flat start, 3 is random voltage, 9 is for given starting point
     icset                                   = [9, 2, 9, 3, 1, 0, 0, 0]    
@@ -188,36 +174,30 @@ if __name__ == '__main__':
     opt_Vgen_dev                            = 1
     opt_Vload_dev                           = 1        
     # -------------------------------------------------------------------------    
-
-   
+    
     
     ## OPTIONS FOR PLOTTING RESULTS -------------------------------------------
     # export the result to spreadsheet or not
     export_to_spreadsheet                   = True
 
     # -------------------------------------------------------------------------
-    
-    
-    
-    
+                
     # Input excel files
-    bus_list_file                           = 'bus_list.xlsx'      
-    distrb_gen_index_file                        = 'distribu_index2.xlsx'
-    solar_oneyear_file                      = 'solar_s_oneyeartest.xlsx'
-    GAMS_OptionSolution_GDXfile             = "one_step_solution.gdx"
-    demand_response_file                 = 'demand_response_load_price.xlsx'
-    GAMS_OPF_file                           = "iv_acopf_reformulation_lop_adj.gms"    
-    
-    
+    bus_list_file                           = mypath + '/7bus/bus_list.xlsx'      
+    distrb_gen_index_file                   = mypath + '/7bus/distribu_index2.xlsx'
+    solar_oneyear_file                      = mypath + '/7bus/solar_s_oneyeartest.xlsx'
+    GAMS_OptionSolution_GDXfile             = mypath + "one_step_solution.gdx"
+    demand_response_file                    = mypath + '/7bus/demand_response_load_price.xlsx'
+    GAMS_OPF_file                           = mypath + "iv_acopf_reformulation_lop_adj.gms"    
+     
 
-    """ CALL """                    
-    System = AC_OPF_test(Nbend, Nbend2, fileorder, simuyear, simutimestep, startrow, definegenlocation, sum_bus_num, sum_load_num, sum_gennum, sum_distributed_gen,\
+    """ CALL AC_OPF object"""                    
+    System = AC_OPF(Nbend, Nbend2, DRnum, fileorder, simuyear, simutimestep, startrow, definegenlocation, sum_bus_num, sum_load_num, sum_gennum, sum_distributed_gen,\
                     solar_curtail_busid, control_load_BusID,solar_qlimit_busID, load_bus_voltage_goal, solar_curtailment_off, control_load_off, solar_q_off, shunt_switching_off,\
                     shuntSwitchingPenalty1, demand_response_decrease_penalty, demand_response_increase_penalty, solar_curtail_penalty, generator_voltage_deviation_penalty,\
                     load_bus_volt_pen_coeff_1, load_bus_volt_pen_coeff_2, load_bus_volt_dead_band, opt_Vgen_dev, opt_Vload_dev, previous_solution_as_start_point, icset, max_iter,\
                     bus_list_file, distrb_gen_index_file, solar_oneyear_file, GAMS_OptionSolution_GDXfile, GAMS_OPF_file, demand_response_file,\
-                    export_to_spreadsheet, system_folder, GDXcaseName, TimeStamp)
+                    export_to_spreadsheet, mypath, GDXcaseName, TimeStamp, feederLoad, self.P, self.Q, self.DRquantity, self.DRprice)
 
-    
+
     print("--- Total running time: %s seconds ---" % (time.time() - start_time))
-    

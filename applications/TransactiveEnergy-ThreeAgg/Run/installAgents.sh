@@ -34,6 +34,6 @@ export CONFIGS3="../CoordinatorAgent/config/*.cfg"
 export SOURCE3="../CoordinatorAgent"
 vctl stop --tag "$TAG3"
 vctl remove -f --tag "$TAG3"
-# for filename in $CONFIGS3; do
-#          python ../../scripts/install-agent.py -s "$SOURCE3" -c "$filename" --tag "$TAG3"
-# done
+for filename in $CONFIGS3; do
+         python ../../scripts/install-agent.py -s "$SOURCE3" -c "$filename" --tag "$TAG3"
+done

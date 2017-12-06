@@ -226,7 +226,7 @@ for line in ip:
                             allHouseDict[groupController].append(name_temp)
                     
                     # Write FNCS_VOLTTRON_Bridge configureation file
-                    write_FNCS_VOLTTRON_Bridge_Config(groupController, config10['houses'])
+#                     write_FNCS_VOLTTRON_Bridge_Config(groupController, config10['houses'])
                     
                     #
                     filename = folderName + "/controller_" + str(groupController) + "_config.cfg"
@@ -262,7 +262,7 @@ for line in ip:
                 aggregatorNamePrev = aggregatorName
                 
                 # Write FNCS_VOLTTRON_Bridge configureation file
-                write_FNCS_VOLTTRON_Bridge_Config(groupController, config10['houses'])
+#                 write_FNCS_VOLTTRON_Bridge_Config(groupController, config10['houses'])
                 
                 # Store all houses in the same group
                 allHouseDict[groupController] = []
@@ -335,32 +335,32 @@ ip.close()
 
 print("Finish writing controller config files based on fncs_configure.cfg")
 
-# Need to rearrange GLD config file
-ip = open (filename_conf, "r")
-op = open ('fncs_configure_cd.txt', "w")
-for line in ip:
-    if ('house' in line and 'FNCS_Volttron_Bridge' in line):
-        temp = line.split(':')
-        houseName = temp[1].split('.')[0]
-        for key, val in allHouseDict.items():
-            if houseName in val:
-                break
-        replaceName = 'FNCS_Volttron_Bridge' + str(key)
-        line = line.replace('FNCS_Volttron_Bridge', replaceName)
-    op.write(line)
-    
-ip.close()
-op.close()
-
-# Write bash file to run all FNCS_VOLTTRON_BRIDGE.py agents together
-folderName = "../FncsVolttronBridge"
-filename = folderName + '/runFNCS_VOLTTRON_BRIDGE.sh'
-op = open (filename, "w")
-numBridge = len(allHouseDict)
-for i in range(numBridge):
-    input = 'python FNCS_Volttron_Bridge.py ' + 'fncs/input' + str(i+1) + ' FNCS_VOLTTRON_Bridge' + str(i+1) + '.config ' + str(i+1) + ' &> FNCS_VOLTTRON_Bridge' + str(i+1) + '.log & \n'
-    op.write(input)
-op.close()
+# # Need to rearrange GLD config file
+# ip = open (filename_conf, "r")
+# op = open ('fncs_configure_cd.txt', "w")
+# for line in ip:
+#     if ('house' in line and 'FNCS_Volttron_Bridge' in line):
+#         temp = line.split(':')
+#         houseName = temp[1].split('.')[0]
+#         for key, val in allHouseDict.items():
+#             if houseName in val:
+#                 break
+#         replaceName = 'FNCS_Volttron_Bridge' + str(key)
+#         line = line.replace('FNCS_Volttron_Bridge', replaceName)
+#     op.write(line)
+#     
+# ip.close()
+# op.close()
+# 
+# # Write bash file to run all FNCS_VOLTTRON_BRIDGE.py agents together
+# folderName = "../FncsVolttronBridge"
+# filename = folderName + '/runFNCS_VOLTTRON_BRIDGE.sh'
+# op = open (filename, "w")
+# numBridge = len(allHouseDict)
+# for i in range(numBridge):
+#     input = 'python FNCS_Volttron_Bridge.py ' + 'fncs/input' + str(i+1) + ' FNCS_VOLTTRON_Bridge' + str(i+1) + '.config ' + str(i+1) + ' &> FNCS_VOLTTRON_Bridge' + str(i+1) + '.log & \n'
+#     op.write(input)
+# op.close()
 
 
 

@@ -200,9 +200,13 @@ def aggregator_agent(config_path, **kwargs):
                 topic = 'controller/' + key + '/all'
                 self.subscriptions['controller'].append(topic)
             # subscription from aggregator agent
-            for key, val in meter.items():
-                topic = 'fncs/output/devices/fncs_Test/' + key
-                self.subscriptions['meter'].append(topic)
+            for key, val in meter.items(): # Only one meter here
+                # topic = 'fncs/output/devices/fncs_Test/' + key # Put meter name and meter property into subscriptions, rather than topic
+                if len(meter.keys()) > 1: 
+                    raise ValueError('The aggregator will only recieve from meter the real power property')
+                for key1, val1 in val.items():
+                    dictTemp = {key: key1}    
+                self.subscriptions['meter'].append(dictTemp)
             # subscription from fncs_bridge
             fncs_bridge = agentSubscription['fncs_bridge'][0]
             for key, val in fncs_bridge.items():
@@ -211,7 +215,7 @@ def aggregator_agent(config_path, **kwargs):
             # subscription from coordinator agent
             coordinatorAgent = agentSubscription['coordinator'][0]
             for key, val in coordinatorAgent.items():
-                topic = 'coordinator/' + key + '/all'
+                topic = 'coordinator/' + key + '/' + config['agentid'] + '/all'
                 self.subscriptions['coordinator'].append(topic)
             
             # Create JSON file storing controller bids and cleared information from coordinator
@@ -239,11 +243,17 @@ def aggregator_agent(config_path, **kwargs):
                                           callback=self.on_receive_controller_message)
             
             # Initialize subscription function to GLD meter:
-            for topic in self.subscriptions['meter']:
-                _log.info('Subscribing to ' + topic)
-                self.vip.pubsub.subscribe(peer='pubsub',
-                                          prefix=topic,
-                                              callback=self.on_receive_GLD_message_fncs)
+            # Subscription to houses in GridLAB-D needs to post-process JSON format messages of all GLD objects together
+            subscription_topic = 'fncs/output/devices/fncs_Test/fncs_output'
+            self.vip.pubsub.subscribe(peer='pubsub',
+                                      prefix=subscription_topic,
+                                      callback=self.on_receive_GLD_message_fncs)
+                                      
+            # for topic in self.subscriptions['meter']:
+                # _log.info('Subscribing to ' + topic)
+                # self.vip.pubsub.subscribe(peer='pubsub',
+                                          # prefix=topic,
+                                              # callback=self.on_receive_GLD_message_fncs)
             
             # Initialize subscription function to fncs_bridge:
             for topic in self.subscriptions['fncs_bridge']:
@@ -330,20 +340,34 @@ def aggregator_agent(config_path, **kwargs):
         # ====================Obtain values from GLD ===========================
         def on_receive_GLD_message_fncs(self, peer, sender, bus, topic, headers, message):
             """Subscribe to GLD publications and change the data accordingly 
-            """    
+            """                
+            # Recieve from GLD the property values of all configured objects, need to extract the house objects and the corresponding properties
+            # Extract the message
+            message = json.loads(message[0])
+            val =  message['fncs_Test']
+            for meterSubs in self.subscriptions['meter']:
+                if len(meterSubs.keys()) != 1:
+                    raise ValueError('For each aggregator, more than one meters are given')
+                # Assign to subscription topics
+                for meterName, meterProp in meterSubs.items():
+                    valTemp = float(val[meterName][meterProp])/1000 # Convert unit to kW
+                    if self.market['capacity_reference_object']['capacity_reference_property'] != valTemp:
+                        self.market['capacity_reference_object']['capacity_reference_property'] = valTemp
+#                         _log.info('Aggregator {0:s} recieves from GLD the real power {1} kW.'.format(self.market['name'], valTemp))
 
-            val =  message[0]/1000 # Convert unit to kW
-#             _log.info('Aggregator {0:s} recieves from GLD the real power {1} kW.'.format(self.market['name'], val))
-            self.market['capacity_reference_object']['capacity_reference_property'] = val
+                        
+            # val =  message[0]/1000 # Convert unit to kW
+# #             _log.info('Aggregator {0:s} recieves from GLD the real power {1} kW.'.format(self.market['name'], val))
+            # self.market['capacity_reference_object']['capacity_reference_property'] = val
             
-            # Publish the total loads seen by aggregator to coordinator
-            pub_topic = 'aggregator/' + self.market['name'] + '/aggregatorLoad'
-#             _log.info('Aggregator agent {0} publishes monitored total loads downstrean to coordinator: {1}'.format(self.market['name'], pub_topic))
-            now = datetime.datetime.utcnow().isoformat(' ') + 'Z' #Create timestamp
-            headers = {
-                headers_mod.DATE: now
-            }
-            self.vip.pubsub.publish('pubsub', pub_topic, headers, message)
+            # # Publish the total loads seen by aggregator to coordinator
+            # pub_topic = 'aggregator/' + self.market['name'] + '/aggregatorLoad'
+# #             _log.info('Aggregator agent {0} publishes monitored total loads downstrean to coordinator: {1}'.format(self.market['name'], pub_topic))
+            # now = datetime.datetime.utcnow().isoformat(' ') + 'Z' #Create timestamp
+            # headers = {
+                # headers_mod.DATE: now
+            # }
+            # self.vip.pubsub.publish('pubsub', pub_topic, headers, message)
         
         # ====================Obtain values from coordinator ===========================
         def on_receive_coordinator_message(self, peer, sender, bus, topic, headers, message):

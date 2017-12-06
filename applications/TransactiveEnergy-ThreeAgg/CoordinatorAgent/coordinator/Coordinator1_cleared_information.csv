@@ -1,1 +1,2 @@
-Cleared_time,market_id,ACOPF_solved,cleared_price,cleared_quantity,cleared_DG1_output (kW),cleared_DG2_output (kW),social_welfare ($),planned_SubstationP (kW),expected_SubstationP (kW),total_uncontrollable_loads
+Cleared_time,market_id,ACOPF_solved,cleared_price_18,cleared_price_57,cleared_quantity_18 (kW),cleared_quantity_57 (kW),DG_7_output (kW),DG_152_output (kW),DG_18_output (kW),DG_57_output (kW),DG_56_output (kW),social_welfare ($),planned_SubstationP (kW),expected_SubstationP (kW),total_uncontrollable_loads (kW)
+2017-12-05-17:48:37,1,True,0.0,0.0,0.0,0.00248799344652,50.0,143.558419086,20.0002819627,93.6269837675,40.0000639607,18.5838741218,1185.77817522,1921.76933598,0.0

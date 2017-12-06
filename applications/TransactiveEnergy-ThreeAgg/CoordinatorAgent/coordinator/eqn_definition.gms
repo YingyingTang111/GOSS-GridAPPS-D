@@ -143,7 +143,7 @@ c_LineIqji(i,j,c)$(branchstatus(i,j,c))..
 *Balance of real power for bus without solar
 c_BalanceP_nosolar(i)$(type(i) ne 4 and (sum(solarbus,solarlocation(solarbus,i)) eq 0))..
         sum(gen$(atBus(gen,i) and status(gen)), V_P(gen))
-        - (Pd(i)+ demLoad('1')$(demLocation(i) eq 1)+sum(demanStep ,V_dem_Load(demanStep))$(demLocation(i) eq 1)+ De_response_Inc_P(i)$(Pd_respon_location(i)) + De_response_Dec_P(i)$(Pd_respon_location(i))   )
+        - (Pd(i)+sum(demanStep ,V_dem_Load(i, demanStep))$(demLocation(i) eq 1)+ De_response_Inc_P(i)$(Pd_respon_location(i)) + De_response_Dec_P(i)$(Pd_respon_location(i))   )
         + V_p_over(i)
         - V_p_under(i)
             =e=
@@ -158,7 +158,7 @@ c_BalanceP_nosolar(i)$(type(i) ne 4 and (sum(solarbus,solarlocation(solarbus,i))
 *Balance of real power for bus with uncontrollable solar installed
 c_BalanceP_solar(i)$(type(i) ne 4 and (sum(solarbus,solarlocation(solarbus,i)) ne 0) and contro_solar_location(i) eq 0)..
         sum(gen$(atBus(gen,i) and status(gen)), V_P(gen))
-         - (Pd(i)+ demLoad('1')$(demLocation(i) eq 1)+sum(demanStep ,V_dem_Load(demanStep))$(demLocation(i) eq 1)- P_S(i)+De_response_Inc_P(i)$(Pd_respon_location(i)) + De_response_Dec_P(i)$(Pd_respon_location(i)))
+         - (Pd(i)+ sum(demanStep ,V_dem_Load(i,demanStep))$(demLocation(i) eq 1)- P_S(i)+De_response_Inc_P(i)$(Pd_respon_location(i)) + De_response_Dec_P(i)$(Pd_respon_location(i)))
         + V_p_over(i)
         - V_p_under(i)
             =e=
@@ -173,7 +173,7 @@ c_BalanceP_solar(i)$(type(i) ne 4 and (sum(solarbus,solarlocation(solarbus,i)) n
 
 c_BalanceP_control_solar(i)$(type(i) ne 4 and  contro_solar_location(i) ne 0)..
         sum(gen$(atBus(gen,i) and status(gen)), V_P(gen))
-         - (Pd(i)+ demLoad('1')$(demLocation(i) eq 1)+sum(demanStep ,V_dem_Load(demanStep))$(demLocation(i) eq 1)+ De_response_Inc_P(i)$(Pd_respon_location(i))+ De_response_Dec_P(i)$(Pd_respon_location(i)) - (P_S(i)-Solar_p_curtail(i) ))
+         - (Pd(i)+ sum(demanStep ,V_dem_Load(i,demanStep))$(demLocation(i) eq 1)+ De_response_Inc_P(i)$(Pd_respon_location(i))+ De_response_Dec_P(i)$(Pd_respon_location(i)) - (P_S(i)-Solar_p_curtail(i) ))
         + V_p_over(i)
         - V_p_under(i)
             =e=
@@ -334,20 +334,19 @@ $endif.nobids
 
 c_obj..
     V_objcost =e=
-           V_shuntSwitchingTotalPenalty
-* + 500*sum(gen, abs(V_P(gen) -Pg(gen)))
-+5000000*sum(gen, V_P(gen)-Pg(gen))
+           V_shuntSwitchingTotalPenalty  +
+5000000*sum(gen, V_P(gen)-Pg(gen))
 *penalty for contro_solar_pout
-         -sum(demanStep ,demSlope(demanStep)*V_dem_Load(demanStep))
+         -sum(i,sum(demanStep ,demSlope(i,demanStep)*V_dem_Load(i,demanStep))  )
          + sum(i,sqr(P_S(i))*dis_gen_par1(i)+P_S(i)*dis_gen_par2(i)+dis_gen_par3(i))
          + solar_curtail_penalty * sum(i,Solar_p_curtail(i))
-         + demand_response_increase_penalty * sum(i,De_response_Inc_P(i))
-         - demand_response_decrease_penalty * sum(i,De_response_Dec_P(i))
+*         + demand_response_increase_penalty * sum(i,De_response_Inc_P(i))
+*         - demand_response_decrease_penalty * sum(i,De_response_Dec_P(i))
 *the demand response q is comment out because it change with respose to p
 *+5*sum(i,De_response_Inc_Q(i))-5*sum(i,De_response_Dec_Q(i))
 *the term of line losses. tobe checked, tobe verified
 *         + sum(i,V_Lossi(i))
-         + V_previous_solution_penalty
+*         + V_previous_solution_penalty
 *the penalty for power balancing relaxation
 *         + %balance_constr_penalty% * (
 *               sum(i,V_p_over(i))
@@ -358,25 +357,24 @@ c_obj..
 
 c_objtest..
     V_objcosttest =e=
-           V_shuntSwitchingTotalPenalty
-*+ 500*sum(gen, abs(V_P(gen) -Pg(gen)))
-+ 5000000*sum(gen, V_P(gen)-Pg(gen))
-         -sum(demanStep ,demSlope(demanStep)*V_dem_Load(demanStep))
+           V_shuntSwitchingTotalPenalty +
+ 5000000*sum(gen, V_P(gen)-Pg(gen))
+         -sum(i,sum(demanStep ,demSlope(i,demanStep)*V_dem_Load(i,demanStep)) )
          + sum(i,sqr(P_S(i))*dis_gen_par1(i)+P_S(i)*dis_gen_par2(i)+dis_gen_par3(i))
 *penalty for contro_solar_pout
          + solar_curtail_penalty * sum(i,Solar_p_curtail(i))
-         + demand_response_increase_penalty * sum(i,De_response_Inc_P(i))
-         - demand_response_decrease_penalty * sum(i,De_response_Dec_P(i))
+*         + demand_response_increase_penalty * sum(i,De_response_Inc_P(i))
+*         - demand_response_decrease_penalty * sum(i,De_response_Dec_P(i))
 *the demand response q is comment out because it change with respose to p
 *+5*sum(i,De_response_Inc_Q(i))-5*sum(i,De_response_Dec_Q(i))
 *the term of line losses. tobe checked, tobe verified
 *         + sum(i,V_Lossi(i))
 * artificial variables is included in objective function with high penalty cost
-         + generator_voltage_deviation_penalty
-             * sum(bus$(sum(gen,status2(gen,bus)) eq 1),  V_artup(bus))
-         + generator_voltage_deviation_penalty
-             * sum(bus$(sum(gen,status2(gen,bus)) eq 1),  V_artlow(bus))
-         + V_previous_solution_penalty
+*         + generator_voltage_deviation_penalty
+*             * sum(bus$(sum(gen,status2(gen,bus)) eq 1),  V_artup(bus))
+*         + generator_voltage_deviation_penalty
+*             * sum(bus$(sum(gen,status2(gen,bus)) eq 1),  V_artlow(bus))
+*         + V_previous_solution_penalty
 *the penalty for power balancing relaxation
 *         + %balance_constr_penalty% * (
 *               sum(i,V_p_over(i))

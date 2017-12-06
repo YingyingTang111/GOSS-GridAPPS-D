@@ -1,17 +1,17 @@
 
 * Set initial conditions
-$batinclude 'ic_iv%sep%preset.gms'
-$ifthen %ic% == 1 $batinclude 'ic_iv%sep%random_all.gms' condensed verbose
-$elseif %ic% == 2 $batinclude 'ic_iv%sep%flat.gms' condensed verbose
-$elseif %ic% == 3 $batinclude 'ic_iv%sep%random_v.gms' condensed verbose
-*$elseif %ic% == 4 $batinclude 'ic_iv%sep%dcopf_pv.gms' limits condensed verbose allon obj Plim timeperiod
-*$elseif %ic% == 5 $batinclude 'ic_iv%sep%dcopf_v.gms' limits condensed verbose allon obj Plim timeperiod
-*$elseif %ic% == 6 $batinclude 'ic_iv%sep%decoupled.gms' condensed verbose
-*$elseif %ic% == 7 $batinclude 'ic_iv%sep%dcopf_pv_loss ' condensed verbose
-*$elseif %ic% == 8 $batinclude 'ic_iv%sep%matpower.gms' condensed verbose
-$elseif %ic% == 9 $batinclude 'ic_iv%sep%given.gms' condensed verbose
-$elseif $ic% == 10 $batinclude 'ic_iv%sep%previous.gms' condensed verbose
-$else $batinclude 'ic_iv%sep%default.gms' condensed verbose
+$batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%preset.gms'
+$ifthen %ic% == 1 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%random_all.gms' condensed verbose
+$elseif %ic% == 2 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%flat.gms' condensed verbose
+$elseif %ic% == 3 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%random_v.gms' condensed verbose
+*$elseif %ic% == 4 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%dcopf_pv.gms' limits condensed verbose allon obj Plim timeperiod
+*$elseif %ic% == 5 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%dcopf_v.gms' limits condensed verbose allon obj Plim timeperiod
+*$elseif %ic% == 6 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%decoupled.gms' condensed verbose
+*$elseif %ic% == 7 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%dcopf_pv_loss ' condensed verbose
+*$elseif %ic% == 8 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%matpower.gms' condensed verbose
+$elseif %ic% == 9 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%given.gms' condensed verbose
+$elseif $ic% == 10 $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%previous.gms' condensed verbose
+$else $batinclude '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/ic_iv%sep%default.gms' condensed verbose
 $endif
 
 * set prior values of distance-penalized variables

@@ -5,6 +5,7 @@ clock {
     stoptime '2010-08-17 00:00:00';
 }
 
+// #set verbose=1
 #set randomseed=10
 #include "inputFiles/appliance_schedules.glm"
 #set minimum_timestep=1
@@ -98625,7 +98626,9 @@ object house {
 object fncs_msg {
     parent network_node;
     name fncs_Test;
-    configure fncs_configure.txt;
+    message_type JSON;
+    configure fncs_configure.json;
+    // configure fncs_configure.txt;
     option "transport:hostname localhost, port 5570";
 };
 

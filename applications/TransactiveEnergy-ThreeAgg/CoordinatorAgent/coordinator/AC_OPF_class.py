@@ -17,18 +17,19 @@ import openpyxl
 from openpyxl.compat import range
 import numpy
 import pandas
+import math
 
 from Export_Solution_class import Export_Solution 
 # -----------------------------------------------------------------------------
 
 
 class AC_OPF:     
-    def __init__(self, Nbend, Nbend2, fileorder, simuyear, simutimestep, startrow, definesolarlocation, sum_bus_num, sum_load_num, sum_gennum, sum_distriGen,\
+    def __init__(self, Nbend, Nbend2, DRnum, fileorder, simuyear, simutimestep, startrow, definesolarlocation, sum_bus_num, sum_load_num, sum_gennum, sum_distriGen,\
                     solar_curtail_busid, control_load_BusID,solar_qlimit_busID, load_bus_voltage_goal, solar_curtailment_off, demand_response_off, solar_q_off, shunt_switching_off,\
                     shuntSwitchingPenalty1, demand_response_decrease_penalty, demand_response_increase_penalty, solar_curtail_penalty, generator_voltage_deviation_penalty,\
                     load_bus_volt_pen_coeff_1, load_bus_volt_pen_coeff_2, load_bus_volt_dead_band, opt_Vgen_dev, opt_Vload_dev, previous_solution_as_start_point, icset, max_iter,\
                     bus_list_file, solar_index_file, solar_oneyear_file, GAMS_OptionSolution_GDXfile, GAMS_OPF_file, Feeder_Constraints_file,\
-                    export_to_spreadsheet, system_folder,GDXcaseName, TimeStamp, feederLoad, P, Q, DRquantity, DRprice):
+                    export_to_spreadsheet, system_folder, GDXcaseName, TimeStamp, feederLoad, P, Q, DRquantity, DRprice):
                  
         self.P                                       = P
         self.Q                                       = Q
@@ -49,7 +50,7 @@ class AC_OPF:
         
         # Define the location of solar bus and solar apparent power
         self.definesolarlocation                     = definesolarlocation 
-        
+        self.DRnum                                  = DRnum
         self.pv_num                                  = sum_distriGen
         self.sum_bus_num                             = sum_bus_num  
         self.sum_load_num                            = sum_load_num 
@@ -127,13 +128,13 @@ class AC_OPF:
     
         
         """ Read in input data into lists including the header """
-        self.wb = openpyxl.load_workbook(self.system_folder + '/' + 'input_update' + str(self.fileorder) + '.xlsx')
+        self.wb = openpyxl.load_workbook(self.system_folder + '/7bus/' + 'input_update' + str(self.fileorder) + '.xlsx')
         
 #         self.p = [7, 18, 57, 1.405808599096, 1.3230449957, 1.681560294004, 1.405808599096, 1.3230449957, 1.681560294004, 1.405808599096, 1.3230449957, 1.681560294004]
         
         self.p  = self.P #self.Read_in(self.wb, 'P'   , self.sum_load_num, self.rowlist)
         self.q  = self.Q #self.Read_in(self.wb, 'Q'   , self.sum_load_num, self.rowlist)
-        
+         
         # comment out ------------------------------------------------------------------
 #         self.p  = self.Read_in(self.wb, 'P'   , self.sum_load_num, self.rowlist)
 #         self.q  = self.Read_in(self.wb, 'Q'   , self.sum_load_num, self.rowlist)
@@ -147,23 +148,23 @@ class AC_OPF:
 #         self.ip = [1, 0.1, 0.1, 0.1]
            
         if self.definesolarlocation:
-            self.solarindex  = self.Read_solar(self.system_folder + '/' + self.solar_index_file  , self.sum_distriGen, 3, 3)
+            self.solarindex  = self.Read_solar(self.solar_index_file  , self.sum_distriGen, 3, 3)
         
             
         self.N               = self.Nbend * self.sum_gennum
         self.iq              = [0] * self.sum_gennum * len(self.rowlist)
         if self.demand_response_off==0:
             
-            self.wb              = openpyxl.load_workbook(self.system_folder + '/' + self.Feeder_Constraints_file)
+            self.wb              = openpyxl.load_workbook(self.Feeder_Constraints_file)
             self.sheet1          = self.wb.get_sheet_by_name('DR_Boundary')
-            
+#             
             self.DemandRes_Price = self.DRprice
             self.DemandRes_load = self.DRquantity
             
             # comment out --------------------------------------------------------------
 #             self.DemandRes_Price   = [None] * self.Nbend2
 #             self.DemandRes_load   = [None] * self.Nbend2
-#     
+#      
 #             for icol in range(2, self.Nbend2+2):
 #                 self.DemandRes_Price[icol-2]   = self.sheet1.cell(row=1, column=icol).value
 #                 self.DemandRes_load[icol-2] = self.sheet1.cell(row=1, column=icol).value
@@ -180,7 +181,7 @@ class AC_OPF:
         self.solarQlimit_Up, self.solarQlimit_Down, self.bus_va_degrees, self.switched_shunt_susceptance_values, self.switched_shunt_susceptance_by_bus_values]\
         = self.Lists_Init(31)
         
-        self.bus_list_df             = pandas.read_excel(self.system_folder + '/' + self.bus_list_file)
+        self.bus_list_df             = pandas.read_excel(self.bus_list_file)
         self.busindex                = list(self.bus_list_df.iloc[1:, 0])
         self.busindex                = list(map(int, self.busindex))
         self.genindex                = list(range(1, self.sum_gennum+1)) 
@@ -190,13 +191,27 @@ class AC_OPF:
         
         # Print inputs of ACOPF
         # ------------------------- Test -------------------------------------------
-#         self.p = [7, 18, 57, 1.33808817432, 1.69949922163, 2.91930600931, 1.33808817432, 1.69949922163, 2.91930600931, 1.33808817432, 1.69949922163, 2.91930600931]
-#         self.q = [7, 18, 57, 0.781933400941, 0.503132155659, 1.04441352255, 0.781933400941, 0.503132155659, 1.04441352255, 0.781933400941, 0.503132155659, 1.04441352255]
-#         self.DemandRes_Price = [1, 2, 3, 4, 5, 0, 4.90188634973, 9.50369900228, 14.0183879718, 18.2996843444]
-#         self.DemandRes_load = [1, 2, 3, 4, 5, 0, 0.0462604737722, 0.0925209475445, 0.138781421317, 0.185041895089]
-#         self.feederLoad = 5.30274177032
+#         self.p = [7, 18, 57, 0.603339523631, 0.660845881779, 0.989795141368, 0.603339523631, 0.660845881779, 0.989795141368, 0.603339523631, 0.660845881779, 0.989795141368] 
+#         self.q = [7, 18, 57, 0.179719007668, 0.167613064308, 0.306499264165, 0.179719007668, 0.167613064308, 0.306499264165, 0.179719007668, 0.167613064308, 0.306499264165] 
+#         self.DemandRes_Price = ['18', '18', '18', '18', '18', '57', '57', '57', '57', '57', 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0.0497276351804,  0.0994552703608, 0.149182905541, 0.198910540722, 0, 0.0497276351804, 0.0994552703608, 0.149182905541, 0.198910540722] 
+#         self.DemandRes_load =  ['18', '18', '18', '18', '18', '57', '57', '57', '57', '57', 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0.00206850918202, 0.00413701836402, 0.00620552754602, 0.00827403672804, 0, 0.00103425459101, 0.00206850918201, 0.00310276377301, 0.00413701836402] 
+#         self.feederLoad = 2.14421804816
 #         self.ip = [1, self.feederLoad, self.feederLoad, self.feederLoad]
-        # ----------------------------------------------------------------------------
+# # 
+#         self.p = [7, 18, 57, 0.390969689581, 0.724665972054, 1.00899847499, 0.390969689581, 0.724665972054, 1.00899847499, 0.390969689581, 0.724665972054, 1.00899847499]
+#         self.q = [7, 18, 57, 0.17611735157, 0.212291204432, 0.316131894608, 0.17611735157, 0.212291204432, 0.316131894608, 0.17611735157, 0.212291204432, 0.316131894608]
+#         self.DemandRes_Price = [18, 18, 18, 18, 18, 57, 57, 57, 57, 57, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0.0248712420545, 0.0497424841091, 0.0746137261636, 0.0994849682181, 0, 0, 0, 0, 0]
+#         self.DemandRes_load =  [18, 18, 18, 18, 18, 57, 57, 57, 57, 57, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0.000849778811774, 0.00169955762355, 0.00254933643532, 0.0033991152471, 0, 0, 0, 0, 0]
+#         self.feederLoad = 1.92176933598
+#         self.ip = [1, self.feederLoad, self.feederLoad, self.feederLoad]
+# 
+#         self.p = [7, 18, 57, 0.410821201279, 0.721584567904, 1.01049356221, 0.410821201279, 0.721584567904, 1.01049356221, 0.410821201279, 0.721584567904, 1.01049356221]
+#         self.q = [7, 18, 57, 0.18218492099, 0.20900939768, 0.321220023573, 0.18218492099, 0.20900939768, 0.321220023573, 0.18218492099, 0.20900939768, 0.321220023573]
+#         self.DemandRes_Price = [18, 18, 18, 18, 18, 57, 57, 57, 57, 57, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0.0248712420545, 0.0497424841091, 0.0746137261636, 0.0994849682181, 0, 0, 0, 0, 0]
+#         self.DemandRes_load = [18, 18, 18, 18, 18, 57, 57, 57, 57, 57, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0.000849778811774, 0.00169955762355, 0.00254933643532, 0.0033991152471, 0, 0, 0, 0, 0]
+#         self.ip = [1, 1.92176933598, 1.92176933598, 1.92176933598]
+
+# ----------------------------------------------------------------------------
 
         print '[%s]' % ', '.join(map(str, self.p))
         print '[%s]' % ', '.join(map(str, self.q))
@@ -212,24 +227,24 @@ class AC_OPF:
             
             """ CREATE DGX FILES -------------------------------------------------- """
             # Create gdx file of demand pd 
-            self.CreateGDXfile(self.p, "UC_OPF_load_elwi_BV.gdx", "Run_newOPF_oneyear_simulation_2", "Pd", "RealPower", 1, GMS_DT_PAR, self.sum_load_num)
+            self.CreateGDXfile(self.p, self.system_folder + "UC_OPF_load_elwi_BV.gdx", "Run_newOPF_oneyear_simulation_2", "Pd", "RealPower", 1, GMS_DT_PAR, self.sum_load_num)
             # Create gdx file of Reactive demand q load
-            self.CreateGDXfile(self.q, "UC_OPF_load_elwi_Q.gdx", "Run_newOPF_oneyear_simulation_2", "Qd", "ReactivePower", 1, GMS_DT_PAR, self.sum_load_num)    
+            self.CreateGDXfile(self.q, self.system_folder + "UC_OPF_load_elwi_Q.gdx", "Run_newOPF_oneyear_simulation_2", "Qd", "ReactivePower", 1, GMS_DT_PAR, self.sum_load_num)    
             # Create gdx file of Generator Status
-            self.CreateGDXfile(self.st, "geni_st.gdx", "Run_newOPF_oneyear_simulation_2", "status", "generator status", 1, GMS_DT_PAR, self.sum_gennum)
+            self.CreateGDXfile(self.st, self.system_folder + "geni_st.gdx", "Run_newOPF_oneyear_simulation_2", "status", "generator status", 1, GMS_DT_PAR, self.sum_gennum)
             # Create gdx file of scheduled real  power 
-            self.CreateGDXfile(self.ip, "geni_p.gdx", "Run_newOPF_oneyear_simulation_2", "PgSch", "ScheduleRealPower", 1, GMS_DT_PAR, self.sum_gennum)    
+            self.CreateGDXfile(self.ip, self.system_folder + "geni_p.gdx", "Run_newOPF_oneyear_simulation_2", "PgSch", "ScheduleRealPower", 1, GMS_DT_PAR, self.sum_gennum)    
             # Create gdx file of scheduled reactive  power
-            self.CreateGDXfile(self.iq, "geni_q.gdx", "Run_newOPF_oneyear_simulation_2", "Qg", "ScheduleReactivePower", 1, GMS_DT_PAR, self.sum_gennum)    
+            self.CreateGDXfile(self.iq, self.system_folder + "geni_q.gdx", "Run_newOPF_oneyear_simulation_2", "Qg", "ScheduleReactivePower", 1, GMS_DT_PAR, self.sum_gennum)    
             # Create gdx file of PV
-            self.CreateGDXfile(self.pv, "Solar_real.gdx", "Run_newOPF_oneyear_simulation_2", "solar_r", "solar", 1, GMS_DT_PAR, self.pv_num)
+            self.CreateGDXfile(self.pv, self.system_folder + "Solar_real.gdx", "Run_newOPF_oneyear_simulation_2", "solar_r", "solar", 1, GMS_DT_PAR, self.pv_num)
             # Create gdx file for solar just ONCE
             if (self.definesolarlocation) & (self.Nb == 1):
-                self.CreateGDX_solar(self.solarindex, "solarbus2.gdx", "Run_newOPF_oneyear_simulation_2", "solarbus", "solar", 1, GMS_DT_SET, self.sum_distriGen, False)
-                self.CreateGDX_solar(self.solarindex, "solarlocation.gdx", "Run_newOPF_oneyear_simulation_2", "solarlocation", "solar", 2, GMS_DT_PAR, self.sum_distriGen, True)
+                self.CreateGDX_solar(self.solarindex, self.system_folder + "solarbus2.gdx", "Run_newOPF_oneyear_simulation_2", "solarbus", "solar", 1, GMS_DT_SET, self.sum_distriGen, False)
+                self.CreateGDX_solar(self.solarindex, self.system_folder + "solarlocation.gdx", "Run_newOPF_oneyear_simulation_2", "solarlocation", "solar", 2, GMS_DT_PAR, self.sum_distriGen, True)
             if (self.demand_response_off==0) & (self.Nb == 1):
-                self.CreateGDXfile(self.DemandRes_load, "demandresponseload.gdx", "Run_newOPF_oneyear_simulation_2", "demLoad", "load", 1, GMS_DT_PAR, self.Nbend2)
-                self.CreateGDXfile(self.DemandRes_Price, "demandresponseprice.gdx", "Run_newOPF_oneyear_simulation_2", "demPrice", "price", 1, GMS_DT_PAR, self.Nbend2)
+                self.CreateGDX_solar(self.DemandRes_load, self.system_folder + "demandresponseload.gdx", "Run_newOPF_oneyear_simulation_2", "demLoad", "load", 2, GMS_DT_PAR, self.Nbend2*self.DRnum, True)
+                self.CreateGDX_solar(self.DemandRes_Price, self.system_folder + "demandresponseprice.gdx", "Run_newOPF_oneyear_simulation_2", "demPrice", "price", 2, GMS_DT_PAR, self.Nbend2*self.DRnum, True)
             """ CALL GAMS TO SOLVE THE OPTIMIZATION PROBLEM ----------------------- """
             self.opt_time           = 0
             self.ws                 = GamsWorkspace()
@@ -264,16 +279,16 @@ class AC_OPF:
             # Run GAMS
             # NOTE:  DO NOT put t1 as an attribute of object SELF; otherwise, you MUST restart Python if you want to run the code again. The command "os.remove" DOES NOT help
             #return # uncomment this line to quit right before the first gams solve
-            try:
-                t1.run(gams_options)  
-                if (t1.out_db["mstat"].find_record().value == 2):
-                    ACOPF_solved = True 
-                    print('ACOPF is solved') 
-                else:
-                    ACOPF_solved = False
-                    print('Could not solve ACOPF - mstat is 5.0') 
-            except:
-                print('Could not solve ACOPF')
+#             try:
+            t1.run(gams_options)  
+            if (t1.out_db["mstat"].find_record().value == 2):
+                ACOPF_solved = True 
+                print('ACOPF is solved') 
+            else:
+                ACOPF_solved = False
+                print('Could not solve ACOPF - mstat is 5.0') 
+#             except:
+#                 print('Could not solve ACOPF')
                  
             # Check the status of the model and solution
             print ('mstat: %s' %t1.out_db["mstat"].find_record().value)
@@ -365,7 +380,7 @@ class AC_OPF:
                 # Load voltage deviation
                 #controllable load shift
 #                 self.token7_demand_res               = self.Get_Result(t1, self.token7_demand_res, "V_dem_Load", 1, 5)
-                self.token7_demand_res               = list(numpy.array(self.Get_Result(t1, self.token7_demand_res, "V_dem_Load", 1, 5))*t1.out_db["baseMVA"].find_record().value) 
+                self.token7_demand_res                   = list(numpy.array(self.Get_Result(t1, self.token7_demand_res, "V_dem_Load", 1, 5))*t1.out_db["baseMVA"].find_record().value) 
                 # sstat
                 self.token8_solver_stat                  = self.Get_Result(t1, self.token8_solver_stat, "sstat", 3, 1)    
                 # mstat
@@ -392,7 +407,9 @@ class AC_OPF:
             returnVal = dict()
             returnVal['solved'] = True
             returnVal['DER'] = [x * t1.out_db["baseMVA"].find_record().value for x in self.token4_Distribu_Gen]
-            returnVal['DRquantity'] = sum(self.token7_demand_res)
+            returnVal['DRquantity'] = {}
+            returnVal['DRquantity']['bus_18'] = sum(self.token7_demand_res[2:6])
+            returnVal['DRquantity']['bus_57'] = sum(self.token7_demand_res[9:13])
             returnVal['substationP'] = self.pgen[0] * t1.out_db["baseMVA"].find_record().value
             returnVal['SocialWelfare'] = self.token4_tot_cost[0]
         

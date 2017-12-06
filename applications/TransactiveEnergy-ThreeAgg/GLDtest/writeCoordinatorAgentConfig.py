@@ -81,9 +81,12 @@ for aggregator in AggregatorName:
     # Meter data (reactive power from aggregator) subscribed  
     for line in ip:      
         if (aggregator in line and 'VAR' in line):
-            lst = line.split('-> ')
-            temp = lst[1].split(';')
-            aggregators[aggregator][temp[0]] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
+            line = line.replace('->', '.')
+            meterName = line.replace(':', '.').split('.')[1]
+            prop = line.split('.')[1].replace(" ", "")
+            aggregators[aggregator][meterName] = {}
+            aggregators[aggregator][meterName][prop] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
+            
 subscriptions['aggregator_kVAR'].append(aggregators)
 
 # Meter data (real power from aggregated loads, and individual DG) subscribed   
@@ -109,14 +112,14 @@ meterkVAR = 'substation_kVAR_load'
 meters['Meter_substation'] = {}
 ip.seek(0, 0)
 for line in ip:      
-        if (meter in line):
-            lst = line.split('-> ')
-            temp = lst[1].split(';')
-            meters['Meter_substation'][temp[0]] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
-        elif (meterkVAR in line):
-            lst = line.split('-> ')
-            temp = lst[1].split(';')
-            meters['Meter_substation'][temp[0]] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
+        if (meter in line or meterkVAR in line):
+            line = line.replace('->', '.')
+            meterName = line.replace(':', '.').split('.')[1]
+            temp = line.split('.')[1].replace(" ", "")
+            if (meterName not in meters['Meter_substation'].keys()):
+                meters['Meter_substation'][meterName] = {}
+            meters['Meter_substation'][meterName][temp] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
+
 #             break    
 
 
@@ -132,11 +135,9 @@ for meter in meterDGs:
     # Meter data (real power from switch) subscribed  
     for line in ip:  
         if (meter in line and '->' in line):  
-            for power in powers:
-                if  (power in line):
-                    lst = line.split('-> ')
-                    temp = lst[1].split(';')
-                    meters[meter][temp[0].replace('"', "")] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
+            line = line.replace('->', '.')
+            temp = line.split('.')[1].replace(" ", "")
+            meters[meter][temp] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
 
 subscriptions['metered_DGs'].append(meters)
 
@@ -150,11 +151,12 @@ subscriptions['fncs_bridge'].append(fncs_bridge)
 initialVal = {}
 initialVal = {}
 initialVal['market_information'] = {'market_id': 0, 'bid_delay': bid_delay, 'unit': unit, 'period': periodCoordinator, 'pricecap': price_cap, 'total_feeder_load': total_feeder_load}
-cccc = {}
 bus = {}
 bus['bus_18'] = ['Aggregator_1', 'Aggregator_2']
 bus['bus_57'] = ['Aggregator_3']
 initialVal['aggregator_information'] = bus
+DERinfo = {'DG_152': 1, 'DG_57': 3, 'DG_7': 0, 'DG_18': 2, 'DG_56': 4}
+initialVal['DER_information'] = DERinfo
 
 # Finalize config dictionary
 config['subscriptions'] = subscriptions

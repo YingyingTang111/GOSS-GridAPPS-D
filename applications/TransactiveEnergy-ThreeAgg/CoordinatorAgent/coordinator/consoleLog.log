@@ -1,0 +1,50 @@
+2017-12-05 17:48:27,716 volttron.platform.agent.utils DEBUG: missing file /home/yingying/.volttron/keystores/3fb4c493-2ccb-4bf5-b0e7-f1684419708f/keystore.json
+2017-12-05 17:48:27,716 volttron.platform.agent.utils INFO: creating file /home/yingying/.volttron/keystores/3fb4c493-2ccb-4bf5-b0e7-f1684419708f/keystore.json
+2017-12-05 17:48:27,720 volttron.platform.vip.agent.core DEBUG: address: ipc://@/home/yingying/.volttron/run/vip.socket
+2017-12-05 17:48:27,721 volttron.platform.vip.agent.core DEBUG: identity: None
+2017-12-05 17:48:27,721 volttron.platform.vip.agent.core DEBUG: agent_uuid: None
+2017-12-05 17:48:27,721 volttron.platform.vip.agent.core DEBUG: serverkey: None
+2017-12-05 17:48:27,723 __main__ INFO: Simulation starts from: 2017-12-05 17:48:27.723750 in coordinator agent Coordinator1.
+2017-12-05 17:48:27,754 volttron.platform.vip.agent.core INFO: Connected to platform: router: eee85d47-3f38-4292-bb96-2a20c3d74105 version: 1.0 identity: 3fb4c493-2ccb-4bf5-b0e7-f1684419708f
+2017-12-05 17:48:27,754 volttron.platform.vip.agent.core DEBUG: Running onstart methods.
+2017-12-05 17:48:27,754 __main__ INFO: Subscribing to fncs/output/devices/fncs_Test/fncs_output
+2017-12-05 17:48:27,755 __main__ INFO: Subscribing to aggregator/Aggregator_2/biddings/all
+2017-12-05 17:48:27,755 __main__ INFO: Subscribing to aggregator/Aggregator_3/biddings/all
+2017-12-05 17:48:27,755 __main__ INFO: Subscribing to aggregator/Aggregator_1/biddings/all
+2017-12-05 17:48:27,755 __main__ INFO: Subscribing to FNCS_Volttron_Bridge/simulation_end
+2017-12-05 17:48:27,788 volttron.platform.vip.agent.subsystems.configstore DEBUG: Processing callbacks for affected files: {}
+2017-12-05 17:48:37,757 __main__ INFO: At time 2017-12-05 17:48:37, coordinator agent Coordinator1 start computing ACOPF, with measured substation 0.0 MW, total DER outputs 0.0 MW, and controllable loads 0 MW
+num_time_steps: 1
+shuntSwitchingPenalty: 0.001000
+load_bus_voltage_goal: 1.000000
+solar_curtailment_off: 1
+demand_response_off: 0
+solar_q_off: 0
+shunt_switching_off: 1
+load_bus_volt_pen_coeff_1: 1.000000
+load_bus_volt_pen_coeff_2: 0.000000
+load_bus_volt_dead_band: 0.010000
+Control generator voltages: 1.000000
+Control load voltages: 1.000000
+previous_solution_as_start_point: 0
+file_number: 1
+start_row_number: 2
+[7, 18, 57, 0.410821201279, 0.721584567904, 1.01049356221, 0.410821201279, 0.721584567904, 1.01049356221, 0.410821201279, 0.721584567904, 1.01049356221]
+[7, 18, 57, 0.18218492099, 0.20900939768, 0.321220023573, 0.18218492099, 0.20900939768, 0.321220023573, 0.18218492099, 0.20900939768, 0.321220023573]
+[18, 18, 18, 18, 18, 57, 57, 57, 57, 57, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0.0248712420545, 0.0497424841091, 0.0746137261636, 0.0994849682181, 0, 0, 0, 0, 0]
+[18, 18, 18, 18, 18, 57, 57, 57, 57, 57, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0.000849778811774, 0.00169955762355, 0.00254933643532, 0.0033991152471, 0, 0, 0, 0, 0]
+1.18577817522
+end of printing inputs
+ACOPF is solved
+mstat: 2.0
+Opt time: 0
+Step: 1
+2017-12-05 17:48:38,502 __main__ INFO: --- ACOPF total running time: 0.745229005814 seconds ---
+2017-12-05 17:48:38,503 __main__ INFO: At time 2017-12-05 17:48:37, coordinator agent Coordinator1 with market_id 1 publishes no_bid price 0.0 to aggregator agent Aggregator_1 since there are no bids recieved from controllable loads in this market period
+2017-12-05 17:48:38,505 __main__ INFO: At time 2017-12-05 17:48:37, coordinator agent Coordinator1 with market_id 1 publishes no_bid price 0.0 to aggregator agent Aggregator_2 since there are no bids recieved from controllable loads in this market period
+2017-12-05 17:48:38,506 __main__ INFO: At time 2017-12-05 17:48:37, coordinator agent Coordinator1 with market_id 1 publishes no_bid price 0.0 to aggregator agent Aggregator_3 since there are no bids recieved from controllable loads in this market period
+2017-12-05 17:48:38,510 __main__ INFO: At time 2017-12-05 17:48:37, coordinator agent Coordinator1 with market_id 2017-12-05 17:48:37 publishes updated DER DG_152 output: 0.143558419086
+2017-12-05 17:48:38,512 __main__ INFO: At time 2017-12-05 17:48:37, coordinator agent Coordinator1 with market_id 2017-12-05 17:48:37 publishes updated DER DG_7 output: 0.05
+2017-12-05 17:48:38,515 __main__ INFO: At time 2017-12-05 17:48:37, coordinator agent Coordinator1 with market_id 2017-12-05 17:48:37 publishes updated DER DG_18 output: 0.0200002819627
+2017-12-05 17:48:38,518 __main__ INFO: At time 2017-12-05 17:48:37, coordinator agent Coordinator1 with market_id 2017-12-05 17:48:37 publishes updated DER DG_56 output: 0.0400000639607
+2017-12-05 17:48:38,521 __main__ INFO: At time 2017-12-05 17:48:37, coordinator agent Coordinator1 with market_id 2017-12-05 17:48:37 publishes updated DER DG_57 output: 0.0936269837675

@@ -25,7 +25,7 @@ $title "AC optimal power flow model, rectangular current-voltage formulation"
 
 
 *===== SECTION: USER PARAMETERS
-*$include user_params.gms
+*$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/user_params.gms
 
 * switched shunt user parameters
 * later these will be passed in from Python
@@ -102,7 +102,7 @@ $if not set use_soft_balance_constrs $set use_soft_balance_constrs 0
 $if not set balance_constr_penalty $set balance_constr_penalty 1e3
 
 *===== SECTION: DEVELOPER PARAMETERS
-*$include developer_params.gms
+*$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/developer_params.gms
 
 * System dependence
 $if %system.filesys% == UNIX $set sep '/'
@@ -150,54 +150,54 @@ $set condensed 'no'
 *$batinclude "%filepath%excel2gdx4ACOPF.gms"  excelpath solar_rp demand_P demand_Q gen_status geni_psch
 $batinclude "%filepath%extract_data_SunLamp_newformulation_cle.gms" excelpath timeperiod demandbids linelimits genPmin allon demand_response_off solar_curtailment_off solar_q_boun_adjust_off
 * load prior sol switched shunt settings if this is not the first time step
-$ifthen exist 'switched_shunt_current.gdx'
-execute_load 'switched_shunt_current.gdx', numShuntStepsOn_init=numShuntStepsOn;
+$ifthen exist '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/switched_shunt_current.gdx'
+execute_load '/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/switched_shunt_current.gdx', numShuntStepsOn_init=numShuntStepsOn;
 $endif
 
 *===== SECTION: PARAMETERS FROM USER
-$include params_from_user.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/params_from_user.gms
 
 *===== SECTION: MODEL PARAMETERS
-$include model_params.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/model_params.gms
 
 *===== SECTION: DATA MANIPULATION
-$include data_manipulation.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/data_manipulation.gms
 
 *===== SECTION: VARIABLE DEFINITION
-$include var_declaration.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/var_declaration.gms
 *display  V_real.l;
 *===== SECTION: EQUATION DECLARATION
-$include eqn_declaration.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/eqn_declaration.gms
 *display V_P.l,V_P.up, V_P.lo;
 *===== SECTION: EQUATION DEFINITION
-$include eqn_definition.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/eqn_definition.gms
 *display Pmax, Pmin, V_P.l;
 *===== SECTION: MODEL DEFINITION
-$include mod_definition.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/mod_definition.gms
 display Pmax, Pmin, Pd, Va, Vm, Qg, Gs, b, bc;
 *===== SECTION: VARIABLE BOUNDS
-$include var_bounds.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/var_bounds.gms
 
 *===== SECTION: VARIABLE START VALUES
-$include start_point.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/start_point.gms
 *===== SECTION: COMPUTE START METRICS
-$include compute_start_metrics.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/compute_start_metrics.gms
 
 *===== SECTION: DISPLAY START METRICS
-$include display_start.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/display_start.gms
 
 *===== SECTION: MODEL OPTIONS AND SOLVE
 $ifthen %use_pv_pq_smoothing%==1
-$include solve_procedure_pv_pq_smoothing.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/solve_procedure_pv_pq_smoothing.gms
 $else
-$include solve_procedure.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/solve_procedure.gms
 $endif
 
 
 
 *===== SECTION: SOLUTION ANALYSIS
-$include solution_analysis.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/solution_analysis.gms
 
 *==== SECTION: SOLUTION SAVE
-$include solution_save.gms
+$include /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/solution_save.gms
 display Pmax, Pmin,ratio,switchedShuntB_init, V_dem_Load.l, V_switchedshuntB.l,V_P.l,V_P.up, V_P.lo, V_Q.l, V_Q.up, V_Q.lo, Qmax, Qmin;

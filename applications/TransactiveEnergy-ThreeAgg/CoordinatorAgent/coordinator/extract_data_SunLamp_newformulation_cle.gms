@@ -71,7 +71,7 @@ set pq  "real and reactive"  /1 * 2/;
 *$call 'GDXXRW input=solarbus.xlsx output=solarbus.gdx set=solarbus rng=Sheet1!A1:CX1 Cdim=1';
 
 
-$GDXIN solarbus2.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/solarbus2.gdx
 $LOAD solarbus
 $GDXIN
 
@@ -149,9 +149,9 @@ parameters
 *  switchedShuntB_init(bus,bus_s) "initial value of switched shunt susceptance"
   switchedShuntB_init(bus) "initial value of switched shunt susceptance"
   numShuntStepsOn_init(bus,bus_s) "initial number of switched shunt steps on"
-  demLoad(demanStep) "demandresponse load"
-  demPrice(demanStep) "demandresponse price"
-  demSlope(demanStep) "slope"
+  demLoad(bus,demanStep) "demandresponse load"
+  demPrice(bus,demanStep) "demandresponse price"
+  demSlope(bus,demanStep) "slope"
   demLocation(bus)      "location of demand response"
 ;
 
@@ -162,33 +162,43 @@ parameters
 *x(i,j,c)$line(i,j,c) = branchinfo(i,j,c,'x','given');
 *branchstatus(i,j,c)$line(i,j,c) = branchinfo(i,j,c,'branchstatus','%timeperiod%');
 
-$GDXIN geni_st.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/geni_st.gdx
 $LOAD status
 $GDXIN
 
-$GDXIN demand_response.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/demand_response.gdx
 $LOAD Pd_respon_location, Pd_respon_p_down, Pd_respon_q_down, Pd_respon_p_up, Pd_respon_q_up
 $GDXIN
 
-$GDXIN demandresponseload.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/demandresponseload.gdx
 $LOAD demLoad
 $GDXIN
 display demLoad;
-$GDXIN demandresponseprice.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/demandresponseprice.gdx
 $LOAD demPrice
 $GDXIN
 demLocation('18')=1;
-
-demLoad(demanStep)=demLoad(demanStep)/baseMVA;
-demSlope(demanStep)$(ord(demanStep) > 1 )=( (demPrice(demanStep)-demPrice(demanStep-1) ) /(demLoad(demanStep)-demLoad(demanStep-1)))$(demLoad(demanStep) ne demLoad(demanStep-1));
+demLocation('57')=1;
+demLoad(bus,demanStep)=demLoad(bus,demanStep)/baseMVA;
+demSlope(bus,demanStep)$(ord(demanStep) > 1 )=( (demPrice(bus,demanStep)-demPrice(bus,demanStep-1) ) /(demLoad(bus,demanStep)-demLoad(bus,demanStep-1)))$(demLoad(bus,demanStep) ne demLoad(bus,demanStep-1));
 
 display demLoad,demPrice,demLocation,demSlope;
-dis_gen_par1('13')=250*sqr(baseMVA);
-dis_gen_par1('57')=310*sqr(baseMVA);
+dis_gen_par1('13')=250*baseMVA*baseMVA;
+dis_gen_par1('57')=310*baseMVA*baseMVA;
 dis_gen_par2('13')=15.6*baseMVA;
 dis_gen_par2('57')=29.7*baseMVA;
 dis_gen_par3('13')=0.33;
 dis_gen_par3('57')=0.3;
+
+dis_gen_par1('7')=150*baseMVA*baseMVA;
+dis_gen_par1('18')=520*baseMVA*baseMVA;
+dis_gen_par1('56')=420*baseMVA*baseMVA;
+dis_gen_par2('7')=26.7*baseMVA;
+dis_gen_par2('18')=15.2*baseMVA;
+dis_gen_par2('56')=18.5*baseMVA;
+dis_gen_par3('7')=0.38;
+dis_gen_par3('18')=0.65;
+dis_gen_par3('56')=0.4;
 
 $ifthen %demand_response_off%==1
 Pd_respon_p_down(bus)=0;
@@ -210,7 +220,7 @@ $ifthen %solar_curtailment_off%==1
 contro_solar_pout(bus)=0;
 contro_solar_location(bus)=0;
 $else
-$GDXIN solar_control.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/solar_control.gdx
 $LOAD contro_solar_pout, contro_solar_location
 $GDXIN
 * to per unit
@@ -223,12 +233,12 @@ csolar_Q_limit_up(bus)=0;
 csolar_Q_limit_down(bus)=0;
 contro_solar_location(bus)=0;
 $elseif %solar_curtailment_off%==1  and  %solar_q_boun_adjust_off%==0
-$GDXIN solar_controlQlimit.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/solar_controlQlimit.gdx
 $LOAD csolar_Q_limit_up, csolar_Q_limit_down, contro_solar_location
 $GDXIN
 $else
 
-$GDXIN solar_controlQlimit.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/solar_controlQlimit.gdx
 $LOAD csolar_Q_limit_up, csolar_Q_limit_down
 $GDXIN
 $endif
@@ -240,7 +250,7 @@ csolar_Q_limit_down(bus) =csolar_Q_limit_down(bus)/baseMVA;
 *solar section
 *$call 'GDXXRW input=solar_s.xlsx output=solar_s.gdx par=solar_s rng=Sheet1!B1:CX2 Cdim=1';
 *$call 'GDXXRW input=solarindex.xlsx output=solarlocation.gdx par=solarlocation rng=Sheet1!B1:CX3 Cdim=2 ';
-$GDXIN solarlocation.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/solarlocation.gdx
 $LOAD solarlocation
 $GDXIN
 * Bus type
@@ -285,7 +295,7 @@ Bs(bus) = businfo(bus,'Bs','given')/baseMVA;
 * add the input replacement above
 
 status2(gen,bus) = 1$(atBus(gen,bus) and status(gen) eq 1 );
-$GDXIN UC_OPF_load_elwi_BV.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/UC_OPF_load_elwi_BV.gdx
 $LOAD Pd
 $GDXIN
 
@@ -323,7 +333,7 @@ B(j,i,c)$(b(i,j,c)) = b(i,j,c);
 
 
 
-$GDXIN geni_p.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/geni_p.gdx
 $LOAD PgSch
 $GDXIN
 PgSch(gen) =PgSch(gen)/baseMVA;
@@ -339,7 +349,7 @@ Pg(gen)=PgSch(gen);
 
 
 
-$GDXIN UC_OPF_load_elwi_Q.gdx
+$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/UC_OPF_load_elwi_Q.gdx
 $LOAD Qd
 $GDXIN
 Qd(bus) =Qd(bus)/baseMVA;
@@ -347,7 +357,7 @@ Qd(bus) =Qd(bus)/baseMVA;
 
 
 
-*$GDXIN geni_q.gdx
+*$GDXIN /home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/geni_q.gdx
 *$LOAD Qg
 *$GDXIN
 *Qg(gen) =Qg(gen)/baseMVA;

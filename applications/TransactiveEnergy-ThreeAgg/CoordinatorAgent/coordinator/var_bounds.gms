@@ -25,8 +25,8 @@ $endif
 
 
 
-V_dem_Load.up(demanStep)$(ord(demanStep) > 1)=  demLoad(demanStep)-demLoad(demanStep-1);
-V_dem_Load.fx('1')=0;
+V_dem_Load.up(bus, demanStep)$(demLocation(bus) eq 1 and ord(demanStep) > 1)=  demLoad(bus, demanStep)-demLoad(bus, demanStep-1);
+V_dem_Load.fx(bus,'1')=0;
 Q_s.lo('13')=-300;
 Q_s.lo('57')=-300;
 Q_s.up('13')=300;
@@ -38,8 +38,19 @@ P_S.lo('57')=0.02/baseMVA;
 P_S.up('13')=0.3/baseMVA;
 P_S.up('57')=0.25/baseMVA;
 
+Q_s.lo('7')=-300;
+Q_s.lo('18')=-300;
+Q_s.lo('56')=-300;
+Q_s.up('7')=300;
+Q_s.up('18')=300;
+Q_s.up('56')=300;
 
-
+P_S.lo('7')=0.05/baseMVA;
+P_S.lo('18')=0.02/baseMVA;
+P_S.lo('56')=0.04/baseMVA;
+P_S.up('7')=0.5/baseMVA;
+P_S.up('18')=0.1/baseMVA;
+P_S.up('56')=0.2/baseMVA;
 
 De_response_Inc_P.up(bus)$(Pd_respon_location(bus))=Pd_respon_p_up(bus);
 De_response_Inc_P.lo(bus)$(Pd_respon_location(bus))=0;

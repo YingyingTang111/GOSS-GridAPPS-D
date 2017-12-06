@@ -4,6 +4,7 @@ import sys
 import uuid
 import math
 import warnings
+import json
 
 from volttron.platform.vip.agent import Agent, Core, PubSub, compat
 from volttron.platform.agent import utils
@@ -72,8 +73,8 @@ def controller_agent(config_path, **kwargs):
                 agentInitialVal = houseInfo['initial_value']
                 agentSubscription = houseInfo['subscriptions']    
                 
-                self.house[houseName] = {'target': 'air_temperature', 'setpoint0':-1, 'lastsetpoint0': 0, 'controlled_load_all': 1, 'controlled_load_curr': 1, \
-                 'uncontrolled_load': 1, 'deadband': 0, 'currTemp': -1, 'powerstate': 'UNKNOWN', 'last_pState': 'UNKNOWN', 
+                self.house[houseName] = {'target': 'air_temperature', 'setpoint0':-1, 'lastsetpoint0': 0, 'hvac_load': 1, 'controlled_load_curr': 1, \
+                 'uncontrolled_load': 1, 'deadband': 0, 'air_temperature': -1, 'power_state': 'UNKNOWN', 'last_pState': 'UNKNOWN', 
                  'heating_demand': 0, 'cooling_demand': 0, 'aux_state': 0, 'heat_state': 0, 'cool_state': 0, 
                  'thermostat_state': 'UNKNOWN', 
                  'heating_setpoint0': -1, 'cooling_setpoint0': -1, 
@@ -117,9 +118,9 @@ def controller_agent(config_path, **kwargs):
                  
                  
                 # house information  - values will be given after the first time step, thereforely here set as default zero values
-                self.house[houseName]['currTemp'] = 0
-                self.house[houseName]['powerstate'] = "ON"
-                self.house[houseName]['controlled_load_all'] = 0 
+                self.house[houseName]['air_temperature'] = 0
+                self.house[houseName]['power_state'] = "ON"
+                self.house[houseName]['hvac_load'] = 0 
                 self.house[houseName]['target'] = "air_temperature"
                 self.house[houseName]['deadband'] = 2 
     #             self.house['setpoint0'] = 0
@@ -277,8 +278,8 @@ def controller_agent(config_path, **kwargs):
                         raise ValueError('The house name written into subscriptions is not the same as in initial_value')
                     self.subscriptions[houseName] = []
                     for key2, val2 in val.items():
-                        topic = 'fncs/output/devices/fncs_Test/' + key + '/' + key2
-                        self.subscriptions[houseName].append(topic)
+                        # topic = 'fncs/output/devices/fncs_Test/' + key + '/' + key2
+                        self.subscriptions[houseName].append(key2) # Put house property into subscriptions, rather than topic
                         
             # subscription from aggregator agent
             aggregator = aggregatorDetail
@@ -307,27 +308,34 @@ def controller_agent(config_path, **kwargs):
         def startup(self, sender, **kwargs):
             
             # Initialize subscription function to change setpoints
-            for oneHouse in houses:
-                houseName = oneHouse.keys()
-                if len(houseName) != 1:
-                    raise ValueError('For each house, more than one house keys are given')
-                else:
-                    houseName = houseName[0]
-                # Assign to subscription topics
-                for subscription_topic in self.subscriptions[houseName]:
-                    self.vip.pubsub.subscribe(peer='pubsub',
-                                              prefix=subscription_topic,
-                                                      callback=self.on_receive_house_message_fncs)
+            # Subscription to houses in GridLAB-D needs to post-process JSON format messages of all GLD objects together
+            subscription_topic = 'fncs/output/devices/fncs_Test/fncs_output'
+            self.vip.pubsub.subscribe(peer='pubsub',
+                                      prefix=subscription_topic,
+                                      callback=self.on_receive_house_message_fncs)
+            # for oneHouse in houses:
+                # houseName = oneHouse.keys()
+                # if len(houseName) != 1:
+                    # raise ValueError('For each house, more than one house keys are given')
+                # else:
+                    # houseName = houseName[0]
+                # # Assign to subscription topics
+                # for subscription_topic in self.subscriptions[houseName]:
+                    # _log.info('Subscribing to ' + subscription_topic)
+                    # self.vip.pubsub.subscribe(peer='pubsub',
+                                              # prefix=subscription_topic,
+                                                      # callback=self.on_receive_house_message_fncs)
                     
             # Initialize subscription function for aggregator
             subscription_topic = self.subscriptions['aggregator']
+            _log.info('Subscribing to ' + subscription_topic)
             self.vip.pubsub.subscribe(peer='pubsub',
                                       prefix=subscription_topic,
                                           callback=self.on_receive_aggregator_message)
                         
             # Initialize subscription function to fncs_bridge:
             for topic in self.subscriptions['fncs_bridge']:
-#                 _log.info('Subscribing to ' + topic)
+                _log.info('Subscribing to ' + topic)
                 self.vip.pubsub.subscribe(peer='pubsub',
                                           prefix=topic,
                                               callback=self.on_receive_fncs_bridge_message_fncs)
@@ -344,21 +352,41 @@ def controller_agent(config_path, **kwargs):
 #             _log.info("Whole message", topic, message)
 #             #The time stamp is in the headers
 #             _log.info('Date', headers['Date'])
-            # Find the object name who sends the message
-            device = topic.split("/")[-2]
-            # Find the property sent
-            topicProperty = topic.split("/")[-1]
-            # Update controller data for house
-            val =  message[0]
-            if "air_temperature" == topicProperty:
-                self.house[device]['currTemp'] = val
-#                 _log.info('Controller {0:s} recieves from house {2:s} the current temperature {1:f}.'.format(config['agentid'], val, device))
-            if "power_state" == topicProperty:
-                self.house[device]['powerstate'] = val
-#                 _log.info('Controller {0:s} recieves from house {2:s} the power state {1:s}.'.format(config['agentid'], val, device))
-            if "hvac_load" == topicProperty:
-                self.house[device]['controlled_load_all'] = val
-#                 _log.info('Controller {0:s} recieves from house {2:s} the hvac load amount {1:f}.'.format(config['agentid'], val, device))
+
+            # Recieve from GLD the property values of all configured objects, need to extract the house objects and the corresponding properties
+            # Extract the message
+            message = json.loads(message[0])
+            val =  message['fncs_Test']
+            for oneHouse in houses:
+                houseName = oneHouse.keys()
+                if len(houseName) != 1:
+                    raise ValueError('For each house, more than one house keys are given')
+                else:
+                    houseName = houseName[0]
+                # Assign to subscription topics
+                for subscription_property in self.subscriptions[houseName]:
+                    valTemp = val[houseName][subscription_property]
+                    if valTemp != self.house[houseName][subscription_property]:
+                        if subscription_property != 'power_state':
+                            valTemp = float(valTemp)
+                        self.house[houseName][subscription_property] = valTemp
+#                         _log.info('Controller {0:s} recieves from house {2:s} the property {1:s} value {3:s}.'.format(config['agentid'], subscription_property, houseName, str(valTemp)))
+                        
+            # # Find the object name who sends the message
+            # device = topic.split("/")[-2]
+            # # Find the property sent
+            # topicProperty = topic.split("/")[-1]
+            # # Update controller data for house
+            # val =  message[0]
+            # if "air_temperature" == topicProperty:
+                # self.house[device]['air_temperature'] = val
+# #                 _log.info('Controller {0:s} recieves from house {2:s} the current temperature {1:f}.'.format(config['agentid'], val, device))
+            # if "power_state" == topicProperty:
+                # self.house[device]['power_state'] = val
+# #                 _log.info('Controller {0:s} recieves from house {2:s} the power state {1:s}.'.format(config['agentid'], val, device))
+            # if "hvac_load" == topicProperty:
+                # self.house[device]['hvac_load'] = val
+# #                 _log.info('Controller {0:s} recieves from house {2:s} the hvac load amount {1:f}.'.format(config['agentid'], val, device))
             
         # ====================Obtain values from aggregator ===========================
         def on_receive_aggregator_message(self, peer, sender, bus, topic, headers, message):
@@ -435,11 +463,11 @@ def controller_agent(config_path, **kwargs):
                 direction = self.controller[houseName]['direction']
                 
                 # Inputs from house object:
-                demand = self.house[houseName]['controlled_load_all']
-                monitor = self.house[houseName]['currTemp']
-                powerstate = self.house[houseName]['powerstate']
+                demand = self.house[houseName]['hvac_load']
+                monitor = self.house[houseName]['air_temperature']
+                powerstate = self.house[houseName]['power_state']
         
-        #        print ("  sync:", demand, powerstate, monitor, last_setpoint, deadband, direction, clear_price, avgP, stdP)
+        #        print ("  sync:", demand, power_state, monitor, last_setpoint, deadband, direction, clear_price, avgP, stdP)
                 
                 # Check t1 to determine if the sync part is needed to be processed or not
                 if self.controller[houseName]['t1'] == self.controller[houseName]['next_run'] and marketId == lastmkt_id :
@@ -516,7 +544,8 @@ def controller_agent(config_path, **kwargs):
     #                     if self.controller[houseName]['next_run'] != self.startTime: # At starting time of the simulation, setpoints also need to be updated
 
                         # Publish the changed setpoints:
-                        pub_topic = 'fncs/input' + houseGroupId + '/controller_' + houseName + '/cooling_setpoint'
+                        pub_topic = 'fncs/input/' + houseName + '/cooling_setpoint'
+#                         pub_topic = 'fncs/input' + houseGroupId + '/controller_' + houseName + '/cooling_setpoint'
     #                         _log.info('controller agent {0} publishes updated setpoints {1} to house controlled with topic: {2}'.format(self.controller['name'], set_temp, pub_topic))
                         #Create timestamp
                         now = datetime.datetime.utcnow().isoformat(' ') + 'Z'
@@ -673,7 +702,7 @@ def controller_agent(config_path, **kwargs):
                     }
                     self.vip.pubsub.publish('pubsub', pub_topic, headers, all_message)
            
-        #            print('  (temp,state,load,avg,std,clear,cap,init)',self.house[houseName]['currTemp'],self.house[houseName]['powerstate'],self.house[houseName]['controlled_load_all'],self.market['average_price'],self.market['std_dev'],self.market['clear_price'],self.market['price_cap'],self.market['initial_price'])      
+        #            print('  (temp,state,load,avg,std,clear,cap,init)',self.house[houseName]['air_temperature'],self.house[houseName]['power_state'],self.house[houseName]['hvac_load'],self.market['average_price'],self.market['std_dev'],self.market['clear_price'],self.market['price_cap'],self.market['initial_price'])      
         #            print (timeSim, 'Bidding PQSrebid',self.controller_bid[houseName]['bid_price'],self.controller_bid[houseName]['bid_quantity'],self.controller_bid[houseName]['state'],self.controller_bid[houseName]['rebid'])
                     # Set controller_bid rebid value to true after publishing
                     self.controller_bid[houseName]['rebid'] = 1
