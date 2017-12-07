@@ -392,6 +392,17 @@ def aggregator_agent(config_path, **kwargs):
                 
             else:
                 warnings.warn('Coordinator market id {0} is not the same with the aggregator id {1}'.format(val['market_id'], self.market['market_id']))
+                
+                # Still receives the coordinator cleared information for continuation
+                self.coordinator['market_id'] = val['market_id']
+                
+                if val['no_bid'] == False:
+                    self.market['fixed_price'] = val['fixed_price']
+                else:
+                    self.market['fixed_price'] = self.market_output['mean']
+                                
+                # Mark "received" flag as true after receiving fromm coordinator
+                self.coordinator['received'] = True
         
         # ====================Obtain values from fncs_bridge ===========================
         def on_receive_fncs_bridge_message_fncs(self, peer, sender, bus, topic, headers, message):

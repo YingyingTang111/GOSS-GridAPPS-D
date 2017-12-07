@@ -177,7 +177,7 @@ def coordinator_agent(config_path, **kwargs):
             
             # Update the clear time 
             self.market['clearat'] = self.startTime + datetime.timedelta(0,self.market['period']) 
-#             self.market['clearat'] = self.startTime + datetime.timedelta(0,10) # For testing
+            # self.market['clearat'] = self.startTime + datetime.timedelta(0,10) # For testing
 
             # Initialize subscription function to GLD meter:
             # Subscription to houses in GridLAB-D needs to post-process JSON format messages of all GLD objects together
@@ -226,7 +226,11 @@ def coordinator_agent(config_path, **kwargs):
                     self.aggregator[aggregatorName]['quantity'] = val['quantity']
                     self.aggregator[aggregatorName]['name'] = val['name']
                 else:
-                    raise ValueError('The market id recieved from aggregator {0:d} is different from coordinator market id {1:d}'.format(val['market_id'], self.market['market_id']))
+                    warnings.warn('The market id recieved from aggregator %d is different from coordinator market id %d' % (val['market_id'], self.market['market_id']))
+                    # But still accept aggregator bids for continuation
+                    self.aggregator[aggregatorName]['price'] = val['price']
+                    self.aggregator[aggregatorName]['quantity'] = val['quantity']
+                    self.aggregator[aggregatorName]['name'] = val['name']
         
         # ====================Obtain values from GLD ===========================
         def on_receive_GLD_message_fncs(self, peer, sender, bus, topic, headers, message):
@@ -482,7 +486,7 @@ def coordinator_agent(config_path, **kwargs):
                 timeDiff = self.timeSim - self.startTime   
                 timeDiffSec = timeDiff.days * 24 * 60 * 60 + timeDiff.seconds
                 timeIndex = (timeDiffSec % (24 * 60 * 60) / 30) # index in total_feeder_load file
-                feederLoad = float(self.feederLoads[timeIndex][0]) * 0.9 # Scale to 0.9 times of the original total loads
+                feederLoad = float(self.feederLoads[timeIndex][0]) * 0.7 # Scale to 0.9 times of the original total loads
 #                 feederLoad = totalSubLds / 1000.0 * 0.9 # Scale the DSO to be 0.9 of the amount needed from real-time substation loads
                 
                 # Clear the market by using the fixed_price sent from coordinator ---------------------------------------------------------------
@@ -586,7 +590,7 @@ def coordinator_agent(config_path, **kwargs):
                         _log.info('At time {3}, coordinator agent {0} with market_id {3} publishes updated DER {1} output: {2}'.format(config['agentid'], DERname, DERoutputs[index], self.timeSim.strftime("%Y-%m-%d %H:%M:%S"), self.market['market_id']))
 
                 
-                # TODOS: remove hard coding of DG outputs
+                # Write to csv file the cleared information
                 with open(self.csvCleared, 'a') as f:
                     temp = [self.timeSim.strftime("%Y-%m-%d-%H:%M:%S"), str(self.market['market_id']), str(returnVal['solved']), str(clear_price['bus_18']), str(clear_price['bus_57']), str(cleared_quantity['bus_18'] * 1000.0), str(cleared_quantity['bus_57'] * 1000.0), str(DERoutputs[0] * 1000.0), str(DERoutputs[1] * 1000.0), str(DERoutputs[2] * 1000.0), str(DERoutputs[3] * 1000.0), str(DERoutputs[4] * 1000.0), str(socialWelfare), str(feederLoad * 1000), str(subsPexpected * 1000.0), (bus7_P + bus18_P + bus57_P) * 1000]
                     writer = csv.writer(f)

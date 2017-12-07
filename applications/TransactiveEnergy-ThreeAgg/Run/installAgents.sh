@@ -1,5 +1,5 @@
 #!/bin/bash
-# export VOLTTRON_HOME=$HOME/.volttron1
+# export VOLTTRON_HOME=$HOME/.volttron1 - # This is to run instakl the agents in other volttron platform volttron1
 export TAG1="controllerAgent"
 export CONFIGS1="../ControllerAgent/config/*.cfg"
 export SOURCE1="../ControllerAgent"
