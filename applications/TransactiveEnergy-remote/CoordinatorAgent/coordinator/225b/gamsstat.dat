@@ -1,0 +1,81 @@
+=C
+=CKNITRO           24.9.1 r63795 Released Aug 30, 2017 LEG x86 64bit/Linux      
+=C
+=0KNITRO           24.9.1 r63795 Released Aug 30, 2017 LEG x86 64bit/Linux      
+=1
+=2
+=1
+=C*** Error Cannot open parameter file "/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/knitro.opt"
+=C*** Error Error code = 2; No such file or directory
+=2
+=CArtelys Knitro Optimizer 10.3.0
+=9?
+?C
+?C=======================================
+?C          Commercial License
+?C         Artelys Knitro 10.3.0
+?C=======================================
+?C
+?CKnitro presolve eliminated 8 variables 
+?Cand 11 constraints.
+?C
+?Cdatacheck:               0
+?Chessian_no_f:            1
+?Cmaxtime_real:            60
+?Cnewpoint:                3
+?Cpar_concurrent_evals:    0
+?CKnitro changing algorithm from AUTO to 1.
+?CKnitro changing bar_initpt from AUTO to 3.
+?CKnitro changing bar_murule from AUTO to 4.
+?CKnitro changing bar_penaltycons from AUTO to 1.
+?CKnitro changing bar_penaltyrule from AUTO to 2.
+?CKnitro changing bar_switchrule from AUTO to 2.
+?CKnitro changing linesearch from AUTO to 1.
+?CKnitro changing linsolver from AUTO to 2.
+?CKnitro shifted start point to satisfy presolved bounds (10 variables).
+?CKnitro fixing 3 variables eliminated from the presolve.
+?CKnitro reinitializing 1 variable eliminated from the presolve.
+?C
+?CProblem Characteristics                    ( Presolved)
+?C-----------------------
+?CObjective goal:  Minimize
+?CNumber of variables:                          64 (        56)
+?C    bounded below only:                        4 (         4)
+?C    bounded above only:                        0 (         0)
+?C    bounded below and above:                  22 (        22)
+?C    fixed:                                     0 (         0)
+?C    free:                                     38 (        30)
+?CNumber of constraints:                        72 (        61)
+?C    linear equalities:                        32 (        24)
+?C    nonlinear equalities:                     20 (        20)
+?C    linear one-sided inequalities:             4 (         1)
+?C    nonlinear one-sided inequalities:         16 (        16)
+?C    linear two-sided inequalities:             0 (         0)
+?C    nonlinear two-sided inequalities:          0 (         0)
+?CNumber of nonzeros in Jacobian:              260 (       242)
+?CNumber of nonzeros in Hessian:                82 (        82)
+?C
+?C  Iter      Objective      FeasError   OptError    ||Step||    CGits 
+?C--------  --------------  ----------  ----------  ----------  -------
+?C       0    4.950046e+06   1.252e+00
+?C       9    2.004774e+01   1.083e-09   8.171e-09   3.310e-01        0
+?C
+?CEXIT: Locally optimal solution found.
+?C
+?CFinal Statistics
+?C----------------
+?CFinal objective value               =   2.00477414485067e+01
+?CFinal feasibility error (abs / rel) =   1.08e-09 / 8.65e-10
+?CFinal optimality error  (abs / rel) =   8.17e-09 / 8.17e-11
+?C# of iterations                     =          9 
+?C# of CG iterations                  =          0 
+?C# of function evaluations           =         11
+?C# of gradient evaluations           =         11
+?C# of Hessian evaluations            =          9
+?CTotal program time (secs)           =       0.00879 (     0.008 CPU time)
+?CTime spent in evaluations (secs)    =       0.00200
+?C
+?C===============================================================================
+?C
+?9=
+=CSolve finished: status = optimal

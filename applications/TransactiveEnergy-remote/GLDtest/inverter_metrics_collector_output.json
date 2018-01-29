@@ -1,0 +1,98 @@
+{
+   "10" : null,
+   "100" : null,
+   "110" : null,
+   "120" : null,
+   "130" : null,
+   "140" : null,
+   "150" : null,
+   "160" : null,
+   "170" : null,
+   "180" : null,
+   "190" : null,
+   "20" : null,
+   "200" : null,
+   "210" : null,
+   "220" : null,
+   "230" : null,
+   "240" : null,
+   "250" : null,
+   "260" : null,
+   "270" : null,
+   "280" : null,
+   "290" : null,
+   "30" : null,
+   "300" : null,
+   "310" : null,
+   "320" : null,
+   "330" : null,
+   "340" : null,
+   "350" : null,
+   "360" : null,
+   "370" : null,
+   "380" : null,
+   "390" : null,
+   "40" : null,
+   "400" : null,
+   "410" : null,
+   "420" : null,
+   "430" : null,
+   "440" : null,
+   "450" : null,
+   "460" : null,
+   "470" : null,
+   "480" : null,
+   "490" : null,
+   "50" : null,
+   "500" : null,
+   "510" : null,
+   "520" : null,
+   "530" : null,
+   "540" : null,
+   "550" : null,
+   "560" : null,
+   "570" : null,
+   "580" : null,
+   "590" : null,
+   "60" : null,
+   "600" : null,
+   "70" : null,
+   "80" : null,
+   "90" : null,
+   "Metadata" : {
+      "reactive_power_avg" : {
+         "index" : 6,
+         "units" : "VAR"
+      },
+      "reactive_power_max" : {
+         "index" : 5,
+         "units" : "VAR"
+      },
+      "reactive_power_median" : {
+         "index" : 7,
+         "units" : "VAR"
+      },
+      "reactive_power_min" : {
+         "index" : 4,
+         "units" : "VAR"
+      },
+      "real_power_avg" : {
+         "index" : 2,
+         "units" : "W"
+      },
+      "real_power_max" : {
+         "index" : 1,
+         "units" : "W"
+      },
+      "real_power_median" : {
+         "index" : 3,
+         "units" : "W"
+      },
+      "real_power_min" : {
+         "index" : 0,
+         "units" : "W"
+      }
+   },
+   "StartTime" : "2012-01-01 00:00:00 PST"
+}
+
