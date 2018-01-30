@@ -398,8 +398,10 @@ def coordinator_agent(config_path, **kwargs):
                         priceArray = priceArray_Agg[key]
                         quantityArray = quantityArray_Agg[key]
                         # Do cumsum
-                        UtilityArray[key] = np.cumsum(np.multiply(priceArray, quantityArray))
-                        sumQuantityArray[key] = np.cumsum(quantityArray)
+                        UtilityArray[key] = [0.0]
+                        sumQuantityArray[key] = [0.0]
+                        UtilityArray[key].extend(np.cumsum(np.multiply(priceArray, quantityArray)))
+                        sumQuantityArray[key].extend(np.cumsum(quantityArray))
                         # curve fit
                         resp_fit = np.polyfit(sumQuantityArray[key], UtilityArray[key], 2)
                         curveFit_a.append(resp_fit[0])
@@ -472,6 +474,7 @@ def coordinator_agent(config_path, **kwargs):
                     if length_bids[key] > 0 and returnVal['solved'] == True:
                         # When there are bids from aggregator (there are controllable loads)
                         clear_price[key] = priceArray_Agg[key][-1]
+                        sumQuantityArray[key] = sumQuantityArray[key][1:] # remove the first 0
                         for j in range(len(sumQuantityArray[key])):
                             if cleared_quantity[key] <= sumQuantityArray[key][j]:
                                 clear_price[key] = priceArray_Agg[key][j]
