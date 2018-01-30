@@ -1,8 +1,0 @@
-i='case_118_switched_shunt.csv'
-o='in.gdx'
-dset=switchedShuntIndex rdim=1 cdim=0 rng=a2
-dset=switchedShuntName rdim=1 cdim=0 rng=b2
-dset=switchedShuntId rdim=1 cdim=0 rng=c2
-dset=switchedShuntBusNo rdim=1 cdim=0 rng=d2
-dset=switchedShuntHeaderEntries rdim=0 cdim=1 rng=e1
-par=switchedShuntInfo rdim=4 cdim=1 rng=a1

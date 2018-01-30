@@ -1,1 +1,0 @@
-gmsgenus.run /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/225a/ /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/ $1 /home/yingying/git/volttron/TransactiveEnergy/CoordinatorAgent/coordinator/225a/gamscntr.dat /opt/gams/gams24.9_linux_x64_64_sfx/ KNITRO
