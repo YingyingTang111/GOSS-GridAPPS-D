@@ -1,0 +1,18 @@
+stops at 12000000000 nanoseconds
+stops at 12000 in sim time
+time_granted is 500
+time_granted is 1500
+time_granted is 2500
+time_granted is 3500
+time_granted is 4500
+time_granted is 5500
+time_granted is 6500
+time_granted is 7500
+time_granted is 8500
+time_granted is 9500
+time_granted is 10500
+time_granted is 11500
+time_granted is 12000
+time_granted was 12000
+time_stop was 12000
+done
