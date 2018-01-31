@@ -4,66 +4,37 @@ import os
 import shutil
 import numpy as np
 
-def write_FNCS_VOLTTRON_Bridge_Config(id, houses):
-    
-    print("Start writing FNCS_VOLTTRON_Bridge%d.config based on fncs_configure.cfg" % (id))
-    
-    # Start writing config file
-    config = {}
-    fncs_zpl = {}
-    values = {}
-    remote_platform_params = {}
-    config['simulation_run_time'] = '24h'
-    config['heartbeat_period'] = 1
-    config['heartbeat_multiplier'] = 1 # 60
-    # Start defining fncs_zpl based on glm config file
-    fncs_zpl['name'] = 'FNCS_Volttron_Bridge' + str(id)
-    fncs_zpl['time_delta'] = '1s' # 60s
-    fncs_zpl['broker'] = 'tcp://localhost:5570'
-    
-    # Obtain the house names this FNCS_Volttron_Bridge will work with
-    
-    values = {}
-    propertyList = ['air_temperature', 'power_state', 'hvac_load']
-    index = 1
-    for house in houses:
-        houseNames = house.keys()
-        if (len(houseNames) != 1):
-            raise ValueError('The house key is more than 1')
-        else:
-            houseName = houseNames[0]
-        for property in propertyList:
-            topic = houseName + '/' + property
-            dict = {}
-            dict['topic'] = 'fncs_Test/' + topic
-            dict['default'] = '0'
-            dict['type'] = 'double'
-            dict['list'] = 'fasle'
-            values[str(index)] = dict
-            index += 1
-      
-    fncs_zpl['values'] = values
-    config['fncs_zpl'] = fncs_zpl
-    
-    # write remote_platform_params
-    remote_platform_params['vip_address'] = 'tcp://127.0.0.1'
-    remote_platform_params['port'] = 22916
-    remote_platform_params['agent_public'] = 'cDc4_Lli13dt-__ju-vpgAeOEbbRPaOVzQoeQ5KHjUk'
-    remote_platform_params['agent_secret'] = 'k19_VwSSfbFUzm4Op3DGBlOH6Vd7rMJWy4iQo_t-wuw'
-    remote_platform_params['server_key'] = 'XDMM3_KrXqSaaPXEM3vL7rumk4nd-A30dcksjfFWNyM'
-    config['remote_platform_params'] = remote_platform_params
-    
-    # Write the dictionary into JSON file
-    filenameFNCS = '../FncsVolttronBridge/FNCS_VOLTTRON_Bridge' + str(id) + '.config'
-    with open(filenameFNCS, 'w') as outfile:
-        json.dump(config, outfile)
-    
-    print("Finish writing FNCS_VOLTTRON_Bridge%d.config based on fncs_configure.cfg" % (id))
-           
-    return
+print("Start writing config based on fncs_configure.txt")
 
+##
+print("Firstly get setpoint of each house written in IEEE_123_mod.glm")
+glm_filename = "IEEE_123_mod.glm"
+houseSetpointDict = {}
+ip = open (glm_filename, "r")
+controlledHouse = ""
+inHouse = False
+endedHouse = False
+for line in ip:
+    lst = line.split()
+    if len(lst) > 1:
+        if lst[1] == "house":
+            inHouse = True
+        if inHouse == True and lst[0] == "object" and lst[1] != "house":
+            endedHouse = True
+        if inHouse == True and lst[0] == "name" and endedHouse == False:
+            houseName = lst[1].strip(";")
+        if inHouse == True and lst[0] == "cooling_setpoint" and endedHouse == False:
+            setpoint = float(lst[1].strip(";"))
+            houseSetpointDict[houseName] = setpoint
+    elif len(lst) == 1:
+        if inHouse == True:
+            inHouse = False
+            endedHouse = False
 
-print("Start writing config based on fncs_configure.cfg")
+ip.close()
+
+##
+print("Then, write config based on fncs_configure.txt")
 
 filename_conf = 'fncs_configure.txt'
 folderName = "../ControllerAgent/config"
@@ -82,14 +53,14 @@ fncs_zpl['fncs_bridge_termination_topic'] = fncs_zpl['name']+'/simulation_end'
 # controller data:
 periodController = 60 * 5
 control_mode = "CN_DOUBLE_PRICE" #"CN_RAMP"
-min_ramp_high = 1.5
-max_ramp_high = 2.5
-min_range_high = 1.5
-max_range_high = 2.5
+min_ramp_high = 1.0 #1.5
+max_ramp_high = 3.0 #2.5
+min_range_high = 4.0 #1.5
+max_range_high = 8.0 #2.5
 # used with np.random.uniform below
-min_ramp_low = 1.5
-max_ramp_low = 2.5
-min_range_low = -3.0
+min_ramp_low = 1.0 #1.5
+max_ramp_low = 3.0 #2.5
+min_range_low = -6.0 #-3.0
 max_range_low = -2.0
 min_base_setpoint = 76.0
 max_base_setpoint = 80.0
@@ -139,7 +110,7 @@ for line in ip:
             
             if (aggregatorNamePrev != 'default' and aggregatorNamePrev != aggregatorName):
                 isNewAgg = True
-                print('At group %d, new type of aggregator encountered', groupController)
+                print('At group ', groupController, ', new type of aggregator encountered')
                  
             elif (aggregatorNamePrev == 'default'):
                 aggregatorNamePrev = aggregatorName 
@@ -187,7 +158,8 @@ for line in ip:
                 range_low = np.random.uniform (min_range_low, max_range_low)
                 ramp_high = np.random.uniform (min_ramp_high, max_ramp_high)
                 range_high = np.random.uniform (min_range_high, max_range_high)
-                base_setpoint = np.random.uniform (min_base_setpoint, max_base_setpoint)
+                # Obtain house setpoint from glm file 
+                base_setpoint = houseSetpointDict[houseName] #np.random.uniform (min_base_setpoint, max_base_setpoint)
                 ctrl_cap = np.random.uniform (min_ctrl_cap, max_ctrl_cap)
                 initialVal['controller_information'] = {'control_mode': control_mode, 'aggregatorName': aggregatorName, 'houseName': controlledHouse, 'bid_id': controllerName, 'period': periodController, \
                            'ramp_low': ramp_low, 'ramp_high': ramp_high, 'range_low': range_low, 'range_high': range_high, 'base_setpoint': base_setpoint, \
@@ -289,7 +261,7 @@ for line in ip:
                         allHouseDict[groupController].append(name_temp)
                 
                 # Write the controller configAgg information into one config file when reaching the group numbers defined:
-                print('At aggregated group %d, config files of all %d houses controlled are written', groupController, countHouse)
+                print('At aggregated group ', groupController, ', config files of all ', countHouse, ' houses controlled are written')
                 filename = folderName + "/controller_" + str(groupController) + "_config.cfg"
                 op_controller = open(filename, "w")
                 json.dump(configAgg, op_controller)
@@ -336,7 +308,7 @@ for line in ip:
                 range_low = np.random.uniform (min_range_low, max_range_low)
                 ramp_high = np.random.uniform (min_ramp_high, max_ramp_high)
                 range_high = np.random.uniform (min_range_high, max_range_high)
-                base_setpoint = np.random.uniform (min_base_setpoint, max_base_setpoint)
+                base_setpoint = houseSetpointDict[houseName] #np.random.uniform (min_base_setpoint, max_base_setpoint)
                 ctrl_cap = np.random.uniform (min_ctrl_cap, max_ctrl_cap)
                 initialVal['controller_information'] = {'control_mode': control_mode, 'aggregatorName': aggregatorName, 'houseName': controlledHouse, 'bid_id': controllerName, 'period': periodController, \
                            'ramp_low': ramp_low, 'ramp_high': ramp_high, 'range_low': range_low, 'range_high': range_high, 'base_setpoint': base_setpoint, \
@@ -392,7 +364,7 @@ for house in houses:
         allHouseDict[groupController].append(name_temp)
 
 # Write the controller configAgg information into one config file when reaching the group numbers defined:
-print('At aggregated group %d, config files of all %d houses controlled are written', groupController, countHouse)
+print('At aggregated group ',groupController,' config files of all ',countHouse, ' houses controlled are written')
 filename = folderName + "/controller_" + str(groupController) + "_config.cfg"
 op_controller = open(filename, "w")
 json.dump(configAgg, op_controller)
