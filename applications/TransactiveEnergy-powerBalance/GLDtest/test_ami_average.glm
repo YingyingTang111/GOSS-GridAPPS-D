@@ -1,0 +1,126 @@
+// Tests "average reporting" for AMI systems
+
+clock {
+     timezone PST+8PDT;
+     starttime '2012-01-01 00:00:00';
+     stoptime '2012-01-01 00:10:00';
+}
+
+#set profiler=1
+#set double_format=%+.12lg
+#set pauseatexit=1
+#set minimum_timestep=1
+
+module connection {
+    security STANDARD;
+	lockout 1 min;
+};
+
+module tape;
+module powerflow {
+	solver_method FBS;
+	maximum_voltage_error 1e-9;
+}
+
+object fncs_msg {
+    parent ROOT;
+    name fncs_Test;
+    configure test.cfg;
+    option "transport:hostname localhost, port 5570";
+};
+
+object metrics_collector_writer {
+	interval 10;
+	filename metrics_collector_output.json;
+};
+
+object triplex_line_conductor {
+	name tplex_line_cond;
+	resistance 0.97;
+	geometric_mean_radius 0.0111;
+}
+
+object triplex_line_conductor {
+	name tplex_line_cond1;
+	resistance 0.97;
+	geometric_mean_radius 0.0111;
+}
+
+object triplex_line_conductor {
+	name tplex_line_cond2;
+	resistance 0.97;
+	geometric_mean_radius 0.0111;
+}
+
+object triplex_line_configuration {
+	name triplex_line_configuration_1;
+	conductor_1 tplex_line_cond;
+	conductor_2 tplex_line_cond;
+	conductor_N tplex_line_cond;
+	insulation_thickness 0.08;
+	diameter 0.368;
+}
+
+object triplex_meter {
+	bustype SWING;
+	name ROOT;
+	phases BS;
+	nominal_voltage 120.0;
+}
+
+object triplex_line {
+	name IMALINE;
+	phases BS;
+	from ROOT;
+	to NOTROOT;
+	configuration triplex_line_configuration_1;
+	length 50.0 ft;
+}
+
+object triplex_line {
+	name IMALINE2;
+	phases BS;
+	from ROOT;
+	to NOTROOT2;
+	configuration triplex_line_configuration_1;
+	length 50.0 ft;
+}
+
+object triplex_meter {
+	name NOTROOT2;
+	phases BS;
+	nominal_voltage 120.0;
+	power_12 2500.0-120.0j;
+	object recorder {
+		 property "voltage_1,voltage_2,voltage_12,measured_power";
+		 interval 300;
+		 file triplexload_voltage_output1.csv;
+	};
+	object metrics_collector {
+		interval 10;
+	};
+	object player {
+		property power_12;
+		file "power_values.player";
+	};
+}
+
+object triplex_meter {
+	name NOTROOT;
+	phases BS;
+	nominal_voltage 120.0;
+	power_12 2500.0-120.0j;
+	object recorder {
+		 property "voltage_1,voltage_2,voltage_12,measured_power";
+		 interval 300;
+		 file triplexload_voltage_output2.csv;
+	};
+	object metrics_collector {
+		interval 10;
+	};
+	object player {
+		property power_12;
+		file "power_values.player";
+	};
+}
+

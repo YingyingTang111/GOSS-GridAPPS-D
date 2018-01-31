@@ -1,0 +1,138 @@
+{
+   "10" : null,
+   "100" : null,
+   "110" : null,
+   "120" : null,
+   "130" : null,
+   "140" : null,
+   "150" : null,
+   "160" : null,
+   "170" : null,
+   "180" : null,
+   "190" : null,
+   "20" : null,
+   "200" : null,
+   "210" : null,
+   "220" : null,
+   "230" : null,
+   "240" : null,
+   "250" : null,
+   "260" : null,
+   "270" : null,
+   "280" : null,
+   "290" : null,
+   "30" : null,
+   "300" : null,
+   "310" : null,
+   "320" : null,
+   "330" : null,
+   "340" : null,
+   "350" : null,
+   "360" : null,
+   "370" : null,
+   "380" : null,
+   "390" : null,
+   "40" : null,
+   "400" : null,
+   "410" : null,
+   "420" : null,
+   "430" : null,
+   "440" : null,
+   "450" : null,
+   "460" : null,
+   "470" : null,
+   "480" : null,
+   "490" : null,
+   "50" : null,
+   "500" : null,
+   "510" : null,
+   "520" : null,
+   "530" : null,
+   "540" : null,
+   "550" : null,
+   "560" : null,
+   "570" : null,
+   "580" : null,
+   "590" : null,
+   "60" : null,
+   "600" : null,
+   "70" : null,
+   "80" : null,
+   "90" : null,
+   "Metadata" : {
+      "air_temperature_avg" : {
+         "index" : 10,
+         "units" : "degF"
+      },
+      "air_temperature_deviation_cooling" : {
+         "index" : 12,
+         "units" : "degF"
+      },
+      "air_temperature_deviation_heating" : {
+         "index" : 13,
+         "units" : "degF"
+      },
+      "air_temperature_max" : {
+         "index" : 9,
+         "units" : "degF"
+      },
+      "air_temperature_median" : {
+         "index" : 11,
+         "units" : "degF"
+      },
+      "air_temperature_min" : {
+         "index" : 8,
+         "units" : "degF"
+      },
+      "hvac_load_avg" : {
+         "index" : 6,
+         "units" : "kW"
+      },
+      "hvac_load_max" : {
+         "index" : 5,
+         "units" : "kW"
+      },
+      "hvac_load_median" : {
+         "index" : 7,
+         "units" : "kW"
+      },
+      "hvac_load_min" : {
+         "index" : 4,
+         "units" : "kW"
+      },
+      "total_load_avg" : {
+         "index" : 2,
+         "units" : "kW"
+      },
+      "total_load_max" : {
+         "index" : 1,
+         "units" : "kW"
+      },
+      "total_load_median" : {
+         "index" : 3,
+         "units" : "kW"
+      },
+      "total_load_min" : {
+         "index" : 0,
+         "units" : "kW"
+      },
+      "waterheater_load_avg" : {
+         "index" : 16,
+         "units" : "kW"
+      },
+      "waterheater_load_max" : {
+         "index" : 15,
+         "units" : "kW"
+      },
+      "waterheater_load_median" : {
+         "index" : 17,
+         "units" : "kW"
+      },
+      "waterheater_load_min" : {
+         "index" : 14,
+         "units" : "kW"
+      }
+   },
+   "StartTime" : "2012-01-01 00:00:00 PST"
+}
+
