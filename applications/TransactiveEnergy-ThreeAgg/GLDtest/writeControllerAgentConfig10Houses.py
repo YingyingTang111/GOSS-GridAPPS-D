@@ -93,7 +93,7 @@ min_range_low = -3.0
 max_range_low = -2.0
 min_base_setpoint = 76.0
 max_base_setpoint = 80.0
-bid_delay = 30 # 15
+bid_delay = 10 # 15
 use_predictive_bidding = 0
 use_override = "OFF"
 

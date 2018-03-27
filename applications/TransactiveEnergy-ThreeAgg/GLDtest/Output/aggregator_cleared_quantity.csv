@@ -1,8 +1,8 @@
 # file...... Output/aggregator_cleared_quantity.csv
-# date...... Thu Dec  7 09:03:37 2017
+# date...... Mon Mar 26 16:02:46 2018
 # user...... yingying
 # host...... (null)
-# target.... dummy_class 4
+# target.... dummy_class 3
 # trigger... (none)
 # interval.. 300
 # limit..... 0
@@ -29,3 +29,6 @@
 2010-08-16 01:35:00 UTC,+0,+0,+0
 2010-08-16 01:40:00 UTC,+0,+0,+0
 2010-08-16 01:45:00 UTC,+0,+0,+0
+2010-08-16 01:50:00 UTC,+0,+0,+0
+2010-08-16 01:55:00 UTC,+0,+0,+0
+2010-08-16 02:00:00 UTC,+0,+0,+0

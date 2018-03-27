@@ -1,75 +1,15 @@
-warning: Debugger speedups using cython not found. Run '"/home/yingying/git/volttron/env/bin/python" "/opt/eclipse/plugins/org.python.pydev_5.7.0.201704111357/pysrc/setup_cython.py" build_ext --inplace' to build.
-pydev debugger: starting (pid: 29278)
-2017-12-06 23:44:03,599 volttron.platform.agent.utils DEBUG: missing file /home/yingying/.volttron/keystores/2495960c-ec83-4010-97b7-ef9da0bfd744/keystore.json
-2017-12-06 23:44:03,600 volttron.platform.agent.utils INFO: creating file /home/yingying/.volttron/keystores/2495960c-ec83-4010-97b7-ef9da0bfd744/keystore.json
-2017-12-06 23:44:03,602 volttron.platform.vip.agent.core DEBUG: address: ipc://@/home/yingying/.volttron/run/vip.socket
-2017-12-06 23:44:03,602 volttron.platform.vip.agent.core DEBUG: identity: None
-2017-12-06 23:44:03,602 volttron.platform.vip.agent.core DEBUG: agent_uuid: None
-2017-12-06 23:44:03,603 volttron.platform.vip.agent.core DEBUG: serverkey: None
-2017-12-06 23:44:03,605 __main__ INFO: Simulation starts from: 2017-12-06 23:44:03.605518 in coordinator agent Coordinator1.
-2017-12-06 23:44:03,670 volttron.platform.vip.agent.core INFO: Connected to platform: router: eee85d47-3f38-4292-bb96-2a20c3d74105 version: 1.0 identity: 2495960c-ec83-4010-97b7-ef9da0bfd744
-2017-12-06 23:44:03,670 volttron.platform.vip.agent.core DEBUG: Running onstart methods.
-2017-12-06 23:44:03,672 __main__ INFO: Subscribing to fncs/output/devices/fncs_Test/fncs_output
-2017-12-06 23:44:03,673 __main__ INFO: Subscribing to aggregator/Aggregator_2/biddings/all
-2017-12-06 23:44:03,673 __main__ INFO: Subscribing to aggregator/Aggregator_3/biddings/all
-2017-12-06 23:44:03,673 __main__ INFO: Subscribing to aggregator/Aggregator_1/biddings/all
-2017-12-06 23:44:03,674 __main__ INFO: Subscribing to FNCS_Volttron_Bridge/simulation_end
-2017-12-06 23:44:04,471 volttron.platform.vip.agent.subsystems.configstore DEBUG: Processing callbacks for affected files: {}
-('RPC ERROR', 'Traceback (most recent call last):\n  File "/home/yingying/git/volttron/volttron/platform/vip/agent/subsystems/rpc.py", line 169, in method\n    return method(*args, **kwargs)\n  File "/home/yingying/git/volttron/volttron/platform/vip/agent/subsystems/pubsub.py", line 266, in _peer_push\n    callback(peer, sender, bus, topic, headers, message)\n  File "/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/coordinatorAgent.py", line 229, in on_receive_aggregator_message\n    raise ValueError(\'The market id recieved from aggregator {0:d} is different from coordinator market id {1:d}\'.format(val[\'market_id\'], self.market[\'market_id\']))\nValueError: The market id recieved from aggregator 11 is different from coordinator market id 0\n')
-2017-12-06 23:44:13,488 volttron.platform.vip.agent.subsystems.rpc ERROR: unhandled exception in JSON-RPC method 'pubsub.push': 
-Traceback (most recent call last):
-  File "/home/yingying/git/volttron/volttron/platform/vip/agent/subsystems/rpc.py", line 169, in method
-    return method(*args, **kwargs)
-  File "/home/yingying/git/volttron/volttron/platform/vip/agent/subsystems/pubsub.py", line 266, in _peer_push
-    callback(peer, sender, bus, topic, headers, message)
-  File "/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/CoordinatorAgent/coordinator/coordinatorAgent.py", line 229, in on_receive_aggregator_message
-    raise ValueError('The market id recieved from aggregator {0:d} is different from coordinator market id {1:d}'.format(val['market_id'], self.market['market_id']))
-ValueError: The market id recieved from aggregator 11 is different from coordinator market id 0
-
-Failed to enable GUI event loop integration for 'tk'
-Traceback (most recent call last):
-  File "/opt/eclipse/plugins/org.python.pydev_5.7.0.201704111357/pysrc/pydev_ipython/matplotlibtools.py", line 30, in do_enable_gui
-    enable_gui(guiname)
-  File "/opt/eclipse/plugins/org.python.pydev_5.7.0.201704111357/pysrc/pydev_ipython/inputhook.py", line 528, in enable_gui
-    return gui_hook(app)
-  File "/opt/eclipse/plugins/org.python.pydev_5.7.0.201704111357/pysrc/pydev_ipython/inputhook.py", line 278, in enable_tk
-    app = _TK.Tk()
-  File "/home/yingying/anaconda/lib/python2.7/lib-tk/Tkinter.py", line 1820, in __init__
-    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
-TclError: Can't find a usable init.tcl in the following directories: 
-    /opt/anaconda1anaconda2anaconda3/lib/tcl8.5 /home/yingying/git/volttron/env/lib/tcl8.5 /home/yingying/git/volttron/lib/tcl8.5 /home/yingying/git/volttron/env/library /home/yingying/git/volttron/library /home/yingying/git/volttron/tcl8.5.18/library /home/yingying/git/tcl8.5.18/library
-
-
-
-This probably means that Tcl wasn't installed properly.
-
-Backend TkAgg is interactive backend. Turning interactive mode on.
-2017-12-06 23:44:46,318 __main__ INFO: At time 2017-12-06 23:44:13, coordinator agent Coordinator1 start computing ACOPF, with measured substation 1.00184001857 MW, total DER outputs 0.160000114223 MW, and controllable loads 0 MW
-num_time_steps: 1
-shuntSwitchingPenalty: 0.001000
-load_bus_voltage_goal: 1.000000
-solar_curtailment_off: 1
-demand_response_off: 0
-solar_q_off: 0
-shunt_switching_off: 1
-load_bus_volt_pen_coeff_1: 1.000000
-load_bus_volt_pen_coeff_2: 0.000000
-load_bus_volt_dead_band: 0.010000
-Control generator voltages: 1.000000
-Control load voltages: 1.000000
-previous_solution_as_start_point: 0
-file_number: 1
-start_row_number: 2
-[7, 18, 57, 0.287071850802, 0.332736401299, 0.50296223832, 0.287071850802, 0.332736401299, 0.50296223832, 0.287071850802, 0.332736401299, 0.50296223832]
-[7, 18, 57, 0.0919941521397, 0.0842204438716, 0.128676353803, 0.0919941521397, 0.0842204438716, 0.128676353803, 0.0919941521397, 0.0842204438716, 0.128676353803]
-[18, 18, 18, 18, 18, 57, 57, 57, 57, 57, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-[18, 18, 18, 18, 18, 57, 57, 57, 57, 57, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-1.3620953583
-end of printing inputs
-ACOPF is solved
-mstat: 2.0
-Opt time: 0
-Step: 1
-0.211063964611
-0.0
-[0.0, 0.0, 0.0, 0.070354654870352487, 0.07035465487031918, 0.070354654870389, 0.070354654870389, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+2018-03-05 09:54:17,490 volttron.platform.agent.utils DEBUG: missing file /home/yingying/.volttron/keystores/62453b4d-db82-4f13-a3e2-73ddfa3d9767/keystore.json
+2018-03-05 09:54:17,491 volttron.platform.agent.utils INFO: creating file /home/yingying/.volttron/keystores/62453b4d-db82-4f13-a3e2-73ddfa3d9767/keystore.json
+2018-03-05 09:54:17,493 volttron.platform.vip.agent.core DEBUG: address: ipc://@/home/yingying/.volttron/run/vip.socket
+2018-03-05 09:54:17,493 volttron.platform.vip.agent.core DEBUG: identity: None
+2018-03-05 09:54:17,493 volttron.platform.vip.agent.core DEBUG: agent_uuid: None
+2018-03-05 09:54:17,493 volttron.platform.vip.agent.core DEBUG: serverkey: None
+2018-03-05 09:54:17,495 __main__ INFO: Simulation starts from: 2018-03-05 09:54:17.495480 in coordinator agent Coordinator1.
+2018-03-05 09:54:17,523 volttron.platform.vip.agent.core INFO: Connected to platform: router: 1f2e53a6-2b5b-432a-8f2c-1f5a940884ad version: 1.0 identity: 62453b4d-db82-4f13-a3e2-73ddfa3d9767
+2018-03-05 09:54:17,523 volttron.platform.vip.agent.core DEBUG: Running onstart methods.
+2018-03-05 09:54:17,524 __main__ INFO: Subscribing to fncs/output/devices/fncs_Test/fncs_output
+2018-03-05 09:54:17,524 __main__ INFO: Subscribing to aggregator/Aggregator_2/biddings/all
+2018-03-05 09:54:17,525 __main__ INFO: Subscribing to aggregator/Aggregator_3/biddings/all
+2018-03-05 09:54:17,525 __main__ INFO: Subscribing to aggregator/Aggregator_1/biddings/all
+2018-03-05 09:54:17,525 __main__ INFO: Subscribing to FNCS_Volttron_Bridge/simulation_end
+2018-03-05 09:54:17,584 volttron.platform.vip.agent.subsystems.configstore DEBUG: Processing callbacks for affected files: {}

@@ -45,8 +45,9 @@ def coordinator_agent(config_path, **kwargs):
             _log.info('Simulation starts from: {0} in coordinator agent {1}.'.format(str(self.startTime), config['agentid']))
         
             # Initialize the variables
-            self.market = {'name': 'none',' period': -1, 'latency': 0, 'market_id': 1, 'lastmkt_id': 1, 'period': 0, 'clearat': 0}  
+            self.market = {'name': 'none',' period': -1, 'latency': 0, 'market_id': 1, 'lastmkt_id': 1, 'period': 0, 'clearat': 0, 'bidmode': 'normal'}  
             self.aggregator = {}
+            self.aggregator_real = {}
             self.aggregator_reactive = {}
             self.meters = {}
             self.meters_reactive = {}
@@ -63,6 +64,7 @@ def coordinator_agent(config_path, **kwargs):
             self.market['period'] = agentInitialVal['market_information']['period']
             self.market['market_id'] = agentInitialVal['market_information']['market_id']
             self.market['lastmkt_id'] = self.market['market_id']
+            self.market['bidmode'] = self.market['bidmode']
             # Aggregator information
             self.aggregator_info = agentInitialVal['aggregator_information']
             # DER index in ACOPF solution
@@ -75,6 +77,12 @@ def coordinator_agent(config_path, **kwargs):
             with open(mypath + fileName, 'rb') as f:
                 reader = csv.reader(f)
                 self.feederLoads = list(reader)
+            
+            # Read in csv file storing unresponsive load information
+            fileName = 'unresponsive.csv'
+            with open(mypath + fileName, 'rb') as f:
+                reader = csv.reader(f)
+                self.unres = list(reader)
             
             # Aggregator information
             aggregators = agentSubscription['aggregators']
@@ -92,7 +100,15 @@ def coordinator_agent(config_path, **kwargs):
                     self.aggregator_reactive[key1] = 0.0
                     for key2, value2 in value1.items():
                         self.subscriptions['aggregators_kVAR'][key1] = key2 # give the meter and property name to be subscribed
-
+            
+            aggregators = agentSubscription['aggregator_kW']
+            self.subscriptions['aggregators_kW'] = {}
+            for key, values in aggregators[0].items():
+#                 self.aggregator_reactive[aggreName] = {}
+                for key1, value1 in values.items():
+                    self.aggregator_real[key1] = 0.0
+                    for key2, value2 in value1.items():
+                        self.subscriptions['aggregators_kW'][key1] = key2 # give the meter and property name to be subscribed
 
             # Metered loads information
             meters = agentSubscription['metered_loads']
@@ -177,7 +193,7 @@ def coordinator_agent(config_path, **kwargs):
             
             # Update the clear time 
             self.market['clearat'] = self.startTime + datetime.timedelta(0,self.market['period']) 
-            # self.market['clearat'] = self.startTime + datetime.timedelta(0,10) # For testing
+#             self.market['clearat'] = self.startTime + datetime.timedelta(0,10) # For testing
 
             # Initialize subscription function to GLD meter:
             # Subscription to houses in GridLAB-D needs to post-process JSON format messages of all GLD objects together
@@ -225,12 +241,16 @@ def coordinator_agent(config_path, **kwargs):
                     self.aggregator[aggregatorName]['price'] = val['price']
                     self.aggregator[aggregatorName]['quantity'] = val['quantity']
                     self.aggregator[aggregatorName]['name'] = val['name']
+                    self.aggregator[aggregatorName]['Q_min'] = val['Q_min']
+                    self.aggregator[aggregatorName]['Q_max'] = val['Q_max']
                 else:
                     warnings.warn('The market id recieved from aggregator %d is different from coordinator market id %d' % (val['market_id'], self.market['market_id']))
                     # But still accept aggregator bids for continuation
                     self.aggregator[aggregatorName]['price'] = val['price']
                     self.aggregator[aggregatorName]['quantity'] = val['quantity']
                     self.aggregator[aggregatorName]['name'] = val['name']
+                    self.aggregator[aggregatorName]['Q_min'] = val['Q_min']
+                    self.aggregator[aggregatorName]['Q_max'] = val['Q_max']
         
         # ====================Obtain values from GLD ===========================
         def on_receive_GLD_message_fncs(self, peer, sender, bus, topic, headers, message):
@@ -265,6 +285,13 @@ def coordinator_agent(config_path, **kwargs):
                 valTemp = float(valFNCS[key][val])/1000 # Convert unit to kVAR
                 if valTemp != self.subscriptions['aggregators_kVAR'][key]:
                     self.aggregator_reactive[key] = valTemp
+                              
+            # aggregated real power
+            for key, val in self.subscriptions['aggregators_kW'].items():
+                valTemp = float(valFNCS[key][val])/1000 # Convert unit to kVAR
+                if valTemp != self.subscriptions['aggregators_kW'][key]:
+                    self.aggregator_real[key] = valTemp
+        
         
         # ====================Obtain utility price setpoint based on given quantity setpoint===========================
         def obtainUtility(self, val, ind, sumQuantityArray, UtilityArray):
@@ -283,7 +310,7 @@ def coordinator_agent(config_path, **kwargs):
             return utilityPrice
         
         # ====================OBtain sorted price and quantity array from combined aggregator bids========================
-        def sortBids(self, priceArray_Agg, quantityArray_Agg):
+        def sortBids(self, priceArray_Agg, quantityArray_Agg, QMinArray_Agg, QMaxArray_Agg):
             
             # Test sort
 #             priceArray_Agg = [6,5,4,3,9,8,4,2]
@@ -291,9 +318,13 @@ def coordinator_agent(config_path, **kwargs):
             index = sorted(range(len(priceArray_Agg)), key=lambda k: priceArray_Agg[k], reverse=True)
             priceArray_Agg = [priceArray_Agg[i] for i in index] 
             array_quantity = [quantityArray_Agg[i] for i in index] 
+            qminarray_quantity = [QMinArray_Agg[i] for i in index] 
+            qmaxarray_quantity = [QMaxArray_Agg[i] for i in index] 
             returnArray = []
             returnArray.append(priceArray_Agg)
-            returnArray.append(array_quantity)        
+            returnArray.append(array_quantity)   
+            returnArray.append(qminarray_quantity)
+            returnArray.append(qmaxarray_quantity)     
             
             return returnArray
         
@@ -322,18 +353,26 @@ def coordinator_agent(config_path, **kwargs):
                 ## Process the aggregator data - buyer curve ------------------------------------------------------------------------------                
                 uncontrolLds = {}
                 priceArray = {}
+                qminArray = {}
+                qmaxArray = {}
                 quantityArray = {}
                 for key, value in self.aggregator.items(): # Currrently assume only one aggregator, or it will not work properly
                     uncontrolLds[key] = 0
                     priceArray[key] = []
                     quantityArray[key] = []
+                    qminArray[key] = []
+                    qmaxArray[key] = []
                     for i in range(len(value['price'])):
                         if value['price'][i] == self.market['pricecap']:
                             uncontrolLds[key] += value['quantity'][i]
                         else:
                             priceArray[key].append(value['price'][i])
                             quantityArray[key].append(value['quantity'][i])
+                            qminArray[key].append(value['Q_min'][i])
+                            qmaxArray[key].append(value['Q_max'][i])
                     quantityArray[key] = [x/1000.0 for x in quantityArray[key]] # unit should be MW in ACOPF 
+                    qminArray[key] = [x/1000.0 for x in qminArray[key]] # unit should be MW in ACOPF 
+                    qmaxArray[key] = [x/1000.0 for x in qmaxArray[key]] # unit should be MW in ACOPF 
 #                 priceArray = [30, 20, 10] #value['price']
 #                 quantityArray = [10, 10, 10] # value['quantity']
 
@@ -352,6 +391,9 @@ def coordinator_agent(config_path, **kwargs):
                 priceArray_Agg = {}
                 quantityArray_Agg = {}
                 sumQuantityArray = {}
+                QMinArray_Agg = {}
+                QMaxArray_Agg = {}
+                sumQtotalArray = {}
                 self.DRquantity = []
                 self.DRprice = []
                 for key, val in self.aggregator_info.items():
@@ -359,15 +401,22 @@ def coordinator_agent(config_path, **kwargs):
                     priceArray_Agg[key] = []
                     quantityArray_Agg[key] = []
                     sumQuantityArray[key] = []
+                    sumQtotalArray[key] = []
+                    QMinArray_Agg[key] = []
+                    QMaxArray_Agg[key] = []
                     for val1 in val:
                         uncontrolLds_Agg[key] += uncontrolLds[val1]
                         priceArray_Agg[key].extend(priceArray[val1])
                         quantityArray_Agg[key].extend(quantityArray[val1])
+                        QMinArray_Agg[key].extend(qminArray[val1])
+                        QMaxArray_Agg[key].extend(qmaxArray[val1])
                     # Sort the combined aggregator bids in decsending order, if there are controllable bids
                     if len(priceArray_Agg[key]) != 0:
-                        returnArrays = self.sortBids(priceArray_Agg[key], quantityArray_Agg[key])
+                        returnArrays = self.sortBids(priceArray_Agg[key], quantityArray_Agg[key], QMinArray_Agg[key], QMaxArray_Agg[key])
                         priceArray_Agg[key] = returnArrays[0]
                         quantityArray_Agg[key] = returnArrays[1]
+                        QMinArray_Agg[key] = returnArrays[2]
+                        QMaxArray_Agg[key] = returnArrays[3]
                     # Start wring DR list
                     busName = key.replace('bus_', '')
                     self.DRquantity.extend([busName] * buyerCurveNum)
@@ -375,12 +424,12 @@ def coordinator_agent(config_path, **kwargs):
                     
                 self.DRquantity.extend(range(1, buyerCurveNum + 1) * 2)
                 self.DRprice.extend(range(1, buyerCurveNum + 1) * 2)
-                    
-                
-                # Get several points from buyer bidding curve
-                for i in range(buyerCurveNum):
-                    self.DRquantity.append(i+1)
-                    self.DRprice.append(i+1)
+#                     
+#                 
+#                 # Get several points from buyer bidding curve
+#                 for i in range(buyerCurveNum):
+#                     self.DRquantity.append(i+1)
+#                     self.DRprice.append(i+1)
                     
                 # Check whether at each aggregated bus there are bids
                 # Obtain DR array to be used by ACOPF
@@ -400,16 +449,22 @@ def coordinator_agent(config_path, **kwargs):
                         #
                         priceArray = priceArray_Agg[key]
                         quantityArray = quantityArray_Agg[key]
+                        qminArray = QMinArray_Agg[key]
+                        qmaxArray = QMaxArray_Agg[key]
                         # Grab the step points
                         step = sum(quantityArray)/(buyerCurveNum - 1)
+                        sumQmin = sum(qminArray)
                         UtilityArray = []
                         sumUtility = 0
                         sumQuantity = 0
+                        sumQtotal = 0
                         for i in range(len(quantityArray)):
                             sumUtility += quantityArray[i] * priceArray[i]
                             UtilityArray.append(sumUtility)
                             sumQuantity += quantityArray[i]
                             sumQuantityArray[key].append(sumQuantity)
+                            sumQtotal += qmaxArray[i] - qminArray[i]
+                            sumQtotalArray[key].append(sumQmin + sumQtotal)
                         for i in range(buyerCurveNum - 1):
                             val = step * (i + 1) # The value put into the DR quantity array, based on given number of points and corresponding step value
                             self.DRquantity.append(val)
@@ -425,21 +480,23 @@ def coordinator_agent(config_path, **kwargs):
                 
                 ## Obtain unknown bus real power ---------------------------------------------------------------------------------------------
                 totalAggregatorLds = 0
-                for key, value in self.aggregator.items():
-                    totalAggregatorLds += sum(value['quantity'])
+#                 for key, value in self.aggregator.items():
+#                     totalAggregatorLds += sum(value['quantity'])
+                for key, value in self.aggregator_real.items():
+                    totalAggregatorLds += value
                 totalDGoutputs = 0
                 for key, value in self.DERs.items():
                     for key1, value1 in value.items():
                         totalDGoutputs += value1
-                totalUnctlLds = 0
-                for key, val in self.meters.items():
-                    totalUnctlLds += val
+#                 totalUnctlLds = 0
+#                 for key, val in self.meters.items():
+#                     totalUnctlLds += val
                 totalSubLds = 0
                 for key, val in self.substation.items():
                     totalSubLds += val
                 
                 # Calculate unknown bus real power:
-                unknownBusLds = totalSubLds + totalDGoutputs - (totalUnctlLds + totalAggregatorLds)
+                unknownBusLds = totalSubLds + totalDGoutputs - totalAggregatorLds
                 
                 totalCtlLds = 0
                 for key in quantityArray_Agg:
@@ -447,31 +504,44 @@ def coordinator_agent(config_path, **kwargs):
                         totalCtlLds += sum(quantityArray_Agg[key])
                 
                 # Record feeder information before conducting ACOPF                
-                _log.info('At time {4}, coordinator agent {0} start computing ACOPF, with measured substation {1} MW, total DER outputs {2} MW, and controllable loads {3} MW'.format(config['agentid'], totalSubLds/1000.0, totalDGoutputs/1000.0, totalCtlLds, self.timeSim.strftime("%Y-%m-%d %H:%M:%S")))
+                _log.info('At time {4}, coordinator agent {0} start computing ACOPF, with measured substation {1} MW, total DER outputs {2} MW, and controllable loads (including On and Off state) {3} MW'.format(config['agentid'], totalSubLds/1000.0, totalDGoutputs/1000.0, totalCtlLds, self.timeSim.strftime("%Y-%m-%d %H:%M:%S")))
                  
                 # Obtain unknown bus reactive power
                 totalAggregatorLds = 0
                 for key, value in self.aggregator_reactive.items():
                     totalAggregatorLds += value
-                totalUnctlLds = 0
-                for key, val in self.meters_reactive.items():
-                    totalUnctlLds += val
+#                 totalUnctlLds = 0
+#                 for key, val in self.meters_reactive.items():
+#                     totalUnctlLds += val
                 totalSubLdskVAR = 0
                 for key, val in self.substation_reactive.items():
                     totalSubLdskVAR += val
                 
                 # Calculate unknown bus reactive power:
-                unknownBusLds_kVAR = totalSubLdskVAR - (totalUnctlLds + totalAggregatorLds) 
+                unknownBusLds_kVAR = totalSubLdskVAR - totalAggregatorLds
                 
                 # Create list of P based on ACOPF fortmat requirement: ------------------------------------------------------------------------
                 # Unit in MW
                 bus7_P = unknownBusLds/1000.0
+#                 bus18_P = (self.aggregator_real['Meter_18_21'] + self.aggregator_real['Meter_18_135']) / 1000.0
+#                 bus57_P = self.aggregator_real['Meter_57_60'] / 1000.0
+                # =========== use unresponsive load data directly ======================
+#                 timeDiff = self.timeSim - self.startTime   
+#                 timeDiffSec = timeDiff.seconds
+#                 timeIndex = int(timeDiffSec / (60 * 60)) # index in total_feeder_load file
+#                 bus18_P = float(self.unres[timeIndex][0])/1000.0# 0.7 # Scale to 0.9 times of the original total loads
+#                 bus57_P = float(self.unres[timeIndex][1])/1000.0# 0.7 # Scale to 0.9 times of the original total loads
+                
+                # =========== use unresponsive load data directly ======================
                 bus18_P = uncontrolLds_Agg['bus_18']/1000.0 # Bus 18 includes uncontrollable loads from teh aggregator section
                 bus57_P = uncontrolLds_Agg['bus_57']/1000.0
                 Nbend = 3 # Defined in ACOPF
                 Plist = [bus7_P, bus18_P, bus57_P] * 3
                 self.P = [7, 18, 57]
                 self.P.extend(Plist)
+                
+                # Record feeder real power information              
+                _log.info('At time {0}, feeder measured substation {1} MW, total DER outputs {2} MW, bus 7 total real power {3} MW, bus 18 uncontrollable real power {4} MW, bus 57 uncontrollable real power {5} MW'.format(self.timeSim.strftime("%Y-%m-%d %H:%M:%S"), totalSubLds/1000.0, totalDGoutputs/1000.0, bus7_P, bus18_P, bus57_P))
                 
                 # Create list of Q based on ACOPF fortmat requirement:
                 # unit in MVAr
@@ -486,8 +556,8 @@ def coordinator_agent(config_path, **kwargs):
                 timeDiff = self.timeSim - self.startTime   
                 timeDiffSec = timeDiff.days * 24 * 60 * 60 + timeDiff.seconds
                 timeIndex = (timeDiffSec % (24 * 60 * 60) / 30) # index in total_feeder_load file
-                feederLoad = float(self.feederLoads[timeIndex][0]) * 0.7 # Scale to 0.9 times of the original total loads
-#                 feederLoad = totalSubLds / 1000.0 * 0.9 # Scale the DSO to be 0.9 of the amount needed from real-time substation loads
+                feederLoad = float(self.feederLoads[timeIndex][0]) * 0.7 # 0.7 # Scale to 0.9 times of the original total loads
+#                 feederLoad = 1.2 
                 
                 # Clear the market by using the fixed_price sent from coordinator ---------------------------------------------------------------
                 returnVal = self.ACOPF(feederLoad) 
@@ -510,6 +580,17 @@ def coordinator_agent(config_path, **kwargs):
                 self.market['market_id'] += 1 # Go to wait for the next market
                 
                 clear_price = {}
+                
+                # ===================== Test ==========================================
+                totalAggHvac = {'bus_18': 1.61377, 'bus_57': 2.4}
+                stairList = [0.2, 0.2, 0.2, 0.2, 0.2, 0.35, 0.35, 0.35, 0.35, 0.5, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 0.75, 0.4, 0.4, 0.4, 0.2, 0.2, 0.2, 0.2]
+                timeDiff = self.timeSim - self.startTime   
+                timeDiffSec = timeDiff.days * 24 * 60 * 60 + timeDiff.seconds
+                timeIndex = (timeDiffSec / (60 * 60)) # index in total_feeder_load file
+                stairScale = 0.2 # stairList[timeIndex] 
+                returnVal['solved'] = True
+                # ===================== Test ==========================================
+                
                 # Publish cleared aggregator bidding price based on quantity solved by ACOPF  
                 # Loop through each aggregated DR:
                 for key, val in self.aggregator_info.items():        
@@ -517,10 +598,24 @@ def coordinator_agent(config_path, **kwargs):
                     if length_bids[key] > 0 and returnVal['solved'] == True:
                         # When there are bids from aggregator (there are controllable loads)
                         clear_price[key] = priceArray_Agg[key][-1]
+                        
+                        # ===================== Test ==========================================
+                        cleared_quantity[key] = totalAggHvac[key] * 0.2 #stairScale
+                        # ===================== Test ==========================================
+                        
                         for j in range(len(sumQuantityArray[key])):
-                            if cleared_quantity[key] <= sumQuantityArray[key][j]:
-                                clear_price[key] = priceArray_Agg[key][j]
-                                break
+                            if self.market['bidmode'] == 'double_price_ver2':
+                                if cleared_quantity[key] <= sumQtotalArray[key][j]:
+                                    clear_price[key] = priceArray_Agg[key][j]
+                                    cleared_quantity[key] = sumQtotalArray[key][j]
+                                    break
+                            else:
+                                if cleared_quantity[key] <= sumQuantityArray[key][j]:
+                                    clear_price[key] = priceArray_Agg[key][j]
+                                    break
+                        if (j == 0):
+                            clear_price[key] = self.market['pricecap']
+                            
                         # Publish clear_price
                         all_message = [{'market_id': self.market['market_id'], 
                             'fixed_price': clear_price[key], 
@@ -573,7 +668,11 @@ def coordinator_agent(config_path, **kwargs):
                     for key1, val1 in self.DERs.items():
                         DERname = key1
                         index = self.DERinfo[DERname] # Find the DER index in ACOPF solution
-                        DER_output = DERoutputs[index] * 1000000.0 / 3.0 # convert unit from MW to W
+                        # ===================== Test ==========================================
+                        DER_output = 0.0
+                        # ===================== Test ==========================================
+#                         DER_output = DERoutputs[index] * 1000000.0 / 3.0 # convert unit from MW to W
+                        
                         for key2, val2 in val1.items():
                             DER_phase_name = key2
                             # Publish the updated DER output by phase:

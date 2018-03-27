@@ -1,6 +1,6 @@
 class curve:
     def __init__(self):
-        self.bidname, self.price, self.quantity = ([] for i in range(3))
+        self.bidname, self.price, self.quantity, self.Q_min, self.Q_max = ([] for i in range(5))
         self.count = 0
         self.total = 0.0
         self.total_on = 0.0
@@ -12,8 +12,10 @@ class curve:
             self.price.reverse()
             self.quantity.reverse()
             self.bidname.reverse()
+            self.Q_min.reverse()
+            self.Q_max.reverse()
         
-    def add_to_curve(self, price, quantity, name, state):
+    def add_to_curve(self, price, quantity, name, state, qmin, qmax):
         if quantity == 0:
             return
         self.total += quantity
@@ -24,10 +26,12 @@ class curve:
         value_insert_flag = 0
         if self.count == 0:
             # Since it is the first time assigning values to the curve, define an empty array for the price and mean
-            self.bidname, self.price, self.quantity = ([] for i in range(3))
+            self.bidname, self.price, self.quantity, self.Q_min, self.Q_max = ([] for i in range(5))
             self.price.append(price)
             self.quantity.append(quantity)
             self.bidname.append(name)
+            self.Q_min.append(qmin)
+            self.Q_max.append(qmax)
             self.count += 1
         else:
             value_insert_flag = 0
@@ -39,10 +43,14 @@ class curve:
                         self.price.insert(0, price)
                         self.quantity.insert(0, quantity)
                         self.bidname.insert(0, name)
+                        self.Q_min.insert(0, qmin)
+                        self.Q_max.insert(0, qmax)
                     else:
                         self.price.insert(i, price)
                         self.quantity.insert(i, quantity)
                         self.bidname.insert(i, name)
+                        self.Q_min.insert(i, qmin)
+                        self.Q_max.insert(i, qmax)
                     self.count += 1
                     value_insert_flag = 1
                     break
@@ -52,6 +60,8 @@ class curve:
                 self.price.append(price)
                 self.quantity.append(quantity)
                 self.bidname.append(name)
+                self.Q_min.append(qmin)
+                self.Q_max.append(qmax)
                 self.count += 1
             
         

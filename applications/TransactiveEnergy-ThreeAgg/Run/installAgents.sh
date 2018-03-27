@@ -8,15 +8,6 @@ vctl remove -f --tag "$TAG1"
 # count=$1
 # group=$1
 for filename in $CONFIGS1; do
-       #   (( count = count + 1))
-       #   if (( count == 100 ))
-       #   then
-     		# sleep 1
-     		# ((group = group + 1))
-     		# count=$1
-       #   fi
-         # tag=$TAG1
-         # tag+=$group
          python ../../scripts/install-agent.py -s "$SOURCE1" -c "$filename" --tag "$TAG1"
 done
 
@@ -30,6 +21,8 @@ for filename in $CONFIGS2; do
 done
 
 export TAG3="coordinatorAgent"
+# export CONFIGS3="../CoordinatorAgentPowerBalance/config/*.cfg"
+# export SOURCE3="../CoordinatorAgentPowerBalance"
 export CONFIGS3="../CoordinatorAgent/config/*.cfg"
 export SOURCE3="../CoordinatorAgent"
 vctl stop --tag "$TAG3"

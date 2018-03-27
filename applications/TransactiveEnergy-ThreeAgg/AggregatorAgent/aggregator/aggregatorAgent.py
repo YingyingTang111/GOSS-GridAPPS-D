@@ -7,6 +7,7 @@ import numpy as np
 from copy import deepcopy
 import warnings
 import json
+import csv
 
 from get_curve import curve
 
@@ -58,10 +59,12 @@ def aggregator_agent(config_path, **kwargs):
                                               'buyer_total_quantity': 0.0, 'seller_min_price': 0.0, 'buyer_total_unrep': 0.0, 'cap_ref_unrep': 0.0, 
                                               'statistics': []}, 
                            'margin_mode': 'AM_NONE', 'ignore_pricecap': 0,'ignore_failedmarket': 0, 'warmup': 1,
-                           'total_samples': 0,'clearat': 0,  'clearing_scalar': 0.5, 'longest_statistic': 0.0}  
+                           'total_samples': 0,'clearat': 0,  'clearing_scalar': 0.5, 'longest_statistic': 0.0,
+                           'Qminmax': False
+                           }  
                 
             self.market_output = {'std': -1, 'mean': -1, 'clear_price': -1, 'market_id': 'none', 'pricecap': 0.0} # Initialize market output with default values
-            self.buyer = {'name': [], 'price': [], 'quantity': [], 'state': [], 'bid_id': []}
+            self.buyer = {'name': [], 'price': [], 'quantity': [], 'state': [], 'bid_id': [], 'Q_min': [], 'Q_max': []}
             self.seller = {'name': [], 'price': [], 'quantity': [], 'state': [], 'bid_id': []} 
             self.nextClear = {'from':0, 'quantity':0, 'price':0}
             self.offers = {'name': [], 'price': [], 'quantity': []}           
@@ -223,6 +226,9 @@ def aggregator_agent(config_path, **kwargs):
             self.controller_bids_metrics = {'Metadata':controller_bids_meta,'StartTime':self.startTime.strftime("%Y-%m-%d %H:%M:%S")}
             aggregator_cleared_meta = {'clearing_price':{'units':'USD','index':0}}
             self.aggregator_cleared_metrics = {'Metadata':aggregator_cleared_meta,'StartTime':self.startTime.strftime("%Y-%m-%d %H:%M:%S")}
+            
+            # Variables stored to debug
+            self.aggDebugAll = {}
         
         @Core.receiver('onsetup')
         def setup(self, sender, **kwargs):
@@ -314,28 +320,35 @@ def aggregator_agent(config_path, **kwargs):
 
             # Find the controller name who sends the message
             controller = topic.split("/")[-2]
+            _log.debug('Aggregator {0} recieves from controller {1} the bids'.format(self.market['name'], controller))
             # Update controller data 
-            val =  message[0]
-#             _log.info('Aggregator {0:s} recieves from controller the bids.'.format(self.market['name']))
-            propertyKeys = val.keys()          
-            # Check if it is rebid. If true, then have to delete the existing bid if any
-            if self.market['market_id'] == val['market_id']:
-                if val['rebid'] != 0:
-                    # Check if the bid from the same bid_id is stored, if so, delete
-                    if (val['bid_id'] in self.buyer['bid_id']):
-                        index_delete = self.buyer['bid_id'].index(val['bid_id'])
-                        print ('  removing list index', index_delete)
-                        for ele in self.buyer.keys():
-                            del self.buyer[ele][index_delete]
-                # Add the new bid:
-                self.buyer['name'].append(val['bid_name'])
-                self.buyer['price'].append(val['price'])
-                self.buyer['quantity'].append(val['quantity'])
-                self.buyer['state'].append(val['state'])
-                self.buyer['bid_id'].append(val['bid_id'])
-            
-            if self.market['market_id'] < val['market_id']:
-                print('bidding into future markets is not yet supported')
+#             val =  message[0]
+            for key, val in message.items():
+#                 _log.info('Aggregator {0:s} recieves from controller the bids.'.format(self.market['name']))         
+                # Check if it is rebid. If true, then have to delete the existingsss bid if any
+                if self.market['market_id'] == val['market_id']:
+                    if val['rebid'] != 0:
+                        # Check if the bid from the same bid_id is stored, if so, delete
+                        if (val['bid_id'] in self.buyer['bid_id']):
+                            index_delete = self.buyer['bid_id'].index(val['bid_id'])
+#                             print ('  removing list index', index_delete)
+                            for ele in self.buyer.keys():
+                                del self.buyer[ele][index_delete]
+                    # Add the new bid:
+                    self.buyer['name'].append(val['bid_name'])
+                    self.buyer['price'].append(val['price'])
+                    self.buyer['quantity'].append(val['quantity'])
+                    self.buyer['state'].append(val['state'])
+                    self.buyer['bid_id'].append(val['bid_id'])
+                    # Obtain controller bid Qmin and Qmax values
+#                     if self.market['Qminmax'] == True:
+                    self.buyer['Q_min'].append(val['Q_min'])
+                    self.buyer['Q_max'].append(val['Q_max'])
+                
+                elif self.market['market_id'] < val['market_id']:
+                    print('Warning: bidding into future markets is not yet supported')
+                else:
+                    print('Warning: received from controller market id {1} < current market id {0}'.format(self.market['name'], val['market_id']))
         
         # ====================Obtain values from GLD ===========================
         def on_receive_GLD_message_fncs(self, peer, sender, bus, topic, headers, message):
@@ -412,7 +425,7 @@ def aggregator_agent(config_path, **kwargs):
             val =  message[0] # value True
 #             _log.info('Aggregator {0:s} recieves from fncs_bridge the simulation ends message {1:s}'.format(self.market['name'], val))
             if (val == 'True'):
-                _log.info('Aggregator {0:s} recieves from fncs_bridge the siimulation ending signal.'.format(self.market['name']))
+                _log.info('Aggregator {0:s} recieves from fncs_bridge the siimulation ending signal.'.format(config['agentid']))
                 # Dump to JSON fies and close the files
                 with open(self.controller_op, 'w') as outfile:
                     json.dumps(self.controller_bids_metrics, outfile)
@@ -423,6 +436,24 @@ def aggregator_agent(config_path, **kwargs):
 #                 self.aggregator_op.close()
 #                 self.controller_op.close()
                 # End the agent
+                
+                # =============================== Debug purpose ================================================= #     
+                                                         
+                if config['agentid'] == 'Aggregator_3':
+                    mypath = "/home/yingying/git/volttron/TransactiveEnergy-ThreeAgg/AggregatorAgent/aggregator/"
+                    self.aggLogs = mypath + config['agentid'] + '_market_information.csv'
+                    with open(self.aggLogs, 'w') as f:
+                            temp = ['market_id', 'average_price', 'std_dev', 'clear_price']
+                            writer = csv.writer(f)
+                            writer.writerow(temp)
+                            for key, val in self.aggDebugAll.items():
+                                print(str(key), str(val['average_price']), str(val['std_dev']), str(val['clear_price']))
+                                temp = [str(key), str(val['average_price']), str(val['std_dev']), str(val['clear_price'])]
+                                writer.writerow(temp)
+                
+                
+                # =============================== Debug purpose ================================================= #
+                 
                 self.core.stop() 
             
         @Core.periodic(1)
@@ -488,6 +519,19 @@ def aggregator_agent(config_path, **kwargs):
                     headers_mod.DATE: now
                 }
                 self.vip.pubsub.publish('pubsub', pub_topic, headers, all_message)
+                
+                # =============================== Debug purpose ================================================= #
+                if config['agentid'] == 'Aggregator_3':
+                    self.aggDebugAll[self.market_output['market_id']] = {'market_id': self.market_output['market_id'], 
+                                                                        'std_dev': self.market_output['std'], 
+                                                                        'average_price': self.market_output['mean'],
+                                                                        'clear_price': self.market_output['clear_price'], 
+                                                                        'price_cap': self.market_output['pricecap'], 
+                                                                        'period': self.market['period'],
+                                                                        'initial_price': self.market['init_price']                          
+                                                                        }
+                
+                # =============================== Debug purpose ================================================= #
         
         # ======================== Update statistics for the calculation of std and mean ==============    
         def update_statistics(self):
@@ -569,7 +613,7 @@ def aggregator_agent(config_path, **kwargs):
             curve_buyer = curve()
             # Iterate each buyer to obtain the final buyer curve    
             for i in range (len(self.buyer['name'])):
-                curve_buyer.add_to_curve(self.buyer['price'][i], self.buyer['quantity'][i], self.buyer['name'][i], self.buyer['state'][i])
+                curve_buyer.add_to_curve(self.buyer['price'][i], self.buyer['quantity'][i], self.buyer['name'][i], self.buyer['state'][i], self.buyer['Q_min'][i], self.buyer['Q_max'][i])
                         
             # "Bid" at the price cap from the unresponsive load (add this last, when we have a summary of the responsive bids)
             # Change the condition to apply to only MD_BUYERS mode, since it is the mode we are using now
@@ -592,7 +636,7 @@ def aggregator_agent(config_path, **kwargs):
                     self.buyer['quantity'].append(unresp) # buyer bid in cpp codes is negative, here bidder quantity always set positive
                     self.buyer['state'].append('ON')
                     self.buyer['bid_id'].append(self.market['capacity_reference_object']['name'])
-                    curve_buyer.add_to_curve(self.market['pricecap'], unresp, self.market['capacity_reference_object']['name'], 'ON')
+                    curve_buyer.add_to_curve(self.market['pricecap'], unresp, self.market['capacity_reference_object']['name'], 'ON', 0, unresp)
              
             # Sort buyer curve
             if curve_buyer.count > 0:
@@ -600,14 +644,16 @@ def aggregator_agent(config_path, **kwargs):
                            
                 # Print out buyer curve and rearrange self.buyer array
                 print ('Buyer Curve at ', self.timeSim.strftime("%Y-%m-%d %H:%M:%S"))
-                self.buyer = {'name': [], 'price': [], 'quantity': [], 'state': [], 'bid_id': []}  # initialize the seller and buyer dictionary
+                self.buyer = {'name': [], 'price': [], 'quantity': [], 'state': [], 'bid_id': [], 'Q_min':[], 'Q_max': []}  # initialize the seller and buyer dictionary
                 # Stor buyer curve value to controller_bid_metrics
                 self.controller_bids_metrics[self.timeSim.strftime("%Y-%m-%d %H:%M:%S")] = {}
                 for i in range(curve_buyer.count):
-                    print ('  ', i, curve_buyer.bidname[i], curve_buyer.quantity[i], curve_buyer.price[i])
+                    print ('  ', i, curve_buyer.bidname[i], curve_buyer.quantity[i], curve_buyer.price[i], curve_buyer.Q_min[i], curve_buyer.Q_max[i])
                     self.buyer['price'].append(curve_buyer.price[i])
                     self.buyer['quantity'].append(curve_buyer.quantity[i])
                     self.buyer['name'].append(curve_buyer.bidname[i])
+                    self.buyer['Q_min'].append(curve_buyer.Q_min[i])
+                    self.buyer['Q_max'].append(curve_buyer.Q_max[i])
                     # Store bid into JSON metrics
                     self.controller_bids_metrics[self.timeSim.strftime("%Y-%m-%d %H:%M:%S")][curve_buyer.bidname[i]] = [curve_buyer.price[i], curve_buyer.quantity[i]]
                     
@@ -615,12 +661,16 @@ def aggregator_agent(config_path, **kwargs):
             all_message = [{'market_id': self.market['market_id'], 
                 'price': self.buyer['price'], 
                 'quantity': self.buyer['quantity'],
-                'name': self.buyer['name']                          
+                'name': self.buyer['name'],
+                'Q_min': self.buyer['Q_min'],
+                'Q_max': self.buyer['Q_max']                    
                 },
                {'market_id': {'units': 'none', 'tz': 'UTC', 'type': 'integer'},
                 'price': {'units': '$', 'tz': 'UTC', 'type': 'float'}, 
                 'quantity': {'units': '', 'tz': 'UTC', 'type': 'list'},
-                'name': {'units': '', 'tz': 'UTC', 'type': 'list'}                         
+                'name': {'units': '', 'tz': 'UTC', 'type': 'list'},
+                'Q_min': {'units': '', 'tz': 'UTC', 'type': 'list'},
+                'Q_max': {'units': '', 'tz': 'UTC', 'type': 'list'}                        
                 }]
             pub_topic = 'aggregator/' + self.market['name'] + '/biddings/all'
             _log.info('aggregator agent {0} with market_id {1} publishes updated biddings to coordinator agent'.format(self.market['name'], self.market['market_id']))
@@ -804,7 +854,7 @@ def aggregator_agent(config_path, **kwargs):
             # self.curve_buyer = None
             
             # initialize the seller and buyer dictionary
-            self.buyer = {'name': [], 'price': [], 'quantity': [], 'state': [], 'bid_id': []}
+            self.buyer = {'name': [], 'price': [], 'quantity': [], 'state': [], 'bid_id': [], 'Q_min': [], 'Q_max': []}
             self.seller = {'name': [], 'price': [], 'quantity': [], 'state': [], 'bid_id': []} 
         
          # =========================================== Pop market ======================================================

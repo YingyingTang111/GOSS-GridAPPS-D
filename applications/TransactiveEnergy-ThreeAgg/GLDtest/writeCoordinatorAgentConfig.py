@@ -30,6 +30,7 @@ unit = "kW"
 periodCoordinator = 60 * 5
 price_cap = 1000
 total_feeder_load = 'total_feeder_load.csv' # The file storing total feeder loads without controllers and DGs
+bidmode = 'double_price_ver2' # or 'normal' version # double_price_ver2
 
 # Aggregator data:
 AggregatorName = []
@@ -68,15 +69,20 @@ for aggregator in AggregatorName:
     aggregators[aggregator]['price'] = {'propertyType': 'array', 'propertyUnit': 'none', 'propertyValue': ''}
     aggregators[aggregator]['quantity'] = {'propertyType': 'array', 'propertyUnit': 'none', 'propertyValue': ''}
     aggregators[aggregator]['name'] = {'propertyType': 'array', 'propertyUnit': 'none', 'propertyValue': ''}
+    aggregators[aggregator]['Q_min'] = {'propertyType': 'array', 'propertyUnit': 'none', 'propertyValue': ''}
+    aggregators[aggregator]['Q_max'] = {'propertyType': 'array', 'propertyUnit': 'none', 'propertyValue': ''}
 subscriptions['aggregators'].append(aggregators)
 # Read in fncs_configure.txt file to obtain the aggregator kVAR load publication information
 filename = 'fncs_configure.txt'
 ip = open (filename, "r")
 # metered loads
+subscriptions['aggregator_kW'] = []
 subscriptions['aggregator_kVAR'] = []
-aggregators = {}
+aggregators_kW = {}
+aggregators_kVAR = {}
 for aggregator in AggregatorName:
-    aggregators[aggregator] = {}
+    aggregators_kW[aggregator] = {}
+    aggregators_kVAR[aggregator] = {}
     ip.seek(0, 0)
     # Meter data (reactive power from aggregator) subscribed  
     for line in ip:      
@@ -84,10 +90,17 @@ for aggregator in AggregatorName:
             line = line.replace('->', '.')
             meterName = line.replace(':', '.').split('.')[1]
             prop = line.split('.')[1].replace(" ", "")
-            aggregators[aggregator][meterName] = {}
-            aggregators[aggregator][meterName][prop] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
+            aggregators_kVAR[aggregator][meterName] = {}
+            aggregators_kVAR[aggregator][meterName][prop] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
+        elif (aggregator in line):
+            line = line.replace('->', '.')
+            meterName = line.replace(':', '.').split('.')[1]
+            prop = line.split('.')[1].replace(" ", "")
+            aggregators_kW[aggregator][meterName] = {}
+            aggregators_kW[aggregator][meterName][prop] = {'propertyType': 'double', 'propertyUnit': 'none', 'propertyValue': 0}
             
-subscriptions['aggregator_kVAR'].append(aggregators)
+subscriptions['aggregator_kW'].append(aggregators_kW)           
+subscriptions['aggregator_kVAR'].append(aggregators_kVAR)
 
 # Meter data (real power from aggregated loads, and individual DG) subscribed   
 # meterLoads = ['Meter_18_135', 'Meter_57_60']
@@ -150,7 +163,7 @@ subscriptions['fncs_bridge'].append(fncs_bridge)
 # Write initial valuess
 initialVal = {}
 initialVal = {}
-initialVal['market_information'] = {'market_id': 0, 'bid_delay': bid_delay, 'unit': unit, 'period': periodCoordinator, 'pricecap': price_cap, 'total_feeder_load': total_feeder_load}
+initialVal['market_information'] = {'market_id': 0, 'bid_delay': bid_delay, 'unit': unit, 'period': periodCoordinator, 'pricecap': price_cap, 'total_feeder_load': total_feeder_load, 'bidmode': bidmode}
 bus = {}
 bus['bus_18'] = ['Aggregator_1', 'Aggregator_2']
 bus['bus_57'] = ['Aggregator_3']
