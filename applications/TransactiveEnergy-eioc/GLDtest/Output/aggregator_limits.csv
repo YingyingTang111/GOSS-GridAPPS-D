@@ -1,0 +1,10 @@
+# file...... Output/aggregator_limits.csv
+# date...... Fri Feb  9 15:44:51 2018
+# user...... admsuser
+# host...... (null)
+# target.... dummy_class 3
+# trigger... (none)
+# interval.. 1000000000
+# limit..... 0
+# timestamp,aggregator_1_limit,aggregator_2_limit,aggregator_3_limit
+2010-08-16 00:00:00 UTC,+1,+2,+4
